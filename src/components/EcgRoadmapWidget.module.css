@@ -1,0 +1,92 @@
+.roadmapToggleContainer {
+  position: absolute;
+  top: 12px;
+  right: 56px; /* adjust as needed to be near bell icon */
+  z-index: 1200;
+}
+
+.roadmapToggleBtn {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(123,47,242,0.08);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s;
+}
+.roadmapToggleBtn:hover {
+  box-shadow: 0 4px 16px rgba(123,47,242,0.18);
+}
+
+.roadmapPopup {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 95vw;
+  max-width: 340px;
+  min-width: 220px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(60,60,60,0.13), 0 1.5px 6px rgba(0,0,0,0.08);
+  border: 1.5px solid #e5e7eb; /* subtle gray border */
+  padding: 14px 4px 8px 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s;
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.roadmapSvg {
+  width: 96vw;
+  max-width: 320px;
+  min-width: 180px;
+  height: 22vw;
+  max-height: 120px;
+  min-height: 60px;
+  display: block;
+}
+
+.moduleCircle {
+  fill: #fff;
+  stroke: #7b2ff2;
+  stroke-width: 4px;
+  filter: drop-shadow(0 2px 6px rgba(123,47,242,0.08));
+  transition: fill 0.2s, stroke 0.2s, filter 0.2s;
+}
+.completed {
+  fill: #7b2ff2;
+  stroke: #f357a8;
+  filter: drop-shadow(0 0 12px #f357a8cc);
+}
+.current {
+  fill: #f357a8;
+  stroke: #7b2ff2;
+  filter: drop-shadow(0 0 8px #f357a8cc);
+}
+.pulse {
+  animation: pulseGlow 1s infinite alternate;
+}
+@keyframes pulseGlow {
+  0% {
+    filter: drop-shadow(0 0 0px #f357a8cc);
+  }
+  100% {
+    filter: drop-shadow(0 0 18px #f357a8ff);
+  }
+}
+
+.roadmapLabel {
+  margin-top: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #7b2ff2;
+  letter-spacing: 0.02em;
+  text-align: center;
+}

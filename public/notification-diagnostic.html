@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push Notification Diagnostics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; border-left: 4px solid #28a745; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; }
+        .error { background: #f8d7da; border-left: 4px solid #dc3545; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover { background: #0056b3; }
+        #results {
+            max-height: 500px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Push Notification System Diagnostics</h1>
+        
+        <div class="status">
+            <strong>🎯 Purpose:</strong> This tool analyzes your push notification setup to identify issues preventing notifications from working.
+        </div>
+
+        <div class="controls">
+            <button onclick="runDiagnostics()">🔍 Run Full Diagnostics</button>
+            <button onclick="testPermissions()">🔐 Test Permissions</button>
+            <button onclick="testServiceWorker()">⚙️ Test Service Worker</button>
+            <button onclick="testFCMToken()">🎫 Test FCM Token</button>
+            <button onclick="sendTestNotification()">📢 Send Test Notification</button>
+            <button onclick="clearResults()">🗑️ Clear Results</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script type="module">
+        import PushNotificationDiagnostic from '/src/utils/pushNotificationDiagnostic.ts';
+
+        let diagnostic;
+        const resultsDiv = document.getElementById('results');
+
+        // Override console methods to capture output
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        function captureConsoleOutput() {
+            console.log = function(...args) {
+                appendToResults(args.join(' '), 'info');
+                originalLog.apply(console, args);
+            };
+
+            console.error = function(...args) {
+                appendToResults(args.join(' '), 'error');
+                originalError.apply(console, args);
+            };
+
+            console.warn = function(...args) {
+                appendToResults(args.join(' '), 'warning');
+                originalWarn.apply(console, args);
+            };
+        }
+
+        function restoreConsoleOutput() {
+            console.log = originalLog;
+            console.error = originalError;
+            console.warn = originalWarn;
+        }
+
+        function appendToResults(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'warning' ? 'warning' : 'success';
+            
+            const logElement = document.createElement('div');
+            logElement.className = `status ${className}`;
+            logElement.innerHTML = `<small>[${timestamp}]</small> ${message}`;
+            
+            resultsDiv.appendChild(logElement);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        window.runDiagnostics = async function() {
+            resultsDiv.innerHTML = '';
+            appendToResults('🔄 Starting comprehensive diagnostics...', 'info');
+            
+            captureConsoleOutput();
+            
+            try {
+                diagnostic = new PushNotificationDiagnostic();
+                await diagnostic.runDiagnostics();
+                appendToResults('✅ Diagnostics completed successfully!', 'info');
+            } catch (error) {
+                appendToResults(`❌ Diagnostics failed: ${error.message}`, 'error');
+            } finally {
+                restoreConsoleOutput();
+            }
+        };
+
+        window.testPermissions = async function() {
+            appendToResults('🔐 Testing notification permissions...', 'info');
+            
+            if (!('Notification' in window)) {
+                appendToResults('❌ Notification API not supported', 'error');
+                return;
+            }
+
+            const permission = Notification.permission;
+            appendToResults(`Current permission: ${permission}`, 'info');
+
+            if (permission === 'default') {
+                try {
+                    const result = await Notification.requestPermission();
+                    appendToResults(`Permission request result: ${result}`, result === 'granted' ? 'info' : 'error');
+                } catch (error) {
+                    appendToResults(`Permission request failed: ${error.message}`, 'error');
+                }
+            } else if (permission === 'granted') {
+                appendToResults('✅ Notifications are permitted', 'info');
+            } else {
+                appendToResults('❌ Notifications are blocked', 'error');
+            }
+        };
+
+        window.testServiceWorker = async function() {
+            appendToResults('⚙️ Testing service worker...', 'info');
+            
+            if (!('serviceWorker' in navigator)) {
+                appendToResults('❌ Service Worker not supported', 'error');
+                return;
+            }
+
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                appendToResults(`Found ${registrations.length} service worker(s)`, 'info');
+
+                // Check for Firebase messaging service worker
+                const messagingSwResponse = await fetch('/firebase-messaging-sw.js');
+                if (messagingSwResponse.ok) {
+                    appendToResults('✅ Firebase messaging service worker found', 'info');
+                } else {
+                    appendToResults('❌ Firebase messaging service worker missing', 'error');
+                }
+
+                if (navigator.serviceWorker.controller) {
+                    appendToResults('✅ Service worker is active', 'info');
+                } else {
+                    appendToResults('⚠️ No active service worker', 'warning');
+                }
+            } catch (error) {
+                appendToResults(`Service worker test failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.testFCMToken = async function() {
+            appendToResults('🎫 Testing FCM token generation...', 'info');
+            
+            try {
+                const { getMessaging, getToken } = await import('firebase/messaging');
+                const { app } = await import('/src/firebase.ts');
+                
+                const messaging = getMessaging(app);
+                const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
+
+                if (!vapidKey) {
+                    appendToResults('❌ VAPID key not found', 'error');
+                    return;
+                }
+
+                const registration = await navigator.serviceWorker.ready;
+                const token = await getToken(messaging, { vapidKey, serviceWorkerRegistration: registration });
+
+                if (token) {
+                    appendToResults(`✅ FCM token generated: ${token.substring(0, 20)}...`, 'info');
+                } else {
+                    appendToResults('❌ Failed to generate FCM token', 'error');
+                }
+            } catch (error) {
+                appendToResults(`FCM token test failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.sendTestNotification = function() {
+            appendToResults('📢 Sending test notification...', 'info');
+            
+            if (Notification.permission !== 'granted') {
+                appendToResults('❌ Notifications not permitted', 'error');
+                return;
+            }
+
+            try {
+                const notification = new Notification('🧠 ECGkid PulsePoints Test', {
+                    body: 'This is a test notification to verify your system is working!',
+                    icon: '/notification-assets/notification-icon.png',
+                    badge: '/notification-assets/notification-badge.png',
+                    tag: 'test-notification',
+                    requireInteraction: false
+                });
+
+                notification.onclick = function() {
+                    appendToResults('✅ Test notification clicked!', 'info');
+                    notification.close();
+                };
+
+                notification.onshow = function() {
+                    appendToResults('✅ Test notification displayed successfully!', 'info');
+                };
+
+                notification.onerror = function(error) {
+                    appendToResults(`❌ Test notification error: ${error}`, 'error');
+                };
+
+                // Auto close after 5 seconds
+                setTimeout(() => {
+                    notification.close();
+                }, 5000);
+
+            } catch (error) {
+                appendToResults(`Test notification failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.clearResults = function() {
+            resultsDiv.innerHTML = '';
+        };
+
+        // Show initial status
+        appendToResults('🔧 Push Notification Diagnostic Tool Ready', 'info');
+        appendToResults('💡 Click "Run Full Diagnostics" to analyze your notification setup', 'info');
+    </script>
+</body>
+</html>

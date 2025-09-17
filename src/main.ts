@@ -1,0 +1,3 @@
+// Import your initialized Firebase app and services
+import { app, analytics } from "@/firebase";
+// ...existing code...

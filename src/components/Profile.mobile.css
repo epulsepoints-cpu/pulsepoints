@@ -1,0 +1,39 @@
+/* Profile.mobile.css - Responsive fixes for Profile component */
+
+@media (max-width: 600px) {
+  .profile-header, .profile-card, .profile-section, .profile-stats {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: left !important;
+  }
+  .profile-header {
+    gap: 0.5rem !important;
+    padding: 1rem 0.5rem !important;
+  }
+  .profile-avatar {
+    margin-bottom: 0.5rem !important;
+    width: 64px !important;
+    height: 64px !important;
+  }
+  .profile-stats {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+  .profile-section {
+    padding: 0.5rem !important;
+  }
+  .profile-bio, .profile-info, .profile-goals {
+    font-size: 0.95rem !important;
+    word-break: break-word !important;
+  }
+  .profile-label {
+    font-size: 0.85rem !important;
+  }
+  .profile-value {
+    font-size: 0.95rem !important;
+  }
+  .profile-tabs {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+}

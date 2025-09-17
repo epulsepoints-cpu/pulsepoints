@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECG Quick Reference - Sample</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { background: #2563eb; color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .section { background: #f8fafc; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #2563eb; }
+        .values { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .value-item { background: white; padding: 10px; border-radius: 5px; }
+        .emergency { background: #fee2e2; border-left-color: #dc2626; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f1f5f9; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📋 ECG Quick Reference Guide</h1>
+        <p>Essential ECG values and patterns for quick reference</p>
+    </div>
+
+    <div class="section">
+        <h2>📊 Normal Values</h2>
+        <div class="values">
+            <div class="value-item">
+                <strong>Heart Rate:</strong><br>
+                60-100 bpm (adults)
+            </div>
+            <div class="value-item">
+                <strong>PR Interval:</strong><br>
+                0.12-0.20 seconds
+            </div>
+            <div class="value-item">
+                <strong>QRS Duration:</strong><br>
+                &lt;0.12 seconds
+            </div>
+            <div class="value-item">
+                <strong>QT Interval:</strong><br>
+                &lt;0.44 seconds (depends on rate)
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📍 Lead Placement</h2>
+        <table>
+            <tr><th>Lead</th><th>Position</th><th>View</th></tr>
+            <tr><td>V1</td><td>4th intercostal space, right sternal border</td><td>Septal</td></tr>
+            <tr><td>V2</td><td>4th intercostal space, left sternal border</td><td>Septal</td></tr>
+            <tr><td>V3</td><td>Between V2 and V4</td><td>Anterior</td></tr>
+            <tr><td>V4</td><td>5th intercostal space, midclavicular line</td><td>Anterior</td></tr>
+            <tr><td>V5</td><td>5th intercostal space, anterior axillary line</td><td>Lateral</td></tr>
+            <tr><td>V6</td><td>5th intercostal space, midaxillary line</td><td>Lateral</td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>🫀 Common Rhythms</h2>
+        <div style="display: grid; gap: 10px;">
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>Normal Sinus Rhythm:</strong> Regular, 60-100 bpm, normal P waves
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>Sinus Bradycardia:</strong> Regular, &lt;60 bpm, normal P waves
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>Sinus Tachycardia:</strong> Regular, &gt;100 bpm, normal P waves
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>Atrial Fibrillation:</strong> Irregularly irregular, no clear P waves
+            </div>
+        </div>
+    </div>
+
+    <div class="section emergency">
+        <h2>🚨 Emergency Patterns</h2>
+        <div style="display: grid; gap: 10px;">
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>STEMI:</strong> ST elevation &gt;1mm in 2+ contiguous leads
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>VT:</strong> Wide QRS (&gt;0.12s), rate &gt;150, AV dissociation
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>VF:</strong> Chaotic, irregular waveform, no identifiable complexes
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <strong>Complete Heart Block:</strong> AV dissociation, escape rhythm
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🔍 Systematic Interpretation</h2>
+        <ol style="background: white; padding: 15px; border-radius: 5px;">
+            <li><strong>Rate:</strong> Count QRS complexes</li>
+            <li><strong>Rhythm:</strong> Regular vs irregular</li>
+            <li><strong>P waves:</strong> Present, morphology, relationship to QRS</li>
+            <li><strong>PR interval:</strong> Consistent, duration</li>
+            <li><strong>QRS:</strong> Width, morphology, axis</li>
+            <li><strong>ST segments:</strong> Elevation, depression</li>
+            <li><strong>T waves:</strong> Morphology, concordance</li>
+        </ol>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f1f5f9; border-radius: 10px;">
+        <p><strong>📱 ECG PulsePoints App</strong></p>
+        <p>This is a sample digital product. Create professional medical content like this for your store!</p>
+        <p style="color: #666; font-size: 14px;">Print this page or save as PDF for quick reference</p>
+    </div>
+</body>
+</html>

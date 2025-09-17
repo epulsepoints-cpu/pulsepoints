@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Notification Action URLs - Simple Login</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .title {
+            color: #2563eb;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        .status.info { background: #dbeafe; color: #1e40af; }
+        .status.success { background: #dcfce7; color: #166534; }
+        .status.error { background: #fee2e2; color: #dc2626; }
+        .status.warning { background: #fef3c7; color: #d97706; }
+        
+        .btn {
+            background: #2563eb;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            width: 100%;
+            max-width: 200px;
+        }
+        .btn:hover { background: #1d4ed8; }
+        .btn:disabled { 
+            background: #9ca3af; 
+            cursor: not-allowed; 
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .login-section {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #10b981;
+            transition: width 0.3s ease;
+        }
+        
+        .log {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .stat-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .auth-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔧 Notification Action URL Fixer</h1>
+        
+        <div class="status info">
+            <strong>📋 What this tool does:</strong><br>
+            • Scans all notifications in your Firebase database<br>
+            • Adds proper action URLs to notifications that are missing them<br>
+            • Ensures clicking notifications navigates to the right place<br>
+            • Works with your current authentication context
+        </div>
+
+        <div class="auth-methods" id="authSection">
+            <div class="login-section">
+                <h3>🔐 Method 1: Email/Password</h3>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Your password">
+                </div>
+                <button id="emailLoginBtn" class="btn">🔐 Login with Email</button>
+            </div>
+            
+            <div class="login-section">
+                <h3>🌐 Method 2: Google (Redirect)</h3>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 15px;">
+                    This will redirect you to Google login page
+                </p>
+                <button id="googleLoginBtn" class="btn">🔐 Login with Google</button>
+            </div>
+        </div>
+
+        <div id="authenticatedSection" style="display: none;">
+            <div class="status success">
+                <strong id="userInfo">✅ Authenticated</strong>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="fixBtn" class="btn">🔧 Fix All Notifications</button>
+                <button id="testBtn" class="btn">🧪 Create Test Notification</button>
+                <button id="logoutBtn" class="btn" style="background: #dc2626;">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="progress" style="display: none;" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total Notifications</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="fixedCount">0</div>
+                <div class="stat-label">Fixed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="skippedCount">0</div>
+                <div class="stat-label">Already OK</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="errorCount">0</div>
+                <div class="stat-label">Errors</div>
+            </div>
+        </div>
+
+        <div class="log" id="log" style="display: none;"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword,
+            signInWithRedirect,
+            getRedirectResult,
+            GoogleAuthProvider,
+            onAuthStateChanged,
+            signOut
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs, 
+            updateDoc, 
+            doc,
+            addDoc 
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDA_jAATsA4_W98bkoACjaWDNI3Lupyb4I",
+            authDomain: "ecgkid-pulsepoint.firebaseapp.com",
+            projectId: "ecgkid-pulsepoint",
+            storageBucket: "ecgkid-pulsepoint.firebasestorage.app",
+            messagingSenderId: "951967187678",
+            appId: "1:951967187678:web:2982df3b09e6a64845f84f",
+            measurementId: "G-KZ066Y7VDC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM elements
+        const authSection = document.getElementById('authSection');
+        const authenticatedSection = document.getElementById('authenticatedSection');
+        const emailLoginBtn = document.getElementById('emailLoginBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const fixBtn = document.getElementById('fixBtn');
+        const testBtn = document.getElementById('testBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const log = document.getElementById('log');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const stats = document.getElementById('stats');
+        const userInfo = document.getElementById('userInfo');
+
+        let currentUser = null;
+
+        // Logging function
+        function logMessage(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            console.log(logEntry);
+            
+            if (log.style.display === 'none') {
+                log.style.display = 'block';
+            }
+            
+            const colors = {
+                info: '#60a5fa',
+                success: '#34d399',
+                error: '#f87171',
+                warning: '#fbbf24'
+            };
+            
+            log.innerHTML += `<div style="color: ${colors[type] || colors.info}">${logEntry}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Update stats display
+        function updateStats(total, fixed, skipped, errors) {
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('fixedCount').textContent = fixed;
+            document.getElementById('skippedCount').textContent = skipped;
+            document.getElementById('errorCount').textContent = errors;
+            
+            if (stats.style.display === 'none') {
+                stats.style.display = 'grid';
+            }
+        }
+
+        // Update progress bar
+        function updateProgress(current, total) {
+            const percentage = total > 0 ? (current / total) * 100 : 0;
+            progressBar.style.width = `${percentage}%`;
+            
+            if (progressContainer.style.display === 'none') {
+                progressContainer.style.display = 'block';
+            }
+        }
+
+        // Generate action URL based on notification type
+        function getDefaultActionUrl(type, data = {}) {
+            switch (type) {
+                case 'lesson':
+                case 'lesson_complete':
+                    return data.lessonId ? `/learn/${data.lessonId}` : '/learn';
+                
+                case 'achievement':
+                case 'rank_up':
+                    return '/profile?tab=achievements';
+                
+                case 'progress':
+                case 'streak':
+                case 'daily_goal':
+                    return '/dashboard?tab=progress';
+                
+                case 'module_unlock':
+                    return data.moduleId ? `/modules/${data.moduleId}` : '/learn';
+                
+                case 'reminder':
+                    return '/dashboard';
+                
+                case 'social':
+                    return '/leaderboard';
+                
+                case 'reward':
+                    return '/rewards';
+                
+                case 'system':
+                default:
+                    return '/dashboard';
+            }
+        }
+
+        // Update UI based on auth state
+        function updateAuthUI(user) {
+            if (user) {
+                authSection.style.display = 'none';
+                authenticatedSection.style.display = 'block';
+                userInfo.textContent = `✅ Authenticated as ${user.displayName || user.email}`;
+                logMessage(`✅ Authenticated as ${user.displayName || user.email}`, 'success');
+            } else {
+                authSection.style.display = 'grid';
+                authenticatedSection.style.display = 'none';
+                logMessage('❌ Not authenticated', 'error');
+            }
+        }
+
+        // Authentication state listener
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            updateAuthUI(user);
+        });
+
+        // Check for redirect result on page load
+        getRedirectResult(auth)
+            .then((result) => {
+                if (result) {
+                    logMessage('🎉 Google login successful!', 'success');
+                }
+            })
+            .catch((error) => {
+                logMessage(`❌ Google login error: ${error.message}`, 'error');
+            });
+
+        // Email/Password login
+        emailLoginBtn.addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                logMessage('❌ Please enter both email and password', 'error');
+                return;
+            }
+
+            try {
+                logMessage('🔄 Signing in with email...', 'info');
+                await signInWithEmailAndPassword(auth, email, password);
+                logMessage('🎉 Email login successful!', 'success');
+            } catch (error) {
+                logMessage(`❌ Email login failed: ${error.message}`, 'error');
+            }
+        });
+
+        // Google login
+        googleLoginBtn.addEventListener('click', async () => {
+            try {
+                logMessage('🔄 Redirecting to Google login...', 'info');
+                const provider = new GoogleAuthProvider();
+                await signInWithRedirect(auth, provider);
+            } catch (error) {
+                logMessage(`❌ Google login failed: ${error.message}`, 'error');
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                logMessage('👋 Logged out successfully', 'info');
+                // Clear form
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+            } catch (error) {
+                logMessage(`❌ Logout failed: ${error.message}`, 'error');
+            }
+        });
+
+        // Test single notification
+        testBtn.addEventListener('click', async () => {
+            if (!currentUser) {
+                logMessage('❌ Please login first', 'error');
+                return;
+            }
+
+            try {
+                logMessage('🧪 Creating test notification...', 'info');
+                
+                const testNotification = {
+                    userId: currentUser.uid,
+                    type: 'lesson',
+                    title: 'Test Notification',
+                    body: 'This is a test notification with action URL',
+                    actionUrl: getDefaultActionUrl('lesson', { lessonId: 'test-lesson-123' }),
+                    timestamp: new Date(),
+                    read: false,
+                    priority: 'normal',
+                    data: { lessonId: 'test-lesson-123' }
+                };
+
+                const docRef = await addDoc(collection(db, 'userNotifications'), testNotification);
+                logMessage(`✅ Test notification created with ID: ${docRef.id}`, 'success');
+                logMessage(`🔗 Action URL: ${testNotification.actionUrl}`, 'info');
+                
+            } catch (error) {
+                logMessage(`❌ Test failed: ${error.message}`, 'error');
+            }
+        });
+
+        // Fix notifications
+        fixBtn.addEventListener('click', async () => {
+            if (!currentUser) {
+                logMessage('❌ Please login first', 'error');
+                return;
+            }
+
+            logMessage('🚀 Starting notification fix process...', 'info');
+            fixBtn.disabled = true;
+            testBtn.disabled = true;
+
+            let totalCount = 0;
+            let fixedCount = 0;
+            let skippedCount = 0;
+            let errorCount = 0;
+
+            try {
+                // Get all notifications
+                logMessage('📊 Fetching all notifications...', 'info');
+                const notificationsRef = collection(db, 'userNotifications');
+                const snapshot = await getDocs(notificationsRef);
+                
+                totalCount = snapshot.size;
+                logMessage(`📋 Found ${totalCount} notifications to check`, 'info');
+
+                let processed = 0;
+
+                for (const notificationDoc of snapshot.docs) {
+                    try {
+                        const data = notificationDoc.data();
+                        processed++;
+                        updateProgress(processed, totalCount);
+
+                        // Check if notification needs action URL
+                        if (!data.actionUrl || data.actionUrl === '' || data.actionUrl === '/') {
+                            // Generate appropriate action URL
+                            const defaultActionUrl = getDefaultActionUrl(data.type, data.data || {});
+                            
+                            // Update the notification
+                            await updateDoc(doc(db, 'userNotifications', notificationDoc.id), {
+                                actionUrl: defaultActionUrl
+                            });
+                            
+                            fixedCount++;
+                            
+                            if (fixedCount % 5 === 0) {
+                                logMessage(`✅ Fixed ${fixedCount} notifications...`, 'success');
+                            }
+                            
+                        } else {
+                            skippedCount++;
+                        }
+
+                        updateStats(totalCount, fixedCount, skippedCount, errorCount);
+
+                    } catch (error) {
+                        errorCount++;
+                        logMessage(`❌ Error fixing notification ${notificationDoc.id}: ${error.message}`, 'error');
+                        updateStats(totalCount, fixedCount, skippedCount, errorCount);
+                    }
+                }
+
+                // Final results
+                logMessage('', 'info');
+                logMessage('🎯 NOTIFICATION FIX COMPLETE!', 'success');
+                logMessage(`📊 Total notifications: ${totalCount}`, 'info');
+                logMessage(`✅ Fixed: ${fixedCount}`, 'success');
+                logMessage(`⏭️  Already OK: ${skippedCount}`, 'info');
+                logMessage(`❌ Errors: ${errorCount}`, 'error');
+                
+                const successRate = totalCount > 0 ? ((fixedCount + skippedCount) / totalCount * 100).toFixed(1) : 0;
+                logMessage(`💯 Success rate: ${successRate}%`, 'success');
+
+            } catch (error) {
+                logMessage(`💥 Fix process failed: ${error.message}`, 'error');
+                errorCount++;
+                updateStats(totalCount, fixedCount, skippedCount, errorCount);
+            } finally {
+                fixBtn.disabled = false;
+                testBtn.disabled = false;
+                logMessage('✨ Process completed!', 'success');
+            }
+        });
+
+        // Initial log
+        logMessage('🔧 Notification Action URL Fixer loaded', 'info');
+        logMessage('👆 Choose a login method to get started', 'info');
+    </script>
+</body>
+</html>

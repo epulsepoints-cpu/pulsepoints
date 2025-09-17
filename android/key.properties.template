@@ -1,0 +1,21 @@
+# Keystore properties for Android app signing
+# Copy this file to android/key.properties and fill in your actual values
+
+# Path to your keystore file (relative to android/ directory)
+storeFile=app/ecg-learn-game.keystore
+
+# Your keystore password
+storePassword=your_keystore_password_here
+
+# Your key alias (what you named your key when creating the keystore)
+keyAlias=ecg-key
+
+# Your key password
+keyPassword=your_key_password_here
+
+# Instructions:
+# 1. Generate keystore: keytool -genkey -v -keystore ecg-learn-game.keystore -alias ecg-key -keyalg RSA -keysize 2048 -validity 10000
+# 2. Place keystore file in android/app/ directory
+# 3. Copy this file to android/key.properties
+# 4. Fill in your actual passwords and paths
+# 5. Never commit key.properties to Git (it's in .gitignore)

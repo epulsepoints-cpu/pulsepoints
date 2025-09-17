@@ -1,0 +1,342 @@
+/* ECG Image Display Fix - Critical CSS Overrides */
+
+/* EMERGENCY LAYOUT FIXES - Remove all layout constraints that break mobile accessibility */
+
+/* Root and App container fixes */
+#root {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.App {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Remove all container constraints globally */
+.container,
+.max-w-4xl,
+.max-w-6xl,
+.max-w-2xl,
+.max-w-3xl,
+.max-w-5xl,
+.max-w-7xl {
+  max-width: none !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Responsive container constraint removal */
+.md\\:max-w-4xl,
+.md\\:max-w-6xl,
+.lg\\:max-w-4xl,
+.lg\\:max-w-6xl,
+.md\\:mx-auto,
+.lg\\:mx-auto {
+  max-width: none !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Force ECG images to be visible and properly sized */
+img[src*="/ecg/medical_accurate/"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  background-color: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  z-index: 10 !important;
+  position: relative !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  cursor: zoom-in !important;
+}
+
+/* Hover effect for ECG images */
+img[src*="/ecg/medical_accurate/"]:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Active/click effect for ECG images */
+img[src*="/ecg/medical_accurate/"]:active {
+  transform: scale(0.98) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Fix for any container that might be hiding ECG images */
+.ecg-image-container,
+.bg-white img[src*="/ecg/"],
+div img[src*="/ecg/medical_accurate/"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+}
+
+/* Ensure ECG task containers don't clip images */
+.ecg-task-content,
+.ecg-strip-mobile,
+.mobile-task-content {
+  overflow: visible !important;
+}
+
+/* Fix for any z-index issues with ECG images */
+.ecg-task-fullscreen img,
+.mobile-task-content img,
+.task-content img {
+  z-index: 10 !important;
+  position: relative !important;
+}
+
+/* Ensure all ECG-related divs are visible */
+div[class*="ecg"],
+div[id*="ecg"],
+.bg-gray-900,
+.bg-white.rounded-lg {
+  overflow: visible !important;
+  display: block !important;
+}
+
+/* LAYOUT FIXES - Prevent page breaking */
+
+/* Force full width for task containers */
+.mobile-task-wrapper,
+.mobile-task-fullscreen,
+.mobile-task-content {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+/* Remove max-width constraints that break mobile layout */
+@media (max-width: 768px) {
+  .max-w-6xl,
+  .max-w-4xl,
+  .max-w-2xl,
+  .max-w-xl {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  /* Fix for specific task containers */
+  div[class*="max-w"] {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Ensure full viewport usage */
+  .min-h-screen {
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    width: 100vw !important;
+  }
+  
+  /* Fix scrolling and overflow issues */
+  body, html {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+  
+  /* Remove rounded corners and shadows on mobile that might cause layout issues */
+  .rounded-xl,
+  .rounded-lg {
+    border-radius: 0.5rem !important;
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+/* Mobile-specific ECG image fixes */
+@media (max-width: 768px) {
+  img[src*="/ecg/medical_accurate/"] {
+    max-height: 300px !important;
+    object-fit: contain !important;
+    width: 100% !important;
+    margin: 10px 0 !important;
+  }
+  
+  .ecg-strip-mobile img,
+  .mobile-task-content img[src*="/ecg/"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Debug styles to make ECG images highly visible */
+.debug-ecg-images img[src*="/ecg/medical_accurate/"] {
+  border: 3px solid red !important;
+  background-color: yellow !important;
+  padding: 5px !important;
+}
+
+/* Force show any hidden ECG elements */
+*[style*="display: none"] img[src*="/ecg/"],
+*[style*="visibility: hidden"] img[src*="/ecg/"],
+*[style*="opacity: 0"] img[src*="/ecg/"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ECG Image Cropping and Enhancement Styles */
+/* Different handling for ECG Simulator vs regular lesson images */
+
+/* ECG Simulator - Boost Mode: Use contain to show full ECG */
+.boost-mode img[src*="/ecg/"],
+.boost-mode .ecg-cropped-image img {
+  object-fit: contain !important;
+  object-position: center !important; /* Center the image for optimal viewing */
+  filter: brightness(115%) contrast(115%) saturate(105%) !important;
+  image-rendering: crisp-edges !important;
+  border-radius: 0.75rem !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #f8fafc !important; /* Light background for contained images */
+}
+
+/* Regular ECG Simulator: Use contain for better clarity */
+.ecg-simulator img[src*="/ecg/"],
+.ecg-simulator .ecg-cropped-image img {
+  object-fit: contain !important;
+  object-position: center !important;
+  filter: brightness(110%) contrast(110%) !important;
+  image-rendering: crisp-edges !important;
+  border-radius: 0.75rem !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #f8fafc !important;
+}
+
+/* Lesson images - Keep cropping to remove diagnosis text */
+.lesson-content img[src*="/ecg/ecg_dataset_clean/"],
+.lesson-content img[alt*="ECG Strip for Analysis"],
+.lesson-content .ecg-cropped-image img {
+  object-fit: cover !important;
+  object-position: 50% 20% !important; /* Crop top 20% to completely remove diagnosis */
+  filter: brightness(110%) contrast(110%) !important;
+  image-rendering: crisp-edges !important;
+  border-radius: 0.75rem !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Enhanced image quality for all ECG images - Base settings */
+img[src*="/ecg/"] {
+  image-rendering: -webkit-optimize-contrast !important;
+  image-rendering: crisp-edges !important;
+  filter: brightness(105%) contrast(105%) !important;
+}
+
+/* Additional boost mode enhancements */
+.boost-mode img[src*="/ecg/"] {
+  box-shadow: 0 4px 20px rgba(139, 69, 197, 0.3) !important;
+  transform: scale(1) !important; /* Ensure no additional scaling conflicts */
+}
+
+/* Ensure EnhancedImage component respects our styling */
+.ecg-cropped-image {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.ecg-cropped-image > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Fix InteractiveImageViewer component scaling issues */
+.ecg-simulator .ecg-cropped-image img,
+.boost-mode .ecg-cropped-image img {
+  /* Override any inline styles set by framer-motion */
+  object-fit: contain !important;
+  object-position: center !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* Ensure ECG images in simulator maintain aspect ratio */
+.ecg-simulator motion-img,
+.boost-mode motion-img {
+  object-fit: contain !important;
+}
+
+/* Override framer-motion inline styles for ECG images */
+.ecg-simulator img[style],
+.boost-mode img[style] {
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* Mobile Responsive ECG Container */
+@media (max-width: 640px) {
+  /* Mobile ECG container adjustments */
+  .relative.overflow-hidden.rounded-3xl {
+    margin: 0 !important;
+    border-radius: 1rem !important;
+  }
+  
+  /* ECG Simulator mobile - Ensure proper sizing */
+  .ecg-simulator img[src*="/ecg/"],
+  .boost-mode img[src*="/ecg/"] {
+    min-height: 200px !important;
+    max-height: 320px !important;
+    width: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+  
+  /* Lesson content mobile - Keep cropping for diagnosis removal */
+  .lesson-content img[src*="/ecg/"] {
+    min-height: 200px !important;
+    max-height: 300px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    object-position: 50% 25% !important; /* More aggressive crop on mobile */
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Tablet responsiveness */
+  img[src*="/ecg/ecg_dataset_clean/"],
+  img[alt*="ECG Strip for Analysis"],
+  .ecg-cropped-image img {
+    object-position: 50% 22% !important; /* Medium crop for tablets */
+  }
+}
+
+/* Ensure ECG containers are always responsive */
+div[class*="h-48"],
+div[class*="h-64"],
+div[class*="h-72"],
+div[class*="h-80"] {
+  min-height: 12rem !important; /* 192px minimum */
+}
+
+@media (max-width: 640px) {
+  div[class*="h-48"],
+  div[class*="h-64"],
+  div[class*="h-72"],
+  div[class*="h-80"] {
+    min-height: 10rem !important; /* 160px on mobile */
+    max-height: 14rem !important; /* 224px max on mobile */
+  }
+}

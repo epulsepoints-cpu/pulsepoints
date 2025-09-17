@@ -1,0 +1,28 @@
+/* ModuleDetail.mobile.css: Mobile-specific tweaks for ModuleDetail */
+
+@media (max-width: 640px) {
+  .mobile-text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+  .rounded-lg {
+    border-radius: 0.75rem !important;
+  }
+  .w-full {
+    width: 100% !important;
+  }
+  .min-h-44px {
+    min-height: 44px !important;
+  }
+  .min-w-44px {
+    min-width: 44px !important;
+  }
+}
+
+/* Touch feedback for cards */
+.card:active {
+  opacity: 0.85;
+}

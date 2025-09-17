@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "outDir": "./scripts-dist",
+    "rootDir": "./scripts",
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": "."
+  },
+  "include": [
+    "scripts/**/*"
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+}

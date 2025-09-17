@@ -1,0 +1,24 @@
+# ECGkid Pocket Book - Demo Version
+
+Your portable ECG interpretation reference guide.
+
+## Quick Reference Tables
+- Normal ECG Values
+- Rhythm Recognition Guide  
+- Axis Interpretation
+- Common Abnormalities
+
+## Clinical Pearls
+- Emergency ECG findings
+- Age-related variations
+- Medication effects on ECG
+
+## Mobile Optimized
+- Easy navigation
+- Quick search
+- Bookmark favorites
+
+---
+**ECGkid PulsePoints Digital Product**
+File: ecgkid-pocket-book.pdf
+Size: 12.1 MB (Demo version)

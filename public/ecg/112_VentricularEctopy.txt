@@ -1,0 +1,9 @@
+MIT-BIH Record 112
+Condition: Ventricular Ectopy
+Files: 112.dat, 112.hea, 112.atr
+
+This is a placeholder file. To generate actual ECG images, you need:
+1. Python with wfdb, matplotlib, numpy packages
+2. Run the full processing script
+
+The raw ECG data files have been downloaded to the temp directory.

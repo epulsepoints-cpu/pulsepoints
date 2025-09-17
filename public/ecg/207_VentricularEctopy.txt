@@ -1,0 +1,9 @@
+MIT-BIH Record 207
+Condition: Ventricular Ectopy
+Files: 207.dat, 207.hea, 207.atr
+
+This is a placeholder file. To generate actual ECG images, you need:
+1. Python with wfdb, matplotlib, numpy packages
+2. Run the full processing script
+
+The raw ECG data files have been downloaded to the temp directory.

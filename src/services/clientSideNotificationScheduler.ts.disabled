@@ -1,0 +1,410 @@
+/**
+ * 🎯 CLIENT-SIDE DUOLINGO-STYLE NOTIFICATION SCHEDULER
+ * No Firebase Functions needed - runs entirely in browser/mobile app
+ */
+
+import { Capacitor } from '@capacitor/core';
+import { LocalNotifications } from '@capacitor/local-notifications';
+
+interface ScheduledNotification {
+  id: string;
+  userId: string;
+  type: 'daily_goal' | 'streak_maintenance' | 'tip_of_day';
+  title: string;
+  body: string;
+  scheduledFor: Date;
+  recurring: boolean;
+  metadata?: any;
+}
+
+class ClientSideNotificationScheduler {
+  private storageKey = 'ecgkid_scheduled_notifications';
+  private userPrefsKey = 'ecgkid_notification_preferences';
+  private isInitialized = false;
+
+  constructor() {
+    this.initialize();
+  }
+
+  async initialize(): Promise<void> {
+    if (this.isInitialized) return;
+
+    try {
+      // Request notification permissions
+      if (Capacitor.isNativePlatform()) {
+        // Mobile: Use Capacitor Local Notifications
+        await LocalNotifications.requestPermissions();
+        await LocalNotifications.registerActionTypes({
+          types: [
+            {
+              id: 'OPEN_APP',
+              actions: [
+                {
+                  id: 'open',
+                  title: 'Open App',
+                  foreground: true
+                }
+              ]
+            }
+          ]
+        });
+      } else {
+        // Web: Use browser notifications
+        if ('Notification' in window && Notification.permission === 'default') {
+          await Notification.requestPermission();
+        }
+      }
+
+      // Start the scheduler
+      this.startScheduler();
+      this.isInitialized = true;
+      
+      console.log('✅ Client-side notification scheduler initialized');
+    } catch (error) {
+      console.error('❌ Error initializing notification scheduler:', error);
+    }
+  }
+
+  /**
+   * 🔥 DUOLINGO-STYLE: Set up daily reminders for a user
+   */
+  async setupDailyReminders(userId: string, preferences?: {
+    reminderTime?: string; // "19:00"
+    enableDaily?: boolean;
+    enableStreak?: boolean;
+    enableTips?: boolean;
+  }): Promise<void> {
+    try {
+      const prefs = {
+        reminderTime: '19:00',
+        enableDaily: true,
+        enableStreak: true,
+        enableTips: true,
+        ...preferences
+      };
+
+      // Save user preferences
+      localStorage.setItem(this.userPrefsKey, JSON.stringify({ userId, ...prefs }));
+
+      // Clear existing notifications for this user
+      await this.clearUserNotifications(userId);
+
+      if (prefs.enableDaily) {
+        await this.scheduleDailyGoalReminders(userId, prefs.reminderTime);
+      }
+
+      if (prefs.enableStreak) {
+        await this.scheduleStreakReminders(userId, prefs.reminderTime);
+      }
+
+      if (prefs.enableTips) {
+        await this.scheduleEducationalTips(userId);
+      }
+
+      console.log(`🎯 Daily reminders set up for user ${userId} at ${prefs.reminderTime}`);
+    } catch (error) {
+      console.error('Error setting up daily reminders:', error);
+    }
+  }
+
+  /**
+   * 📚 Schedule daily goal reminders
+   */
+  private async scheduleDailyGoalReminders(userId: string, time: string): Promise<void> {
+    const [hours, minutes] = time.split(':').map(Number);
+    
+    // Schedule for the next 7 days
+    for (let i = 0; i < 7; i++) {
+      const scheduledDate = new Date();
+      scheduledDate.setDate(scheduledDate.getDate() + i);
+      scheduledDate.setHours(hours, minutes, 0, 0);
+      
+      // Skip if time has passed today
+      if (i === 0 && scheduledDate.getTime() < Date.now()) {
+        continue;
+      }
+
+      const notification: ScheduledNotification = {
+        id: `daily_goal_${userId}_${i}`,
+        userId,
+        type: 'daily_goal',
+        title: '🎯 Daily ECG Challenge Awaits!',
+        body: 'Ready to master ECG today? Complete your daily tasks and build your learning streak! 💪',
+        scheduledFor: scheduledDate,
+        recurring: true,
+        metadata: { dayOffset: i }
+      };
+
+      await this.scheduleNotification(notification);
+    }
+  }
+
+  /**
+   * 🔥 Schedule streak maintenance reminders (later in evening)
+   */
+  private async scheduleStreakReminders(userId: string, baseTime: string): Promise<void> {
+    const [hours, minutes] = baseTime.split(':').map(Number);
+    const streakHours = hours + 2; // 2 hours after daily reminder
+    
+    for (let i = 0; i < 7; i++) {
+      const scheduledDate = new Date();
+      scheduledDate.setDate(scheduledDate.getDate() + i);
+      scheduledDate.setHours(Math.min(streakHours, 23), minutes, 0, 0);
+      
+      if (i === 0 && scheduledDate.getTime() < Date.now()) {
+        continue;
+      }
+
+      const notification: ScheduledNotification = {
+        id: `streak_${userId}_${i}`,
+        userId,
+        type: 'streak_maintenance',
+        title: '⚡ Don\'t Break Your Streak!',
+        body: 'Your learning streak is valuable! Complete today\'s ECG tasks before midnight to keep it alive! 🔥',
+        scheduledFor: scheduledDate,
+        recurring: true,
+        metadata: { dayOffset: i }
+      };
+
+      await this.scheduleNotification(notification);
+    }
+  }
+
+  /**
+   * 💡 Schedule educational tips
+   */
+  private async scheduleEducationalTips(userId: string): Promise<void> {
+    const tips = [
+      'Did you know? A normal heart rate is between 60-100 beats per minute. Practice identifying rhythm patterns!',
+      'ECG Tip: The P wave represents atrial depolarization. Look for its consistent shape and timing.',
+      'Pro Tip: ST elevation can indicate a heart attack. Learn to spot these critical changes!',
+      'Fun Fact: The QRS complex shows ventricular depolarization and should be less than 120ms wide.',
+      'Remember: Practice makes perfect! Review ECG patterns daily to build your expertise.',
+      'Clinical Pearl: Always check lead placement - incorrect leads can mimic serious conditions!',
+      'Study Tip: Focus on rhythm, rate, and morphology when analyzing any ECG strip.'
+    ];
+
+    // Schedule tips at 2 PM for next 7 days
+    for (let i = 0; i < 7; i++) {
+      const scheduledDate = new Date();
+      scheduledDate.setDate(scheduledDate.getDate() + i);
+      scheduledDate.setHours(14, 0, 0, 0); // 2 PM
+      
+      if (i === 0 && scheduledDate.getTime() < Date.now()) {
+        continue;
+      }
+
+      const tip = tips[i % tips.length];
+      
+      const notification: ScheduledNotification = {
+        id: `tip_${userId}_${i}`,
+        userId,
+        type: 'tip_of_day',
+        title: '💡 ECG Tip of the Day',
+        body: tip,
+        scheduledFor: scheduledDate,
+        recurring: true,
+        metadata: { tipIndex: i % tips.length }
+      };
+
+      await this.scheduleNotification(notification);
+    }
+  }
+
+  /**
+   * Schedule a single notification
+   */
+  private async scheduleNotification(notification: ScheduledNotification): Promise<void> {
+    try {
+      if (Capacitor.isNativePlatform()) {
+        // Mobile: Use Capacitor Local Notifications
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              id: notification.id.hashCode(), // Convert string to number
+              title: notification.title,
+              body: notification.body,
+              schedule: {
+                at: notification.scheduledFor,
+                allowWhileIdle: true
+              },
+              actionTypeId: 'OPEN_APP',
+              extra: {
+                type: notification.type,
+                userId: notification.userId,
+                ...notification.metadata
+              }
+            }
+          ]
+        });
+      } else {
+        // Web: Store in localStorage and use setTimeout
+        this.storeWebNotification(notification);
+      }
+    } catch (error) {
+      console.error('Error scheduling notification:', error);
+    }
+  }
+
+  /**
+   * Store web notification for setTimeout scheduling
+   */
+  private storeWebNotification(notification: ScheduledNotification): void {
+    const stored = localStorage.getItem(this.storageKey);
+    const notifications: ScheduledNotification[] = stored ? JSON.parse(stored) : [];
+    
+    notifications.push(notification);
+    localStorage.setItem(this.storageKey, JSON.stringify(notifications));
+    
+    // Schedule the notification
+    const delay = notification.scheduledFor.getTime() - Date.now();
+    if (delay > 0) {
+      setTimeout(() => {
+        this.showWebNotification(notification);
+      }, delay);
+    }
+  }
+
+  /**
+   * Show web notification
+   */
+  private async showWebNotification(notification: ScheduledNotification): Promise<void> {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      const webNotification = new Notification(notification.title, {
+        body: notification.body,
+        icon: '/ecgkid_logo.png',
+        badge: '/ecgkid_logo.png',
+        tag: notification.id,
+        requireInteraction: true,
+        data: {
+          type: notification.type,
+          userId: notification.userId,
+          actionUrl: '/dashboard'
+        }
+      });
+
+      webNotification.onclick = () => {
+        window.focus();
+        window.location.href = '/dashboard';
+        webNotification.close();
+      };
+
+      // Auto-close after 10 seconds
+      setTimeout(() => webNotification.close(), 10000);
+    }
+  }
+
+  /**
+   * Start the notification scheduler (check every minute)
+   */
+  private startScheduler(): void {
+    // Check for due notifications every minute
+    setInterval(() => {
+      this.checkDueNotifications();
+    }, 60000); // 1 minute
+
+    // Initial check
+    this.checkDueNotifications();
+  }
+
+  /**
+   * Check for due notifications
+   */
+  private checkDueNotifications(): void {
+    if (Capacitor.isNativePlatform()) return; // Mobile handles this automatically
+
+    const stored = localStorage.getItem(this.storageKey);
+    if (!stored) return;
+
+    const notifications: ScheduledNotification[] = JSON.parse(stored);
+    const now = new Date();
+    const dueNotifications = notifications.filter(n => 
+      new Date(n.scheduledFor).getTime() <= now.getTime()
+    );
+
+    dueNotifications.forEach(notification => {
+      this.showWebNotification(notification);
+      
+      // If recurring, schedule for next day
+      if (notification.recurring) {
+        const nextDate = new Date(notification.scheduledFor);
+        nextDate.setDate(nextDate.getDate() + 1);
+        
+        const newNotification = {
+          ...notification,
+          id: `${notification.type}_${notification.userId}_${Date.now()}`,
+          scheduledFor: nextDate
+        };
+        
+        this.storeWebNotification(newNotification);
+      }
+    });
+
+    // Remove processed notifications
+    const remaining = notifications.filter(n => 
+      new Date(n.scheduledFor).getTime() > now.getTime()
+    );
+    localStorage.setItem(this.storageKey, JSON.stringify(remaining));
+  }
+
+  /**
+   * Clear all notifications for a user
+   */
+  private async clearUserNotifications(userId: string): Promise<void> {
+    if (Capacitor.isNativePlatform()) {
+      // Clear mobile notifications
+      const pending = await LocalNotifications.getPending();
+      const userNotificationIds = pending.notifications
+        .filter(n => n.extra?.userId === userId)
+        .map(n => ({ id: n.id }));
+      
+      if (userNotificationIds.length > 0) {
+        await LocalNotifications.cancel({ notifications: userNotificationIds });
+      }
+    } else {
+      // Clear web notifications from storage
+      const stored = localStorage.getItem(this.storageKey);
+      if (stored) {
+        const notifications: ScheduledNotification[] = JSON.parse(stored);
+        const filtered = notifications.filter(n => n.userId !== userId);
+        localStorage.setItem(this.storageKey, JSON.stringify(filtered));
+      }
+    }
+  }
+
+  /**
+   * Get user notification preferences
+   */
+  getUserPreferences(): any {
+    const stored = localStorage.getItem(this.userPrefsKey);
+    return stored ? JSON.parse(stored) : null;
+  }
+
+  /**
+   * Update notification preferences
+   */
+  async updatePreferences(userId: string, preferences: any): Promise<void> {
+    await this.setupDailyReminders(userId, preferences);
+  }
+}
+
+// Helper function to convert string to hash code
+declare global {
+  interface String {
+    hashCode(): number;
+  }
+}
+
+String.prototype.hashCode = function() {
+  let hash = 0;
+  for (let i = 0; i < this.length; i++) {
+    const char = this.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
+};
+
+// Export singleton
+export const clientNotificationScheduler = new ClientSideNotificationScheduler();
+export default clientNotificationScheduler;

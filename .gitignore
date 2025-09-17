@@ -1,0 +1,157 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Android/Capacitor
+android/app/build/
+android/.gradle/
+android/build/
+android/capacitor-cordova-android-plugins/
+*.apk
+*.aab
+
+# iOS
+ios/App/build/
+ios/App/Pods/
+ios/App/App.xcworkspace/
+ios/App/App.xcodeproj/
+
+# Debug and test files
+debug-*.js
+test-*.js
+test-*.cjs
+test-*.html
+test-*.py
+temp_*
+*-test.*
+*-backup.*
+*-old.*
+*-new.*
+*-temp.*
+*-fixed.*
+*-clean.*
+
+# Analysis and script files
+analyze-*.js
+analyze-*.cjs
+comprehensive-*.cjs
+convert-*.js
+convert-*.cjs
+create-*.js
+create-*.cjs
+create-*.ps1
+fix-*.js
+fix-*.cjs
+upload-*.cjs
+verify-*.js
+extract_*.py
+scripts/
+backup*/
+
+# Documentation and reports (except README)
+*.md
+!README.md
+!CHANGELOG.md
+*.csv
+reports/
+*.json
+!package.json
+!package-lock.json
+!tsconfig*.json
+!capacitor.config.ts
+!components.json
+
+# Large media files
+public/ecg/ecg_dataset_clean/
+public/audio/
+public/assets/icons/
+resources/
+
+# Lesson backup files
+src/data/optimized-lesson-*-backup.*
+src/data/optimized-lesson-*-old.*
+src/data/optimized-lesson-*-new.*
+src/data/optimized-lesson-*-temp.*
+src/data/optimized-lesson-*-fixed.*
+src/data/optimized-lesson-*-clean.*
+## src/data/optimized-lesson-*-6unit.* (removed to allow commit)
+src/data/lessons/
+lesson-backup*/
+
+# Android specific
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/local.properties
+android/keystore.properties
+android/key.properties
+android/app/google-services.json
+*.keystore
+*.jks
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Functions
+functions/
+*_temp.*
+*.backup
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ECG Processing temp files
+temp_ecg_data/
+temp_ptbxl/
+temp_single_test/
+python_ecg/
+backend/
+
+# Build scripts
+*.bat
+*.sh
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Firebase Admin
+firebase-admin-key.json

@@ -1,0 +1,134 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read/write their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Allow user creation even without prior authentication for initial setup
+      allow create: if request.auth != null;
+    }
+
+    // ECG Tasks: Public read access for all users (including guests)
+    match /ecgTasks/{taskId} {
+      allow read: if true;  // Public read access for all users and guests
+      allow write, update: if request.auth != null && 
+        (request.auth.token.admin == true || 
+         request.auth.uid in resource.data.allowedEditors);
+      allow create: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Public data collection for app functionality
+    match /publicData/{document} {
+      allow read: if true;  // Public read access for all users
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Learning Progress: Users can read/write their own progress
+    match /learningProgress/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Progress: Users can read/write their own progress data
+    match /userProgress/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Achievements: Users can read/write their own achievements
+    match /achievements/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Achievements (alternative collection name): Users can read/write their own achievements
+    match /userAchievements/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Progress Stats: Users can read/write their own progress statistics
+    match /progressStats/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Progress Stats: Users can read/write their own progress statistics
+    match /userProgressStats/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Module Progress: Users can read/write their own module progress
+    match /moduleProgress/{progressId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+    }
+
+    // User Learning Profiles: Users can read/write their own learning profiles
+    match /userLearningProfiles/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Activities: Users can read/write their own activity data
+    match /userActivities/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Lesson Progress: Users can read/write their own lesson progress
+    match /userLessonProgress/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // User Notifications: Users can read/write their own notifications
+    match /userNotifications/{notificationId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+    }
+
+    // Task Submissions: Users can read/write their own submissions
+    match /taskSubmissions/{submissionId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+    }
+
+    // Global App Settings: Read access for all authenticated users
+    match /appSettings/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Test collection for connection verification (public read)
+    match /test/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Analytics and usage data (admin only)
+    match /analytics/{document} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Lessons: TEMPORARY PUBLIC ACCESS FOR TESTING
+    match /lessons/{lessonId} {
+      allow read, write, update, delete, create: if true;  // TEMPORARY: Full public access for testing
+      // TODO: Change back to auth-only after testing:
+      // allow read: if request.auth != null;
+      // allow write, update, delete: if request.auth != null && request.auth.token.admin == true;
+      // allow create: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Feedback and support (authenticated users)
+    match /feedback/{feedbackId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+    }
+
+    // Weekly Events: Public read access, admin write access
+    match /weeklyEvents/{eventId} {
+      allow read: if true;  // Public read access for all users
+      allow write: if request.auth != null && request.auth.token.admin == true;
+      allow create: if request.auth != null;
+    }
+
+    // User Event Progress: Users can read/write their own event progress
+    match /userEventProgress/{progressId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+    }
+  }
+}

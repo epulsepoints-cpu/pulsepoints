@@ -1,0 +1,479 @@
+/* Import ECG Image Fix */
+@import './styles/ecg-image-fix.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your custom CSS below */
+@layer utilities {
+  /* Hide scrollbar for mobile while keeping functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+  }
+}
+
+/* Custom animations for gamified experience */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.4s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+/* Additional animation utilities */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+/* ECG-themed gradients */
+.bg-ecg-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-pulse-gradient {
+  background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+}
+
+.text-ecg-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hide toast notifications on mobile screens */
+@media (max-width: 640px) {
+  [data-radix-toast-viewport],
+  .ToastViewport,
+  .toaster,
+  .toast,
+  .Toastify__toast-container,
+  [class*="toast"],
+  [id*="toast"],
+  [role="status"] {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+}
+
+/* Enhanced Lesson View Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-float-slow {
+  animation: float-slow 10s ease-in-out infinite;
+  animation-delay: 4s;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out;
+}
+
+.animate-slide-in {
+  animation: slide-in-left 0.5s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Glass morphism effects */
+.shadow-glass {
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.shadow-glass-lg {
+  box-shadow: 
+    0 20px 40px 0 rgba(31, 38, 135, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Premium scrollbar styling */
+.premium-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.premium-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.premium-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.premium-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Lesson step transitions */
+.lesson-step-enter {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.lesson-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* GPU acceleration for better performance */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* ECG Learning Roadmap Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+/* Line clamp utility for text overflow */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ECG Learning Map Specific Animations */
+@keyframes pathFlow {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -24;
+  }
+}
+
+.learning-path-flow {
+  animation: pathFlow 3s linear infinite;
+}
+
+/* Map node hover effects */
+.map-node {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.map-node:hover {
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+}
+
+/* Boost Mode Animations - NEET PG Style */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flash {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.8), 0 0 60px rgba(168, 85, 247, 0.4);
+  }
+}
+
+@keyframes boost-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 6s linear infinite;
+}
+
+.animate-flash {
+  animation: flash 1s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-boost-pulse {
+  animation: boost-pulse 2s ease-in-out infinite;
+}
+
+/* NEET PG Style Question Card */
+.neet-question-card {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 20px 40px rgba(168, 85, 247, 0.2);
+}
+
+.neet-option-button {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.neet-option-button:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+  border-color: rgba(168, 85, 247, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+}
+
+.neet-option-button.selected {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.4) 0%, rgba(236, 72, 153, 0.4) 100%);
+  border-color: rgba(168, 85, 247, 0.8);
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+}
