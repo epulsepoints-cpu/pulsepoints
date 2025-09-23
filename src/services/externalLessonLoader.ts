@@ -13,7 +13,8 @@ interface LessonResponse {
 }
 
 class ExternalLessonLoader {
-  private baseUrl = 'https://pulsepoints-loudz3san-310891s-projects.vercel.app/lessons-data';
+  // Primary URL (Vercel) - fallback to GitHub raw files if needed
+  private baseUrl = 'https://raw.githubusercontent.com/rajkalale/pulsepoints/main/public/lessons-data';
   private cache = new Map<string, Lesson>();
   private moduleCache = new Map<string, Lesson[]>();
   private loadingPromises = new Map<string, Promise<Lesson | null>>();
