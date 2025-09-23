@@ -13,7 +13,7 @@ interface LessonResponse {
 }
 
 class ExternalLessonLoader {
-  private baseUrl = 'https://pulsepoints-three.vercel.app/data';
+  private baseUrl = 'https://pulsepoints-q8khy7mtj-310891s-projects.vercel.app/Data';
   private cache = new Map<string, Lesson>();
   private moduleCache = new Map<string, Lesson[]>();
   private loadingPromises = new Map<string, Promise<Lesson | null>>();
