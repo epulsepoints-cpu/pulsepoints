@@ -1,7 +1,5 @@
 /**
- * 🌐 EXTclass ExternalLessonLoader {
-  private baseUrl = 'https://pulsepoints-oi64nchoj-310891s-projects.vercel.app/api';
-  private cache = new Map<string, Lesson>();AL LESSON LOADER - True Dynamic Loading
+ * 🌐 EXTERNAL LESSON LOADER - True Dynamic Loading
  * Loads lessons from Vercel deployment to eliminate bundle bloat
  * This completely removes lesson content from mobile app bundle
  */
@@ -15,7 +13,7 @@ interface LessonResponse {
 }
 
 class ExternalLessonLoader {
-  private baseUrl = 'https://pulsepoints-q8khy7mtj-310891s-projects.vercel.app/Data';
+  private baseUrl = 'https://pulsepoints-loudz3san-310891s-projects.vercel.app/lessons-data';
   private cache = new Map<string, Lesson>();
   private moduleCache = new Map<string, Lesson[]>();
   private loadingPromises = new Map<string, Promise<Lesson | null>>();
