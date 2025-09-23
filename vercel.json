@@ -52,10 +52,30 @@
       ]
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/data/(.*)",
+      "dest": "/data/$1",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "src": "/Data/(.*)",
+      "dest": "/data/$1",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
