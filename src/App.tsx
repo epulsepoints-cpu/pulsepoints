@@ -5,7 +5,7 @@ import { App as CapacitorApp } from '@capacitor/app';
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { NetworkStatusIndicator } from "@/hooks/useNetworkStatus";
 import { AuthProvider } from "@/hooks/useAuth";
-import { unifiedNotificationService } from "@/services/unifiedNotificationService";
+import { initializeNotifications } from "@/services/NotificationManager";
 import verifyFirebaseSetup from "@/lib/firebase-checker";
 import { autoInitializeEventsSystem } from "@/services/autoInitializeEvents";
 import { toast } from "@/components/ui/use-toast";
@@ -107,13 +107,13 @@ const App = () => {
         await autoInitializeEventsSystem();
         console.log('✅ Events system ready');
         
-        // Initialize notification service for all platforms
-        console.log('🔔 Initializing notification service...');
-        const notificationInit = await unifiedNotificationService.initialize();
+        // Initialize unified notification service for all platforms
+        console.log('🔔 Initializing unified notification service...');
+        const notificationInit = await initializeNotifications();
         if (notificationInit) {
-          console.log('✅ Notification service initialized successfully');
+          console.log('✅ Unified notification service initialized successfully');
         } else {
-          console.error('❌ Notification service initialization failed');
+          console.error('❌ Unified notification service initialization failed');
         }
         
         console.log('✅ App initialization complete');

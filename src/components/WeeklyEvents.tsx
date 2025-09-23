@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import { useUISounds } from '@/hooks/useUISounds';
 import { 
   Calendar,
   Clock,
@@ -51,6 +52,7 @@ interface WeeklyEventsProps {
 
 const WeeklyEvents: React.FC<WeeklyEventsProps> = ({ className }) => {
   const { user } = useAuth();
+  const { playClickSound, playRewardSound, playCorrectSound, playSwooshSound } = useUISounds();
   const [currentEvent, setCurrentEvent] = useState<WeeklyEvent | null>(null);
   const [userProgress, setUserProgress] = useState<UserEventProgress | null>(null);
   const [loading, setLoading] = useState(true);
@@ -125,14 +127,18 @@ const WeeklyEvents: React.FC<WeeklyEventsProps> = ({ className }) => {
     try {
       await completeDayProgress(user.uid, currentEvent.id, dayNumber, xpEarned, gemsEarned, accuracy, timeSpent);
       
+      // Play success sound for day completion
+      playCorrectSound();
+      
       toast({
         title: `Day ${dayNumber} Complete! 🎉`,
         description: `You earned ${xpEarned} XP and ${gemsEarned} gems!`,
         duration: 4000
       });
 
-      // Show celebration animation
+      // Show celebration animation with reward sound
       setTimeout(() => {
+        playRewardSound(); // Play reward sound for XP/gems
         toast({
           title: 'Great Progress! ✨',
           description: dayNumber < 7 ? `Day ${dayNumber + 1} is now unlocked!` : 'Event completed! Check your rewards!',
@@ -348,6 +354,7 @@ const WeeklyEvents: React.FC<WeeklyEventsProps> = ({ className }) => {
                 )}
                 onClick={() => {
                   if (isUnlocked) {
+                    playClickSound(); // Play click sound for day selection
                     if (isBoss) {
                       setShowBossChallenge(true);
                     } else {
@@ -434,6 +441,8 @@ const WeeklyEvents: React.FC<WeeklyEventsProps> = ({ className }) => {
                 <Button 
                   className="mt-4"
                   onClick={() => {
+                    // Play click sound for button interaction
+                    playClickSound();
                     // Simulate completion for demo
                     const mockXP = selectedDay.rewards.xp;
                     const mockGems = selectedDay.rewards.gems;
@@ -462,7 +471,10 @@ const WeeklyEvents: React.FC<WeeklyEventsProps> = ({ className }) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setShowBossChallenge(false)}
+                  onClick={() => {
+                    playClickSound();
+                    setShowBossChallenge(false);
+                  }}
                 >
                   ×
                 </Button>
@@ -477,7 +489,10 @@ const WeeklyEvents: React.FC<WeeklyEventsProps> = ({ className }) => {
                 <Button 
                   className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
                   onClick={() => {
+                    playClickSound(); // Play click sound for boss challenge
                     setShowBossChallenge(false);
+                    // Play special reward sound for boss completion
+                    setTimeout(() => playRewardSound(), 100);
                     toast({
                       title: 'Boss Challenge Complete! 👑',
                       description: 'You are now a master of this event!',

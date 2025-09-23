@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { toast } from '@/components/ui/use-toast';
 import { useGameState } from '@/hooks/useGameState';
 import { useUserStats } from '@/hooks/useUserStats';
+import OnboardingErrorBoundary from './OnboardingErrorBoundary';
 import { CompactProfileBadge } from './ProfileBadgeDisplay';
 import { useUnifiedNotifications } from '@/hooks/useUnifiedNotifications';
 import HeartShop from './HeartShop';
@@ -67,6 +68,7 @@ import PulsepointStore from './PulsepointStore';
 import EventsMain from './Events/EventsMain';
 import ECGSimulator from './ECGSimulator';
 import DownloadsManager from './DownloadsManager';
+import { androidRecoveryManager } from '@/utils/AndroidRecoveryManager';
 
 type ActiveTab = 'daily-tasks' | 'learn' | 'progress' | 'store' | 'profile' | 'events' | 'ecg-simulator' | 'downloads';
 
@@ -257,8 +259,19 @@ const MainDuolingoLayout: React.FC = () => {
 
   // Check if authenticated user needs onboarding assessment
   useEffect(() => {
-    if (gameState.isAuthenticated && gameState.user?.id && !gameState.user.onboardingCompleted) {
+    console.log('🔍 MainDuolingo: Checking onboarding state:', {
+      isAuthenticated: gameState.isAuthenticated,
+      userId: gameState.user?.id,
+      onboardingCompleted: gameState.user?.onboardingCompleted,
+      currentShowOnboardingAssessment: showOnboardingAssessment
+    });
+    
+    if (gameState.isAuthenticated && gameState.user?.id && !gameState.user.onboardingCompleted && !showOnboardingAssessment) {
+      console.log('🎯 MainDuolingo: Setting showOnboardingAssessment to true');
       setShowOnboardingAssessment(true);
+    } else if (gameState.user?.onboardingCompleted && showOnboardingAssessment) {
+      console.log('🎯 MainDuolingo: Onboarding completed, setting showOnboardingAssessment to false');
+      setShowOnboardingAssessment(false);
     }
   }, [gameState.isAuthenticated, gameState.user?.id, gameState.user?.onboardingCompleted]);
 
@@ -304,50 +317,80 @@ const MainDuolingoLayout: React.FC = () => {
 
   // Show onboarding if user is new or hasn't completed professional onboarding
   if (!gameState.isAuthenticated && !gameState.isGuestUser && showOnboarding) {
-    return <AdvancedOnboardingAssessment 
-      userId="guest-user" 
-      onComplete={async (onboardingData) => {
-        localStorage.setItem('ecg-onboarding-completed', 'true');
-        localStorage.setItem('ecg-onboarding-data', JSON.stringify(onboardingData));
-        
-        // If user is already authenticated, update their profile immediately
-        if (gameState.isAuthenticated && updateUserOnboardingData) {
-          await updateUserOnboardingData(onboardingData);
-        }
-        
-        setShowOnboarding(false);
-        setShowLoginForm(true);
-      }} 
-    />;
+    return (
+      <OnboardingErrorBoundary>
+        <AdvancedOnboardingAssessment 
+          userId="guest-user" 
+          onComplete={async (onboardingData) => {
+            localStorage.setItem('ecg-onboarding-completed', 'true');
+            localStorage.setItem('ecg-onboarding-data', JSON.stringify(onboardingData));
+            
+            // If user is already authenticated, update their profile immediately
+            if (gameState.isAuthenticated && updateUserOnboardingData) {
+              await updateUserOnboardingData(onboardingData);
+            }
+            
+            setShowOnboarding(false);
+            setShowLoginForm(true);
+          }} 
+        />
+      </OnboardingErrorBoundary>
+    );
   }
 
   // Show assessment if user is authenticated but hasn't completed onboarding
   if (gameState.isAuthenticated && showOnboardingAssessment && gameState.user?.id) {
     return (
-      <AdvancedOnboardingAssessment 
-        onComplete={async (data) => {
-          try {
+      <OnboardingErrorBoundary>
+        <AdvancedOnboardingAssessment 
+          onComplete={async (data) => {
+            console.log('🎯 MainDuolingo: onComplete received data:', data);
+            
+            // Use Android-safe navigation to prevent UI freeze
+            androidRecoveryManager.safeNavigate(
+              () => {
+                setShowOnboardingAssessment(false);
+                toast({
+                  title: "Assessment Complete! 🎉",
+                  description: `Starting with Module ${data.recommendedModule} based on your performance.`,
+                  duration: 3000,
+                });
+              },
+              () => {
+                // Fallback navigation
+                console.log('🔄 Using fallback navigation for onboarding completion');
+                setShowOnboardingAssessment(false);
+              }
+            );
+            
+            // Move heavy operations to background using Android-safe wrapper
             if (updateUserOnboardingData) {
-              await updateUserOnboardingData(data);
-              setShowOnboardingAssessment(false);
-              
-              toast({
-                title: "Assessment Complete! 🎉",
-                description: `Starting with Module ${data.recommendedModule} based on your performance.`,
+              androidRecoveryManager.safeAsyncOperation(
+                () => updateUserOnboardingData(data),
+                'onboarding-data-update',
+                {
+                  maxRetries: 3,
+                  retryDelay: 1000,
+                  fallbackAction: () => {
+                    console.warn('⚠️ Failed to save onboarding data, will retry later');
+                    // Store data locally as fallback
+                    localStorage.setItem('pending-onboarding-data', JSON.stringify(data));
+                  }
+                }
+              ).catch(error => {
+                console.error('❌ MainDuolingo: Error saving assessment data:', error);
               });
             }
-          } catch (error) {
-            console.error('Error saving assessment data:', error);
-            toast({
-              title: "Error",
-              description: "Failed to save assessment results. Please try again.",
-              variant: "destructive",
-            });
-          }
-        }}
-        onBack={() => setShowOnboardingAssessment(false)}
-        userId={gameState.user.id}
-      />
+          }}
+          onBack={() => {
+            androidRecoveryManager.safeNavigate(
+              () => setShowOnboardingAssessment(false),
+              () => setShowOnboardingAssessment(false)
+            );
+          }}
+          userId={gameState.user.id}
+        />
+      </OnboardingErrorBoundary>
     );
   }
 

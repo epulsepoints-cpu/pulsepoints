@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Play, RotateCcw, Award, Clock, Zap, Target, Heart, Activity, Pause, BookOpen, Brain, Trophy, Stethoscope, Waves, AlertTriangle, Shuffle, TrendingUp, AlertCircle, Check, X, CheckCircle, Rocket } from 'lucide-react';
+import { ArrowLeft, Play, RotateCcw, Award, Clock, Zap, Target, Heart, Activity, Pause, BookOpen, Brain, Trophy, Stethoscope, Waves, AlertTriangle, Shuffle, TrendingUp, AlertCircle, Check, X, CheckCircle, Rocket, GitBranch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/components/ui/use-toast';
-import EnhancedImage from '@/components/EnhancedImage';
+import { motion, AnimatePresence } from 'framer-motion';
+import SimpleImageViewer from '@/components/SimpleImageViewer';
+import { useUISounds } from '@/hooks/useUISounds';
+import { usePulseStore } from '@/components/usePulseStore';
+import MedicalAnimation from '@/components/MedicalAnimation';
 
 interface ECGSimulatorProps {
   onBack: () => void;
@@ -477,7 +481,7 @@ const generateRandomECGQuestion = (id: string): ECGQuestion => {
   };
 };
 
-// Static ECG categories for practice mode
+// Comprehensive ECG categories for Learn Mode - Expanded with all medical rhythms
 const ECG_CATEGORIES = {
   basic: {
     name: 'Normal Sinus Rhythm',
@@ -501,9 +505,9 @@ const ECG_CATEGORIES = {
         'Regular cardiac health maintenance'
       ],
       images: [
-        '/ecg/medical_accurate/normal_75bpm.png',
-        '/ecg/medical_accurate/normal_sinus_85bpm_3.png',
-        '/ecg/medical_accurate/normal_60bpm.png'
+        '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00001_normal%20ECG.png',
+        '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00002_normal%20ECG.png',
+        '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00003_normal%20ECG.png'
       ]
     },
     questions: [
@@ -515,211 +519,376 @@ const ECG_CATEGORIES = {
         explanation: 'This shows normal sinus rhythm with regular P waves, normal PR interval, and regular QRS complexes.',
         difficulty: 'easy',
         category: 'basic'
-      },
-      {
-        id: '2',
-        imageUrl: '/ecg/medical_accurate/normal_sinus_85bpm_3.png',
-        correctAnswer: 'Normal Sinus Rhythm',
-        options: ['Normal Sinus Rhythm', 'Sinus Bradycardia', 'First Degree AV Block', 'Junctional Rhythm'],
-        explanation: 'Normal sinus rhythm with regular P waves and normal PR intervals.',
-        difficulty: 'easy',
-        category: 'basic'
-      },
-      {
-        id: '3',
-        imageUrl: '/ecg/medical_accurate/bradycardia_45bpm.png',
-        correctAnswer: 'Sinus Bradycardia',
-        options: ['Normal Sinus Rhythm', 'Sinus Bradycardia', 'Junctional Rhythm', 'AV Block'],
-        explanation: 'Sinus bradycardia with heart rate below 60 BPM but normal P waves and PR intervals.',
-        difficulty: 'easy',
-        category: 'basic'
-      },
-      {
-        id: '4',
-        imageUrl: '/ecg/medical_accurate/tachycardia_125bpm.png',
-        correctAnswer: 'Sinus Tachycardia',
-        options: ['Normal Sinus Rhythm', 'Sinus Tachycardia', 'Atrial Fibrillation', 'SVT'],
-        explanation: 'Sinus tachycardia with heart rate above 100 BPM and normal P waves.',
-        difficulty: 'easy',
-        category: 'basic'
       }
     ]
   },
-  arrhythmias: {
-    name: 'Atrial Arrhythmias',
-    description: 'Abnormal rhythms originating from the atria',
-    icon: Activity,
-    educational: {
-      mechanism: 'Atrial arrhythmias originate from abnormal electrical activity in the atria. This can result from enhanced automaticity, triggered activity, or reentrant circuits. Common types include atrial fibrillation, atrial flutter, and premature atrial contractions.',
-      pathophysiology: 'Atrial fibrillation involves multiple reentrant wavelets in the atria, causing chaotic electrical activity. Risk factors include age, hypertension, heart failure, valvular disease, hyperthyroidism, and alcohol use. The irregular ventricular response can compromise cardiac output.',
-      ecgChanges: [
-        'Atrial Fibrillation: Irregularly irregular rhythm, no distinct P waves, fibrillatory waves',
-        'Atrial Flutter: Regular sawtooth flutter waves at 250-350 bpm',
-        'Variable ventricular response (often 2:1, 3:1, or 4:1 conduction)',
-        'QRS complexes usually narrow unless aberrant conduction'
-      ],
-      clinicalSignificance: 'Atrial arrhythmias can cause palpitations, fatigue, shortness of breath, and increased stroke risk due to thromboembolic complications. Atrial fibrillation is the most common sustained arrhythmia.',
-      management: [
-        'Rate control: Beta-blockers, calcium channel blockers, digoxin',
-        'Rhythm control: Cardioversion, antiarrhythmic drugs',
-        'Anticoagulation for stroke prevention (CHA2DS2-VASc score)',
-        'Catheter ablation for drug-refractory cases',
-        'Treat underlying causes (thyroid, alcohol, heart failure)'
-      ],
-      images: [
-        '/ecg/medical_accurate/atrial_fibrillation_95bpm_3.png',
-        '/ecg/medical_accurate/atrial_flutter_75bpm_1.png',
-        '/ecg/medical_accurate/atrial_fibrillation_130bpm_6.png'
-      ]
-    },
-    questions: [
-      {
-        id: '5',
-        imageUrl: '/ecg/medical_accurate/atrial_fibrillation_95bpm_3.png',
-        correctAnswer: 'Atrial Fibrillation',
-        options: ['Atrial Fibrillation', 'Atrial Flutter', 'Multifocal Atrial Tachycardia', 'Sinus Arrhythmia'],
-        explanation: 'Atrial fibrillation showing irregularly irregular rhythm with no distinct P waves, only fibrillatory waves.',
-        difficulty: 'medium',
-        category: 'arrhythmias'
-      },
-      {
-        id: '6',
-        imageUrl: '/ecg/medical_accurate/atrial_flutter_75bpm_1.png',
-        correctAnswer: 'Atrial Flutter',
-        options: ['Normal Sinus Rhythm', 'Atrial Fibrillation', 'Atrial Flutter', 'Ventricular Tachycardia'],
-        explanation: 'Atrial flutter with characteristic sawtooth pattern of flutter waves.',
-        difficulty: 'medium',
-        category: 'arrhythmias'
-      },
-      {
-        id: '7',
-        imageUrl: '/ecg/medical_accurate/pvc_78bpm_2.png',
-        correctAnswer: 'Premature Ventricular Contractions',
-        options: ['Normal Sinus Rhythm', 'Atrial Fibrillation', 'Premature Ventricular Contractions', 'Bundle Branch Block'],
-        explanation: 'PVCs appear as wide, bizarre QRS complexes that occur earlier than expected.',
-        difficulty: 'medium',
-        category: 'arrhythmias'
-      },
-      {
-        id: '8',
-        imageUrl: '/ecg/medical_accurate/supraventricular_tachycardia_180bpm_2.png',
-        correctAnswer: 'Supraventricular Tachycardia',
-        options: ['Sinus Tachycardia', 'Supraventricular Tachycardia', 'Ventricular Tachycardia', 'Atrial Flutter'],
-        explanation: 'SVT shows rapid, regular rhythm with narrow QRS complexes and absent P waves.',
-        difficulty: 'hard',
-        category: 'arrhythmias'
-      }
-    ]
-  },
-  blocks: {
-    name: 'Conduction Blocks',
-    description: 'Impaired electrical conduction through the heart',
+  anterior_mi: {
+    name: 'Anterior STEMI',
+    description: 'Anterior ST-elevation myocardial infarction patterns',
     icon: AlertTriangle,
     educational: {
-      mechanism: 'Conduction blocks occur when electrical impulses are delayed or blocked as they travel through the cardiac conduction system. This can happen at the AV node (AV blocks) or in the bundle branches (bundle branch blocks).',
-      pathophysiology: 'AV blocks result from dysfunction in the AV node, bundle of His, or bundle branches. Causes include ischemia, fibrosis, medications (beta-blockers, calcium channel blockers), electrolyte imbalances, or infiltrative diseases. Bundle branch blocks indicate delay or block in the right or left bundle branch.',
+      mechanism: 'Anterior STEMI occurs due to occlusion of the left anterior descending (LAD) coronary artery. This leads to ischemia and necrosis of the anterior wall of the left ventricle, causing characteristic ECG changes in the anterior leads (V1-V4).',
+      pathophysiology: 'LAD occlusion causes transmural ischemia of the anterior myocardium. The lack of oxygen leads to cellular injury, membrane depolarization, and eventually cell death. This manifests as ST elevation due to injury current and later Q wave development due to necrosis.',
       ecgChanges: [
-        'First-degree AV block: PR interval >200 ms, all P waves conducted',
-        'Second-degree AV block: Some P waves not conducted',
-        'Third-degree AV block: Complete dissociation of P waves and QRS',
-        'RBBB: Wide QRS >120 ms, RSR\' pattern in V1',
-        'LBBB: Wide QRS >120 ms, broad R waves in I, aVL, V5-V6'
+        'ST elevation in leads V1-V4 (anterior leads)',
+        'Reciprocal ST depression in inferior leads (II, III, aVF)',
+        'Development of pathological Q waves in V1-V4',
+        'T wave inversion in anterior leads (late finding)',
+        'Loss of R wave progression in precordial leads'
       ],
-      clinicalSignificance: 'Higher-grade AV blocks can cause bradycardia, syncope, and hemodynamic compromise. Bundle branch blocks may indicate underlying structural heart disease and can affect the interpretation of other ECG findings.',
+      clinicalSignificance: 'Anterior STEMI is a medical emergency requiring immediate reperfusion therapy. It carries significant morbidity and mortality, often affecting a large portion of the left ventricle and potentially causing cardiogenic shock.',
       management: [
-        'First-degree AV block: Usually no treatment needed, monitor',
-        'Symptomatic bradycardia: Atropine, pacing',
-        'Complete heart block: Permanent pacemaker',
-        'Treat underlying causes (ischemia, medications)',
-        'Bundle branch blocks: Evaluate for structural heart disease'
+        'Immediate primary PCI (percutaneous coronary intervention) within 90 minutes',
+        'Dual antiplatelet therapy (aspirin + P2Y12 inhibitor)',
+        'Anticoagulation (heparin or bivalirudin)',
+        'Beta-blockers, ACE inhibitors, and statins',
+        'Emergency cardiac catheterization and revascularization'
       ],
       images: [
-        '/ecg/medical_accurate/first_degree_av_block_70bpm_2.png',
-        '/ecg/medical_accurate/rbbb_80bpm_2.png',
-        '/ecg/medical_accurate/lbbb_75bpm_2.png'
+        '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00311_anterior%20myocardial%20infarction.png',
+        '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00418_anterior%20myocardial%20infarction.png',
+        '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00486_anterior%20myocardial%20infarction.png'
       ]
     },
-    questions: [
-      {
-        id: '9',
-        imageUrl: '/ecg/medical_accurate/first_degree_av_block_70bpm_2.png',
-        correctAnswer: 'First Degree AV Block',
-        options: ['Normal Sinus Rhythm', 'First Degree AV Block', 'Second Degree AV Block', 'Third Degree AV Block'],
-        explanation: 'First degree AV block shows prolonged PR interval (>200ms) but all P waves are conducted.',
-        difficulty: 'medium',
-        category: 'blocks'
-      },
-      {
-        id: '10',
-        imageUrl: '/ecg/medical_accurate/rbbb_80bpm_2.png',
-        correctAnswer: 'Right Bundle Branch Block',
-        options: ['Normal Sinus Rhythm', 'Right Bundle Branch Block', 'Left Bundle Branch Block', 'First Degree AV Block'],
-        explanation: 'RBBB shows widened QRS complexes with characteristic RSR\' pattern in V1.',
-        difficulty: 'hard',
-        category: 'blocks'
-      },
-      {
-        id: '11',
-        imageUrl: '/ecg/medical_accurate/lbbb_75bpm_2.png',
-        correctAnswer: 'Left Bundle Branch Block',
-        options: ['Right Bundle Branch Block', 'Left Bundle Branch Block', 'Normal Sinus Rhythm', 'Ventricular Tachycardia'],
-        explanation: 'LBBB shows wide QRS complexes with broad R waves in lateral leads and no septal Q waves.',
-        difficulty: 'hard',
-        category: 'blocks'
-      }
-    ]
+    questions: []
   },
-  dangerous: {
-    name: 'Life-Threatening Arrhythmias',
-    description: 'Emergency rhythms requiring immediate intervention',
+  inferior_mi: {
+    name: 'Inferior STEMI',
+    description: 'Inferior ST-elevation myocardial infarction patterns',
+    icon: AlertTriangle,
+    educational: {
+      mechanism: 'Inferior STEMI results from occlusion of the right coronary artery (RCA) or left circumflex artery (LCX). This causes ischemia and necrosis of the inferior wall of the left ventricle, showing characteristic changes in the inferior leads (II, III, aVF).',
+      pathophysiology: 'RCA or LCX occlusion leads to inferior wall ischemia. The RCA supplies the inferior wall, posterior wall, and often the right ventricle. LCX occlusion affects the inferior-lateral wall. Transmural ischemia causes ST elevation and eventual Q wave formation.',
+      ecgChanges: [
+        'ST elevation in leads II, III, aVF (inferior leads)',
+        'Reciprocal ST depression in leads I, aVL',
+        'Development of pathological Q waves in II, III, aVF',
+        'T wave inversion in inferior leads (later finding)',
+        'May have right ventricular involvement (V4R changes)'
+      ],
+      clinicalSignificance: 'Inferior STEMI may be associated with bradyarrhythmias due to RCA supplying the SA and AV nodes. Right ventricular involvement can cause hemodynamic compromise and requires specific management considerations.',
+      management: [
+        'Primary PCI within 90 minutes (door-to-balloon time)',
+        'Dual antiplatelet therapy and anticoagulation',
+        'Monitor for bradyarrhythmias and AV blocks',
+        'Right heart catheterization if RV involvement suspected',
+        'Avoid nitroglycerin if RV infarction present'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00008_inferior%20myocardial%20infarction.png',
+        '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00153_inferior%20myocardial%20infarction.png',
+        '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00161_inferior%20myocardial%20infarction.png'
+      ]
+    },
+    questions: []
+  },
+  lbbb: {
+    name: 'Left Bundle Branch Block',
+    description: 'Complete left bundle branch conduction block',
+    icon: Zap,
+    educational: {
+      mechanism: 'Left bundle branch block occurs when there is a delay or complete block in the left bundle branch of the cardiac conduction system. This forces the left ventricle to be activated via the right bundle branch and transseptal conduction, causing delayed and abnormal left ventricular activation.',
+      pathophysiology: 'LBBB can result from coronary artery disease, hypertensive heart disease, cardiomyopathy, or degenerative conduction system disease. The block prevents normal simultaneous ventricular activation, leading to dyssynchronous contraction and potential reduction in cardiac efficiency.',
+      ecgChanges: [
+        'QRS duration ≥120 ms (≥3 small squares)',
+        'Broad monophasic R waves in leads I, aVL, V5, V6',
+        'Absence of septal Q waves in I, aVL, V5, V6',
+        'Secondary ST-T wave changes (discordant to QRS)',
+        'Poor R wave progression in precordial leads'
+      ],
+      clinicalSignificance: 'LBBB often indicates underlying structural heart disease and is associated with increased cardiovascular morbidity and mortality. New LBBB in the setting of chest pain may indicate acute MI and requires urgent evaluation.',
+      management: [
+        'Evaluate for underlying structural heart disease',
+        'Echocardiogram to assess left ventricular function',
+        'Consider cardiac catheterization if new LBBB',
+        'Cardiac resynchronization therapy (CRT) if heart failure',
+        'Treat underlying conditions (hypertension, CAD)'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00180_complete%20left%20bundle%20branch%20block.png',
+        '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00256_complete%20left%20bundle%20branch%20block.png',
+        '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00279_complete%20left%20bundle%20branch%20block.png'
+      ]
+    },
+    questions: []
+  },
+  rbbb: {
+    name: 'Right Bundle Branch Block',
+    description: 'Complete right bundle branch conduction block',
+    icon: Zap,
+    educational: {
+      mechanism: 'Right bundle branch block occurs when there is a delay or complete block in the right bundle branch. The right ventricle is then activated via the left bundle branch and transseptal conduction, causing delayed right ventricular activation and characteristic ECG morphology.',
+      pathophysiology: 'RBBB can be congenital or acquired due to coronary artery disease, pulmonary embolism, pulmonary hypertension, or degenerative changes. Unlike LBBB, isolated RBBB in young individuals may be a normal variant and doesn\'t necessarily indicate structural heart disease.',
+      ecgChanges: [
+        'QRS duration ≥120 ms (≥3 small squares)',
+        'RSR\' pattern in leads V1-V2 (M-shaped QRS)',
+        'Wide S waves in leads I, aVL, V5, V6',
+        'Secondary ST-T wave changes in right precordial leads',
+        'Normal septal Q waves still present'
+      ],
+      clinicalSignificance: 'RBBB is often benign in young patients but may indicate pulmonary pathology, right heart strain, or coronary disease in older patients. It can mask signs of anterior MI and make ECG interpretation more challenging.',
+      management: [
+        'Investigate for underlying pulmonary or cardiac disease',
+        'Echocardiogram to assess right ventricular function',
+        'Consider pulmonary embolism if acute onset',
+        'Monitor for progression to complete heart block',
+        'Generally no specific treatment required for isolated RBBB'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00172_complete%20right%20bundle%20branch%20block.png',
+        '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00195_complete%20right%20bundle%20branch%20block.png',
+        '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00424_complete%20right%20bundle%20branch%20block.png'
+      ]
+    },
+    questions: []
+  },
+  first_degree_avb: {
+    name: 'First Degree AV Block',
+    description: 'Prolonged atrioventricular conduction delay',
+    icon: Clock,
+    educational: {
+      mechanism: 'First degree AV block represents a delay in atrioventricular conduction, typically at the level of the AV node. Every atrial impulse is conducted to the ventricles, but with a prolonged PR interval due to slowed conduction through the AV node.',
+      pathophysiology: 'The delay can result from increased parasympathetic tone, medications (beta-blockers, calcium channel blockers, digoxin), electrolyte imbalances, ischemia, or degenerative changes in the conduction system. The AV node conducts more slowly but remains functional.',
+      ecgChanges: [
+        'PR interval >200 ms (>5 small squares) consistently',
+        'Every P wave is followed by a QRS complex',
+        'Regular rhythm with constant PR interval',
+        'Normal QRS morphology (unless concurrent BBB)',
+        'P wave morphology remains normal'
+      ],
+      clinicalSignificance: 'First degree AV block is usually asymptomatic and benign. However, it may progress to higher degrees of AV block, especially in the setting of acute MI or degenerative conduction system disease.',
+      management: [
+        'Usually no treatment required',
+        'Monitor for progression to higher degree AV block',
+        'Review medications that may prolong AV conduction',
+        'Correct electrolyte abnormalities if present',
+        'Consider pacemaker only if symptomatic bradycardia develops'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00102_first%20degree%20AV%20block.png',
+        '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00218_first%20degree%20AV%20block.png',
+        '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00522_first%20degree%20AV%20block.png'
+      ]
+    },
+    questions: []
+  },
+  second_degree_avb: {
+    name: 'Second Degree AV Block',
+    description: 'Intermittent failure of atrioventricular conduction',
     icon: AlertCircle,
     educational: {
-      mechanism: 'Life-threatening arrhythmias include ventricular tachycardia, ventricular fibrillation, and complete heart block. These rhythms compromise cardiac output and can rapidly lead to cardiac arrest if untreated.',
-      pathophysiology: 'Ventricular tachycardia often results from reentrant circuits in damaged ventricular tissue (post-MI, cardiomyopathy). VT can degenerate into ventricular fibrillation, where chaotic electrical activity prevents effective ventricular contraction. Complete heart block causes severe bradycardia and inadequate perfusion.',
+      mechanism: 'Second degree AV block involves intermittent failure of AV conduction, where some P waves are not followed by QRS complexes. This can occur at the AV node (Mobitz I/Wenckebach) or below the AV node in the His-Purkinje system (Mobitz II).',
+      pathophysiology: 'Mobitz I typically occurs at the AV node with progressive conduction delay until a beat is dropped. Mobitz II occurs below the AV node with sudden conduction failure without preceding delay. The location determines the clinical significance and prognosis.',
       ecgChanges: [
-        'Ventricular Tachycardia: Wide QRS >120 ms, rate >150 bpm, AV dissociation',
-        'Ventricular Fibrillation: Chaotic, irregular waveforms, no identifiable QRS',
-        'Torsades de Pointes: Polymorphic VT with changing axis',
-        'Complete Heart Block: P-wave and QRS dissociation, slow ventricular escape'
+        'Mobitz I: Progressive PR prolongation before dropped beat',
+        'Mobitz II: Constant PR interval with sudden dropped beats',
+        'P waves more numerous than QRS complexes',
+        '2:1, 3:1, or variable AV conduction ratios',
+        'QRS may be narrow (nodal) or wide (infranodal)'
       ],
-      clinicalSignificance: 'These rhythms are medical emergencies causing hemodynamic collapse, loss of consciousness, and cardiac arrest. Immediate recognition and treatment are critical for survival.',
+      clinicalSignificance: 'Mobitz I is usually benign and may be physiological. Mobitz II is more serious, often progresses to complete heart block, and typically requires pacemaker implantation due to risk of sudden cardiac death.',
       management: [
-        'VT with pulse: Synchronized cardioversion, amiodarone, lidocaine',
-        'VT without pulse: CPR, defibrillation, epinephrine, amiodarone',
-        'VF: Immediate defibrillation, CPR, ACLS protocol',
-        'Complete heart block: Atropine, transcutaneous pacing, permanent pacemaker',
-        'Treat underlying causes (ischemia, electrolyte imbalance, drugs)'
+        'Mobitz I: Observation unless symptomatic',
+        'Mobitz II: Permanent pacemaker indicated',
+        'Atropine for acute symptomatic bradycardia',
+        'Temporary pacing if hemodynamically unstable',
+        'Evaluate for reversible causes (medications, ischemia)'
       ],
       images: [
-        '/ecg/medical_accurate/ventricular_tachycardia_180bpm_3.png',
-        '/ecg/medical_accurate/ventricular_tachycardia_210bpm_5.png',
-        '/ecg/medical_accurate/vtach_200bpm.png'
+        '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_11209_second%20degree%20AV%20block.png',
+        '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_13938_second%20degree%20AV%20block.png',
+        '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_14009_second%20degree%20AV%20block.png'
       ]
     },
-    questions: [
-      {
-        id: '12',
-        imageUrl: '/ecg/medical_accurate/ventricular_tachycardia_180bpm_3.png',
-        correctAnswer: 'Ventricular Tachycardia',
-        options: ['Sinus Tachycardia', 'Supraventricular Tachycardia', 'Ventricular Tachycardia', 'Atrial Flutter'],
-        explanation: 'Ventricular tachycardia shows wide QRS complexes with rapid rate, typically >150 BPM.',
-        difficulty: 'hard',
-        category: 'dangerous'
-      },
-      {
-        id: '13',
-        imageUrl: '/ecg/medical_accurate/ventricular_tachycardia_210bpm_5.png',
-        correctAnswer: 'Ventricular Tachycardia',
-        options: ['Ventricular Tachycardia', 'Supraventricular Tachycardia', 'Atrial Fibrillation', 'Torsades de Pointes'],
-        explanation: 'High-rate ventricular tachycardia requiring immediate cardioversion.',
-        difficulty: 'hard',
-        category: 'dangerous'
-      }
-    ]
+    questions: []
+  },
+  third_degree_avb: {
+    name: 'Complete Heart Block',
+    description: 'Complete dissociation of atrial and ventricular activity',
+    icon: AlertTriangle,
+    educational: {
+      mechanism: 'Third degree (complete) AV block represents complete failure of AV conduction. The atria and ventricles beat independently, with atrial activity controlled by the SA node and ventricular activity by an escape pacemaker (junctional or ventricular).',
+      pathophysiology: 'Complete heart block can result from congenital abnormalities, degenerative disease, ischemia, infection, or medications. The ventricles are driven by escape rhythms that are inherently slower and less reliable than normal sinus rhythm.',
+      ecgChanges: [
+        'Complete AV dissociation (P waves and QRS independent)',
+        'P waves march through at their own rate',
+        'Escape rhythm rate 40-60 bpm (junctional) or 20-40 bpm (ventricular)',
+        'QRS may be narrow (junctional escape) or wide (ventricular escape)',
+        'Regular ventricular rate despite irregular P-QRS relationship'
+      ],
+      clinicalSignificance: 'Complete heart block is a medical emergency that can cause syncope, heart failure, or sudden cardiac death. The slow ventricular rate often cannot maintain adequate cardiac output, especially during stress or exercise.',
+      management: [
+        'Emergency temporary pacing if symptomatic',
+        'Permanent pacemaker implantation indicated',
+        'Atropine may be tried but often ineffective',
+        'Transcutaneous pacing as bridge to permanent device',
+        'Treat underlying causes when possible'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_07688_third%20degree%20AV%20block.png',
+        '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_08210_third%20degree%20AV%20block.png',
+        '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_10505_third%20degree%20AV%20block.png'
+      ]
+    },
+    questions: []
+  },
+  lvh: {
+    name: 'Left Ventricular Hypertrophy',
+    description: 'Increased left ventricular muscle mass and wall thickness',
+    icon: Activity,
+    educational: {
+      mechanism: 'Left ventricular hypertrophy develops as a compensatory response to chronic pressure or volume overload. The increased muscle mass helps maintain cardiac output but eventually leads to diastolic dysfunction and increased oxygen demand.',
+      pathophysiology: 'Chronic conditions like hypertension, aortic stenosis, or hypertrophic cardiomyopathy cause LVH. The hypertrophied muscle generates higher electrical voltages, creates strain patterns, and may develop ischemia due to increased oxygen demand exceeding supply.',
+      ecgChanges: [
+        'Increased QRS voltage (Cornell criteria: R in aVL + S in V3 >28mm men, >20mm women)',
+        'Sokolow-Lyon criteria: S in V1 + R in V5/V6 >35mm',
+        'Left axis deviation',
+        'ST depression and T wave inversion in lateral leads (strain pattern)',
+        'Prolonged QRS duration'
+      ],
+      clinicalSignificance: 'LVH increases risk of arrhythmias, sudden cardiac death, heart failure, and stroke. It\'s an independent cardiovascular risk factor and indicates target organ damage from hypertension or other cardiac conditions.',
+      management: [
+        'Aggressive blood pressure control (<130/80 mmHg)',
+        'ACE inhibitors or ARBs preferred for regression',
+        'Treat underlying causes (aortic stenosis, hypertension)',
+        'Echocardiogram to assess structure and function',
+        'Lifestyle modifications (weight loss, exercise, sodium restriction)'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00030_left%20ventricular%20hypertrophy.png',
+        '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00096_left%20ventricular%20hypertrophy.png',
+        '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00138_left%20ventricular%20hypertrophy.png'
+      ]
+    },
+    questions: []
+  },
+  rvh: {
+    name: 'Right Ventricular Hypertrophy',
+    description: 'Increased right ventricular muscle mass due to pressure overload',
+    icon: Activity,
+    educational: {
+      mechanism: 'Right ventricular hypertrophy develops in response to chronic pressure overload from pulmonary hypertension, congenital heart disease, or chronic lung disease. The right ventricle thickens to maintain adequate pulmonary circulation.',
+      pathophysiology: 'Conditions like pulmonary stenosis, pulmonary hypertension, tetralogy of Fallot, or chronic pulmonary disease cause RVH. The hypertrophied right ventricle generates increased electrical forces that overcome the normally dominant left ventricular forces.',
+      ecgChanges: [
+        'Right axis deviation (QRS axis >+90°)',
+        'Tall R waves in right precordial leads (V1-V3)',
+        'Deep S waves in left precordial leads (V5-V6)',
+        'R/S ratio >1 in V1',
+        'ST depression and T wave inversion in V1-V3 (strain pattern)'
+      ],
+      clinicalSignificance: 'RVH indicates significant pulmonary or right heart pathology. It\'s associated with increased morbidity and mortality, especially in the setting of pulmonary hypertension or congenital heart disease.',
+      management: [
+        'Treat underlying pulmonary or cardiac disease',
+        'Pulmonary vasodilators for pulmonary hypertension',
+        'Oxygen therapy for hypoxemic patients',
+        'Diuretics for right heart failure',
+        'Surgical correction of congenital lesions when appropriate'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_00222_right%20ventricular%20hypertrophy.png',
+        '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_02417_right%20ventricular%20hypertrophy.png',
+        '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_04713_right%20ventricular%20hypertrophy.png'
+      ]
+    },
+    questions: []
+  },
+  wpw: {
+    name: 'Wolf-Parkinson-White Syndrome',
+    description: 'Ventricular pre-excitation via accessory pathway',
+    icon: Zap,
+    educational: {
+      mechanism: 'WPW syndrome involves an accessory pathway (bundle of Kent) that bypasses the normal AV node conduction. This allows early ventricular activation, creating pre-excitation with characteristic delta waves and predisposing to reentrant tachyarrhythmias.',
+      pathophysiology: 'The accessory pathway conducts faster than the AV node, causing early ventricular depolarization. This creates a fusion complex combining normal AV conduction and pre-excited conduction. Reentrant circuits can form using the normal and accessory pathways.',
+      ecgChanges: [
+        'Short PR interval (<120 ms)',
+        'Delta wave (slurred upstroke of QRS)',
+        'Wide QRS complex (>120 ms)',
+        'Secondary ST-T wave changes',
+        'Location of pathway determines delta wave polarity'
+      ],
+      clinicalSignificance: 'WPW predisposes to supraventricular tachycardia and, rarely, atrial fibrillation with rapid ventricular response that can degenerate to ventricular fibrillation. Sudden cardiac death, though rare, can occur.',
+      management: [
+        'Asymptomatic WPW: Risk stratification with electrophysiology study',
+        'Symptomatic WPW: Radiofrequency catheter ablation',
+        'Avoid AV nodal blocking agents in atrial fibrillation',
+        'Emergency cardioversion for hemodynamically unstable tachycardia',
+        'Procainamide for stable atrial fibrillation with WPW'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_02145_Wolf-Parkinson-White%20syndrome.png',
+        '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_04279_Wolf-Parkinson-White%20syndrome.png',
+        '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_04658_Wolf-Parkinson-White%20syndrome.png'
+      ]
+    },
+    questions: []
+  },
+  lafb: {
+    name: 'Left Anterior Fascicular Block',
+    description: 'Block in left anterior fascicle of left bundle branch',
+    icon: GitBranch,
+    educational: {
+      mechanism: 'Left anterior fascicular block occurs when there is a block in the anterior fascicle of the left bundle branch. This causes altered ventricular activation with the impulse traveling down the posterior fascicle first, then spreading to the anterior wall.',
+      pathophysiology: 'LAFB can result from coronary artery disease affecting the septal perforators, degenerative conduction system disease, or acute MI. It represents a more localized conduction abnormality than complete bundle branch blocks.',
+      ecgChanges: [
+        'Left axis deviation (-30° to -90°)',
+        'Small Q waves in leads I and aVL',
+        'Small R waves in leads II, III, aVF',
+        'QRS duration usually <120 ms',
+        'No other cause of left axis deviation'
+      ],
+      clinicalSignificance: 'Isolated LAFB is usually benign but may indicate underlying coronary disease. When combined with RBBB (bifascicular block), it indicates extensive conduction system disease and increased risk of complete heart block.',
+      management: [
+        'Isolated LAFB: Usually no specific treatment',
+        'Evaluate for underlying coronary artery disease',
+        'Monitor for progression to bifascicular or trifascicular block',
+        'Pacemaker consideration if symptomatic bradycardia',
+        'Bifascicular block may require closer monitoring'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00041_left%20anterior%20fascicular%20block.png',
+        '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00103_left%20anterior%20fascicular%20block.png',
+        '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00157_left%20anterior%20fascicular%20block.png'
+      ]
+    },
+    questions: []
+  },
+  long_qt: {
+    name: 'Long QT Syndrome',
+    description: 'Prolonged ventricular repolarization predisposing to arrhythmias',
+    icon: Clock,
+    educational: {
+      mechanism: 'Long QT syndrome involves abnormal ventricular repolarization due to mutations in ion channels (congenital) or acquired causes (medications, electrolytes). Prolonged repolarization creates electrical instability and predisposes to torsades de pointes.',
+      pathophysiology: 'Abnormal potassium or sodium channel function prolongs the action potential duration. This creates early afterdepolarizations that can trigger polymorphic ventricular tachycardia (torsades de pointes), which can degenerate to ventricular fibrillation.',
+      ecgChanges: [
+        'Prolonged QT interval (>440 ms in men, >460 ms in women)',
+        'QTc (corrected QT) >450 ms in men, >470 ms in women',
+        'T wave morphology abnormalities',
+        'U waves may be prominent',
+        'T wave alternans (beat-to-beat variation)'
+      ],
+      clinicalSignificance: 'Long QT syndrome increases risk of syncope, seizures, and sudden cardiac death due to torsades de pointes. Risk is higher with longer QT intervals and certain triggers (exercise, emotions, medications).',
+      management: [
+        'Beta-blockers (particularly nadolol or propranolol)',
+        'Avoid QT-prolonging medications',
+        'Correct electrolyte abnormalities (K+, Mg2+)',
+        'ICD implantation for high-risk patients',
+        'Lifestyle modifications (avoid triggers, swimming restrictions)'
+      ],
+      images: [
+        '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_00039_long%20QT-interval.png',
+        '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_00260_long%20QT-interval.png',
+        '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_00320_long%20QT-interval.png'
+      ]
+    },
+    questions: []
   }
 };
 
 const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
+  // Sound effects and XP system hooks
+  const { playCorrectSound, playErrorSound, playRewardSound, playPageTurnSound } = useUISounds();
+  const { awardXP } = usePulseStore();
+
   // Core game state
   const [currentView, setCurrentView] = useState<'menu' | 'categories' | 'game' | 'results' | 'educational'>('menu');
   const [selectedMode, setSelectedMode] = useState<string | null>(null);
@@ -729,6 +898,11 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [currentChunk, setCurrentChunk] = useState(0);
+  
+  // Answer feedback popup state
+  const [showAnswerFeedback, setShowAnswerFeedback] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
+  const [xpAwarded, setXpAwarded] = useState(0);
   
   // Educational mode state
   const [selectedEducationalCategory, setSelectedEducationalCategory] = useState<string>('');
@@ -759,12 +933,15 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     
     if (isLeftSwipe && currentView === 'educational') {
       // Swipe left - next slide
-      const slides = selectedEducationalCategory ? ECG_CATEGORIES[selectedEducationalCategory]?.educational.images || [] : [];
-      setCurrentEducationalSlide(Math.min(slides.length - 1, currentEducationalSlide + 1));
+      // Each educational category has 5 slides: overview, pathophysiology, ECG features, clinical impact, treatment
+      const totalSlides = 5;
+      playPageTurnSound();
+      setCurrentEducationalSlide(Math.min(totalSlides - 1, currentEducationalSlide + 1));
     }
     
     if (isRightSwipe && currentView === 'educational') {
       // Swipe right - previous slide  
+      playPageTurnSound();
       setCurrentEducationalSlide(Math.max(0, currentEducationalSlide - 1));
     }
   };
@@ -894,6 +1071,9 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
   const nextQuestion = async () => {
     if (!selectedCategory) return;
     
+    // Play page turn sound for navigation
+    playPageTurnSound();
+    
     let question: ECGQuestion;
     
     // Generate next question using appropriate generator for unlimited challenges
@@ -921,30 +1101,62 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     }
   };
 
-  const handleAnswer = (answer: string) => {
+  const handleAnswer = async (answer: string) => {
     if (!currentQuestion || userAnswer) return;
     
     setUserAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
+    setIsAnswerCorrect(isCorrect);
     
     if (isCorrect) {
+      // Play success sound
+      playCorrectSound();
+      
+      // Award 15 XP for correct answers in boost/challenge modes
+      if (selectedMode === 'boost' || selectedMode === 'challenge') {
+        try {
+          await awardXP(15);
+          setXpAwarded(15);
+          // Play reward sound for XP
+          playRewardSound();
+        } catch (error) {
+          console.error('Failed to award XP:', error);
+          setXpAwarded(0);
+        }
+      } else {
+        setXpAwarded(0);
+      }
+      
       setScore(score + 10 + streak);
       setStreak(streak + 1);
-      toast({
-        title: "Correct! 🎉",
-        description: `+${10 + streak} points! Streak: ${streak + 1}`,
-      });
     } else {
+      // Play error sound
+      playErrorSound();
+      setXpAwarded(0);
       setStreak(0);
-      toast({
-        title: "Incorrect",
-        description: `The correct answer was: ${currentQuestion.correctAnswer}`,
-        variant: "destructive",
-      });
     }
     
     setQuestionsAnswered(questionsAnswered + 1);
-    setShowAnswer(true);
+    
+    // Show answer feedback popup instead of inline answer
+    setShowAnswerFeedback(true);
+  };
+
+  // Continue to next question from feedback popup
+  const continueToNextQuestion = async () => {
+    setShowAnswerFeedback(false);
+    setUserAnswer(null);
+    setXpAwarded(0);
+    setIsAnswerCorrect(false);
+    
+    // Reset image states for new question
+    setImageLoading(true);
+    setImageError(false);
+    
+    // Play page turn sound for flashcard-style navigation
+    playPageTurnSound();
+    
+    await nextQuestion();
   };
 
   const resetGame = () => {
@@ -954,6 +1166,9 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     setCurrentQuestion(null);
     setUserAnswer(null);
     setShowAnswer(false);
+    setShowAnswerFeedback(false);
+    setIsAnswerCorrect(false);
+    setXpAwarded(0);
     setScore(0);
     setQuestionsAnswered(0);
     setStreak(0);
@@ -1101,7 +1316,16 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
             <ArrowLeft className="h-5 w-5" />
           </button>
           
-          <h1 className="text-lg font-bold text-white">ECG Master</h1>
+          <h1 className="text-lg font-bold text-white flex items-center gap-2">
+            ECG Master
+            <MedicalAnimation
+              type="heartbeat"
+              size="small"
+              loop={true}
+              autoplay={true}
+              className="inline-block"
+            />
+          </h1>
           
           <div className="w-8"></div> {/* Spacer */}
         </div>
@@ -1265,10 +1489,11 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                     </div>
                   )}
                   
-                  <EnhancedImage
+                  <SimpleImageViewer
                     src={currentQuestion.imageUrl}
                     alt="ECG Strip for Analysis"
-                    className="w-full h-full ecg-cropped-image rounded-xl"
+                    className="rounded-xl"
+                    containerClassName="w-full h-full"
                     onLoad={() => {
                       setImageLoading(false);
                       setImageError(false);
@@ -1362,46 +1587,150 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
             </div>
           </div>
 
-          {/* Answer Explanation with modern glassmorphism styling */}
-          {showAnswer && (
-            <div className="relative mt-6 sm:mt-8">
-              {/* Background with glassmorphism */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-lg border border-white/20 rounded-3xl"></div>
-              
-              {/* Content */}
-              <div className="relative p-6 sm:p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl">
-                    <CheckCircle className="h-5 w-5 text-white" />
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white">Explanation</h3>
-                </div>
-                
-                <p className="text-blue-100 text-sm sm:text-base leading-relaxed mb-6">
-                  {currentQuestion.explanation}
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <button
-                    onClick={nextQuestion}
-                    className="group flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/25"
-                  >
-                    Next Question
-                    <ArrowLeft className="h-4 w-4 rotate-180 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                  
-                  <button
-                    onClick={resetGame}
-                    className="group flex items-center justify-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white font-semibold rounded-xl transition-all duration-300 transform hover:-translate-y-1"
-                  >
-                    <RotateCcw className="h-4 w-4 group-hover:rotate-180 transition-transform duration-500" />
-                    New Game
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Remove old answer sections and replace with popup */}
         </div>
+
+        {/* Answer Feedback Popup - Duolingo Style */}
+        <AnimatePresence>
+          {showAnswerFeedback && currentQuestion && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.8, y: 50 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.8, y: 50 }}
+                className="w-full max-w-lg mx-auto"
+              >
+                <Card className={`${
+                  isAnswerCorrect 
+                    ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200' 
+                    : 'bg-gradient-to-br from-red-50 to-pink-50 border-red-200'
+                } shadow-2xl`}>
+                  <CardContent className="p-8 text-center">
+                    {/* Result Icon with Lottie Animation */}
+                    <motion.div
+                      className="w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ 
+                        delay: 0.2, 
+                        type: "spring", 
+                        stiffness: 150 
+                      }}
+                    >
+                      {isAnswerCorrect ? (
+                        <MedicalAnimation
+                          type="success-check"
+                          size="large"
+                          loop={false}
+                          autoplay={true}
+                          className="drop-shadow-lg"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500">
+                          <X className="w-10 h-10 text-white" />
+                        </div>
+                      )}
+                    </motion.div>
+
+                    {/* Result Title */}
+                    <motion.h2 
+                      className={`text-4xl font-extrabold mb-4 ${
+                        isAnswerCorrect ? 'text-green-700' : 'text-red-700'
+                      }`}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      {isAnswerCorrect ? '🎉 Correct!' : '😔 Incorrect!'}
+                    </motion.h2>
+
+                    {/* XP Reward for Correct Answers with Celebration Animation */}
+                    {isAnswerCorrect && xpAwarded > 0 && (
+                      <motion.div 
+                        className="relative flex items-center justify-center gap-2 mb-4"
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.4, type: "spring" }}
+                      >
+                        {/* Background Celebration Animation */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <MedicalAnimation
+                            type="celebration"
+                            size="xl"
+                            loop={false}
+                            autoplay={true}
+                            className="opacity-60"
+                          />
+                        </div>
+                        
+                        {/* XP Display */}
+                        <div className="relative z-10 flex items-center gap-2">
+                          <Zap className="w-6 h-6 text-yellow-500" />
+                          <span className="font-bold text-lg text-yellow-600 bg-yellow-100 px-3 py-1 rounded-full">
+                            +{xpAwarded} XP
+                          </span>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* Correct Answer Display for Wrong Answers */}
+                    {!isAnswerCorrect && (
+                      <motion.div
+                        className="mb-6 p-4 bg-green-100 border border-green-200 rounded-xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <p className="text-green-800 text-sm font-medium mb-1">Correct answer:</p>
+                        <p className="text-green-900 text-lg font-bold">{currentQuestion.correctAnswer}</p>
+                      </motion.div>
+                    )}
+
+                    {/* Explanation */}
+                    <motion.div
+                      className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-left"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <Brain className="w-4 h-4 text-blue-600" />
+                        <h4 className="font-semibold text-blue-800">Explanation</h4>
+                      </div>
+                      <p className="text-blue-700 text-sm leading-relaxed">
+                        {currentQuestion.explanation}
+                      </p>
+                    </motion.div>
+
+                    {/* Continue Button */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 }}
+                    >
+                      <Button
+                        onClick={continueToNextQuestion}
+                        className={`w-full py-4 text-lg font-bold rounded-xl ${
+                          isAnswerCorrect
+                            ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
+                            : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600'
+                        } text-white shadow-lg transition-all duration-300 transform hover:scale-105`}
+                      >
+                        Continue to Next Question
+                        <ArrowLeft className="ml-2 w-5 h-5 rotate-180" />
+                      </Button>
+                    </motion.div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -1554,7 +1883,10 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
             {slides.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentEducationalSlide(index)}
+                onClick={() => {
+                  playPageTurnSound();
+                  setCurrentEducationalSlide(index);
+                }}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentEducationalSlide 
                     ? 'w-8 bg-gradient-to-r ' + currentSlideData.color
@@ -1596,13 +1928,10 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
               {/* ECG Image Section */}
               <div className="p-4 sm:p-6">
                 <div className="bg-gray-900/50 rounded-2xl p-4 mb-4">
-                  <EnhancedImage
+                  <SimpleImageViewer
                     src={currentSlideData.image}
                     alt={`${currentSlideData.title} ECG Example`}
-                    className="w-full h-48 sm:h-64 object-contain"
-                    enableZoom={true}
-                    enableFullscreen={true}
-                    enableDownload={true}
+                    containerClassName="w-full h-48 sm:h-64"
                   />
                 </div>
                 
@@ -1627,7 +1956,10 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
               <div className="p-4 sm:p-6 border-t border-white/20 hidden sm:block">
                 <div className="flex justify-between items-center">
                   <button
-                    onClick={() => setCurrentEducationalSlide(Math.max(0, currentEducationalSlide - 1))}
+                    onClick={() => {
+                      playPageTurnSound();
+                      setCurrentEducationalSlide(Math.max(0, currentEducationalSlide - 1));
+                    }}
                     disabled={currentEducationalSlide === 0}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
                       currentEducationalSlide === 0 
@@ -1653,7 +1985,10 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                     </button>
                   ) : (
                     <button
-                      onClick={() => setCurrentEducationalSlide(Math.min(slides.length - 1, currentEducationalSlide + 1))}
+                      onClick={() => {
+                        playPageTurnSound();
+                        setCurrentEducationalSlide(Math.min(slides.length - 1, currentEducationalSlide + 1));
+                      }}
                       className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all"
                     >
                       <span className="text-sm">Next</span>

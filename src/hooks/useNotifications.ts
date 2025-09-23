@@ -1,148 +1,301 @@
 /**
- * Unified Notification Hook
+ * 🔔 NOTIFICATION SERVICE HOOKS
+ * React hooks for notification management with TypeScript
  * 
- * React hook for managing notifications throughout the app.
- * Replaces all other notification hooks to prevent conflicts.
+ * Updated to use the new unified NotificationManager
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from './useAuth';
-import { unifiedNotificationService, NotificationData } from '@/services/unifiedNotificationService';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { notificationManager, NotificationData } from '@/services/NotificationManager';
+import { auth } from '@/firebase';
 
-interface UseNotificationsReturn {
-  notifications: NotificationData[];
-  unreadCount: number;
-  isLoading: boolean;
-  error: string | null;
-  markAsRead: (id: string) => Promise<void>;
-  createNotification: (data: Omit<NotificationData, 'id' | 'timestamp' | 'read' | 'userId'>) => Promise<void>;
-  refreshNotifications: () => Promise<void>;
-  clearError: () => void;
-  isServiceReady: boolean;
-}
-
-export const useNotifications = (): UseNotificationsReturn => {
-  const { user, loading: authLoading } = useAuth();
+// Hook for managing notification state
+export const useNotifications = () => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isServiceReady, setIsServiceReady] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const listenerRef = useRef<((notification: NotificationData) => void) | null>(null);
 
-  // Initialize notification service
+  // Initialize notifications
   useEffect(() => {
-    const initService = async () => {
+    const initializeNotificationSystem = async () => {
       try {
-        const initialized = await unifiedNotificationService.initialize();
-        setIsServiceReady(initialized);
+        console.log('🔔 Initializing notification system...');
+        const success = await notificationManager.initialize();
+        setIsInitialized(success);
         
-        if (initialized && !authLoading && user) {
-          // Request FCM token for push notifications
-          await unifiedNotificationService.requestFCMToken();
+        if (success) {
+          await loadNotifications();
         }
-      } catch (err) {
-        console.error('Failed to initialize notification service:', err);
-        setError('Failed to initialize notifications');
+      } catch (error) {
+        console.error('❌ Failed to initialize notifications:', error);
+        setIsInitialized(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    initService();
-  }, [authLoading, user]);
+    initializeNotificationSystem();
+  }, []);
 
-  // Fetch notifications when user changes
-  const refreshNotifications = useCallback(async () => {
-    if (!user || authLoading) {
-      setNotifications([]);
-      setIsLoading(false);
-      return;
-    }
+  // Set up real-time listener
+  useEffect(() => {
+    if (!isInitialized) return;
 
-    setIsLoading(true);
-    setError(null);
+    const handleNewNotification = (notification: NotificationData) => {
+      console.log('📱 New notification received:', notification);
+      
+      setNotifications(prev => {
+        const exists = prev.find(n => n.id === notification.id);
+        if (exists) return prev;
+        
+        return [notification, ...prev];
+      });
+
+      if (!notification.read) {
+        setUnreadCount(prev => prev + 1);
+      }
+    };
+
+    listenerRef.current = handleNewNotification;
+    notificationManager.addListener(handleNewNotification);
+
+    return () => {
+      if (listenerRef.current) {
+        notificationManager.removeListener(listenerRef.current);
+      }
+    };
+  }, [isInitialized]);
+
+  // Load notifications from Firestore
+  const loadNotifications = useCallback(async () => {
+    if (!auth.currentUser || !isInitialized) return;
 
     try {
-      const userNotifications = await unifiedNotificationService.getUserNotifications(user.uid);
+      setIsLoading(true);
+      const userNotifications = await notificationManager.getUserNotifications(
+        auth.currentUser.uid,
+        50
+      );
+      
       setNotifications(userNotifications);
-    } catch (err) {
-      console.error('Error fetching notifications:', err);
-      setError('Failed to load notifications');
+      
+      // Count unread notifications
+      const unread = userNotifications.filter(n => !n.read).length;
+      setUnreadCount(unread);
+      
+    } catch (error) {
+      console.error('❌ Error loading notifications:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [user, authLoading]);
-
-  // Initial load and setup listener
-  useEffect(() => {
-    if (!user || authLoading) return;
-
-    // Initial fetch
-    refreshNotifications();
-
-    // Listen for new notifications
-    const unsubscribe = unifiedNotificationService.addListener((notification) => {
-      if (notification.userId === user.uid) {
-        setNotifications(prev => [notification, ...prev]);
-      }
-    });
-
-    return unsubscribe;
-  }, [user, authLoading, refreshNotifications]);
+  }, [isInitialized]);
 
   // Mark notification as read
-  const markAsRead = useCallback(async (id: string) => {
+  const markAsRead = useCallback(async (notificationId: string) => {
     try {
-      const success = await unifiedNotificationService.markAsRead(id);
+      const success = await notificationManager.markAsRead(notificationId);
+      
       if (success) {
         setNotifications(prev => 
-          prev.map(notification => 
-            notification.id === id 
-              ? { ...notification, read: true }
-              : notification
+          prev.map(n => 
+            n.id === notificationId 
+              ? { ...n, read: true }
+              : n
           )
         );
+        
+        setUnreadCount(prev => Math.max(0, prev - 1));
       }
-    } catch (err) {
-      console.error('Error marking notification as read:', err);
-      setError('Failed to mark notification as read');
+      
+      return success;
+    } catch (error) {
+      console.error('❌ Error marking notification as read:', error);
+      return false;
     }
   }, []);
 
-  // Create new notification
-  const createNotification = useCallback(async (data: Omit<NotificationData, 'id' | 'timestamp' | 'read' | 'userId'>) => {
-    if (!user) {
-      setError('User not authenticated');
-      return;
+  // Mark all as read
+  const markAllAsRead = useCallback(async () => {
+    const unreadNotifications = notifications.filter(n => !n.read && n.id);
+    
+    try {
+      const promises = unreadNotifications.map(n => 
+        n.id ? notificationManager.markAsRead(n.id) : Promise.resolve(false)
+      );
+      
+      await Promise.all(promises);
+      
+      setNotifications(prev => 
+        prev.map(n => ({ ...n, read: true }))
+      );
+      
+      setUnreadCount(0);
+      
+    } catch (error) {
+      console.error('❌ Error marking all notifications as read:', error);
+    }
+  }, [notifications]);
+
+  // Send notification
+  const sendNotification = useCallback(async (notificationData: Omit<NotificationData, 'userId'>) => {
+    if (!auth.currentUser) {
+      console.warn('⚠️ No authenticated user for sending notification');
+      return null;
     }
 
     try {
-      await unifiedNotificationService.createNotification({
-        ...data,
-        userId: user.uid
+      const result = await notificationManager.sendNotification({
+        ...notificationData,
+        userId: auth.currentUser.uid
       });
-    } catch (err) {
-      console.error('Error creating notification:', err);
-      setError('Failed to create notification');
+      
+      return result;
+    } catch (error) {
+      console.error('❌ Error sending notification:', error);
+      return null;
     }
-  }, [user]);
-
-  // Clear error
-  const clearError = useCallback(() => {
-    setError(null);
   }, []);
 
-  // Calculate unread count
-  const unreadCount = notifications.filter(n => !n.read).length;
+  // Send test notification
+  const sendTestNotification = useCallback(async () => {
+    try {
+      await notificationManager.sendTestNotification();
+    } catch (error) {
+      console.error('❌ Error sending test notification:', error);
+    }
+  }, []);
 
   return {
     notifications,
     unreadCount,
     isLoading,
-    error,
+    isInitialized,
+    loadNotifications,
     markAsRead,
-    createNotification,
-    refreshNotifications,
-    clearError,
-    isServiceReady
+    markAllAsRead,
+    sendNotification,
+    sendTestNotification
   };
 };
 
-export default useNotifications;
+// Hook for notification permissions
+export const useNotificationPermissions = () => {
+  const [permissionStatus, setPermissionStatus] = useState<'granted' | 'denied' | 'default'>('default');
+  const [isChecking, setIsChecking] = useState(false);
+
+  const checkPermissions = useCallback(async () => {
+    setIsChecking(true);
+    
+    try {
+      if ('Notification' in window) {
+        setPermissionStatus(Notification.permission);
+      } else {
+        setPermissionStatus('denied');
+      }
+    } catch (error) {
+      console.error('❌ Error checking notification permissions:', error);
+      setPermissionStatus('denied');
+    } finally {
+      setIsChecking(false);
+    }
+  }, []);
+
+  const requestPermissions = useCallback(async () => {
+    if (!('Notification' in window)) {
+      console.warn('⚠️ Notifications not supported');
+      return 'denied';
+    }
+
+    try {
+      const permission = await Notification.requestPermission();
+      setPermissionStatus(permission);
+      return permission;
+    } catch (error) {
+      console.error('❌ Error requesting notification permissions:', error);
+      setPermissionStatus('denied');
+      return 'denied';
+    }
+  }, []);
+
+  useEffect(() => {
+    checkPermissions();
+  }, [checkPermissions]);
+
+  return {
+    permissionStatus,
+    isChecking,
+    checkPermissions,
+    requestPermissions,
+    hasPermission: permissionStatus === 'granted'
+  };
+};
+
+// Hook for notification badge count
+export const useNotificationBadge = () => {
+  const { unreadCount } = useNotifications();
+
+  useEffect(() => {
+    // Update document title with badge count
+    const originalTitle = document.title.replace(/^\(\d+\)\s*/, '');
+    
+    if (unreadCount > 0) {
+      document.title = `(${unreadCount}) ${originalTitle}`;
+    } else {
+      document.title = originalTitle;
+    }
+
+    // Update favicon badge (if you have badge-enabled favicon)
+    const favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+    if (favicon && unreadCount > 0) {
+      // You can implement favicon badge logic here
+      favicon.href = '/favicon-with-badge.ico';
+    } else if (favicon) {
+      favicon.href = '/favicon.ico';
+    }
+
+    return () => {
+      document.title = originalTitle;
+    };
+  }, [unreadCount]);
+
+  return { unreadCount };
+};
+
+// Hook for typing notification indicators
+export const useTypingIndicator = (userId: string) => {
+  const [isTyping, setIsTyping] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const setTyping = useCallback((typing: boolean) => {
+    setIsTyping(typing);
+    
+    if (typing) {
+      // Clear existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      
+      // Auto-clear typing after 5 seconds
+      timeoutRef.current = setTimeout(() => {
+        setIsTyping(false);
+      }, 5000);
+    } else {
+      // Clear timeout when explicitly set to false
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  return { isTyping, setTyping };
+};

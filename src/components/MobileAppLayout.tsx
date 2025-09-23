@@ -451,13 +451,27 @@ const MobileAppLayout: React.FC = () => {
 
   // If not authenticated, show onboarding/login
   const handleOnboardingFinish = async (onboardingData: any) => {
+    console.log('🎯 Onboarding completed for guest user:', onboardingData);
+    
+    // Set onboarding as completed
     setOnboardingDone(true);
     localStorage.setItem('ecg-onboarding-completed', 'true');
     localStorage.setItem('ecg-onboarding-data', JSON.stringify(onboardingData));
     
-    // After onboarding completion for guest users, show login prompt
-    console.log('🎯 Onboarding completed for guest user, showing login option');
-    setShowSaveProgressPrompt(true); // Enable save progress prompt
+    // Store recommended module for later use
+    localStorage.setItem('ecg-recommended-module', onboardingData.recommendedModule.toString());
+    
+    // Navigate to the main app interface
+    setActiveTab('learn'); // Go to ECG Master tab
+    setShowSaveProgressPrompt(true); // Enable save progress prompt for later login
+    
+    // Show success toast
+    toast({
+      title: "Welcome to ECG Kid! 🎉",
+      description: `Starting with Module ${onboardingData.recommendedModule}. Sign in to save your progress.`,
+    });
+    
+    console.log('✅ Guest user can now access the main app interface');
   };
 
   const handleAssessmentComplete = async (data: any) => {
@@ -502,38 +516,133 @@ const MobileAppLayout: React.FC = () => {
             onComplete={handleOnboardingFinish} 
           />
         ) : (
-          <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-            <LoginForm 
-              onLogin={async (username, email) => {
-                await login(username, email);
+          // Guest user has completed onboarding - show main app interface
+          <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+            {/* Header with guest user indicator */}
+            <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+              <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div className="flex-1">
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    ECG Kid
+                  </h1>
+                  <p className="text-xs text-orange-600 font-medium">Guest Mode - Sign in to save progress</p>
+                </div>
                 
-                // Apply stored onboarding data after successful login
-                const storedOnboardingData = localStorage.getItem('ecg-onboarding-data');
-                if (storedOnboardingData && updateUserOnboardingData) {
-                  try {
-                    const onboardingData = JSON.parse(storedOnboardingData);
-                    await updateUserOnboardingData(onboardingData);
-                    localStorage.removeItem('ecg-onboarding-data'); // Clean up
-                    
-                    // Reset the save progress prompt state
-                    setShowSaveProgressPrompt(false);
-                    
-                    // Show success message about saved progress
-                    setTimeout(() => {
-                      // This will show after login is complete
-                      console.log('✅ Onboarding data successfully saved to user account');
-                    }, 1000);
-                  } catch (error) {
-                    console.error('Error applying stored onboarding data:', error);
-                  }
-                }
-              }} 
-              onSkipLogin={() => {
-                skipLogin();
-                setShowSaveProgressPrompt(false); // Reset prompt state when skipping
-              }}
-              showSaveProgressPrompt={showSaveProgressPrompt}
-            />
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowSaveProgressPrompt(true)}
+                    className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowMobileMenu(!showMobileMenu)}
+                    className="p-2"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+            </header>
+
+            {/* Main content area */}
+            <main className="pb-20">
+              {activeTab === 'dashboard' && (
+                <DashboardContent 
+                  gameState={gameState}
+                  onCompleteTask={handleCompleteTask}
+                  onRefreshTasks={refreshDailyTasks}
+                />
+              )}
+              {activeTab === 'learn' && (
+                <ECGMasterHub 
+                  onLessonComplete={completeLearningLesson}
+                  onHeartLost={loseHeart}
+                  onBack={() => setActiveTab('dashboard')}
+                />
+              )}
+              {activeTab === 'store' && (
+                <PulsepointStore />
+              )}
+            </main>
+
+            {/* Bottom Navigation */}
+            <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-30">
+              <div className="flex justify-around py-2">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id as any)}
+                      className={cn(
+                        "flex flex-col items-center py-2 px-3 rounded-lg transition-all duration-200",
+                        activeTab === item.id
+                          ? "text-blue-600 bg-blue-50"
+                          : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                      )}
+                    >
+                      <Icon className="h-5 w-5 mb-1" />
+                      <span className="text-xs font-medium">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </nav>
+
+            {/* Login prompt modal */}
+            {showSaveProgressPrompt && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-lg max-w-md w-full p-6">
+                  <h3 className="text-lg font-semibold mb-2">Save Your Progress?</h3>
+                  <p className="text-gray-600 mb-4">
+                    Sign in to save your learning progress, unlock achievements, and sync across devices.
+                  </p>
+                  <div className="flex space-x-3">
+                    <Button
+                      onClick={async () => {
+                        // Show full login form
+                        setShowSaveProgressPrompt(false);
+                        // For now, we'll just close the modal. You could navigate to a full login page.
+                      }}
+                      className="flex-1"
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowSaveProgressPrompt(false)}
+                      className="flex-1"
+                    >
+                      Continue as Guest
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Mobile menu overlay */}
+            {showMobileMenu && (
+              <div className="fixed inset-0 bg-black/50 z-50" onClick={closeMobileMenu}>
+                <div className="fixed right-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 overflow-y-auto">
+                  <div className="p-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold">Menu</h2>
+                      <Button variant="ghost" size="sm" onClick={closeMobileMenu}>
+                        <X className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm text-gray-600">Guest mode menu options would go here</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

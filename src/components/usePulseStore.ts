@@ -51,5 +51,14 @@ export function usePulseStore() {
     return true;
   }, [user]);
 
-  return { xp, gems, spendXP, spendGems, loading, awardBonusQuizReward };
+  // Award XP for correct ECG quiz answers
+  const awardXP = useCallback(async (amount: number) => {
+    if (!user) return false;
+    const ref = doc(db, 'users', user.uid);
+    await updateDoc(ref, { xp: increment(amount) });
+    setXp(xp => xp + amount);
+    return true;
+  }, [user]);
+
+  return { xp, gems, spendXP, spendGems, loading, awardBonusQuizReward, awardXP };
 }

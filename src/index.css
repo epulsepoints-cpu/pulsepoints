@@ -1,5 +1,7 @@
 /* Import ECG Image Fix */
 @import './styles/ecg-image-fix.css';
+/* Import Virtual Lesson List Styles */
+@import './styles/virtual-lesson-list.css';
 
 @tailwind base;
 @tailwind components;

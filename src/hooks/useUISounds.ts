@@ -50,6 +50,11 @@ export const useUISounds = () => {
     playSound('error.mp3', 0.5);
   }, [playSound]);
 
+  // Page turn sound for flashcards and navigation
+  const playPageTurnSound = useCallback(() => {
+    playSound('sounds/effects/page-turn.mp3', 0.4);
+  }, [playSound]);
+
   return {
     playClickSound,
     playSwooshSound,
@@ -58,6 +63,7 @@ export const useUISounds = () => {
     playBrandSound,
     playCorrectSound,
     playErrorSound,
+    playPageTurnSound,
     playSound
   };
 };
