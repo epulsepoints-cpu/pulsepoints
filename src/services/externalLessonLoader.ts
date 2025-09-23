@@ -13,7 +13,7 @@ interface LessonResponse {
 }
 
 class ExternalLessonLoader {
-  private baseUrl = 'https://app.ecgkid.com/api';
+  private baseUrl = 'https://pulsepoints-three.vercel.app/data';
   private cache = new Map<string, Lesson>();
   private moduleCache = new Map<string, Lesson[]>();
   private loadingPromises = new Map<string, Promise<Lesson | null>>();
@@ -53,13 +53,13 @@ class ExternalLessonLoader {
   }
   
   /**
-   * Fetch lesson from Vercel API
+   * Fetch lesson from static JSON files
    */
   private async fetchLessonFromAPI(lessonId: string): Promise<Lesson | null> {
     try {
-      console.log(`🚀 Fetching from API: ${this.baseUrl}/lessons/${lessonId}`);
+      console.log(`🚀 Fetching from static data: ${this.baseUrl}/lesson-${lessonId}.json`);
       
-      const response = await fetch(`${this.baseUrl}/lessons/${lessonId}`, {
+      const response = await fetch(`${this.baseUrl}/lesson-${lessonId}.json`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -118,7 +118,7 @@ class ExternalLessonLoader {
     }
     
     try {
-      const response = await fetch(`${this.baseUrl}/lessons/module/${moduleId}`, {
+      const response = await fetch(`${this.baseUrl}/module-${moduleId}.json`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
