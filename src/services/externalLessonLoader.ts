@@ -1,6 +1,6 @@
 /**
  * 🌐 EXTclass ExternalLessonLoader {
-  private baseUrl = 'https://pulsepoints-7sob0c2hd-310891s-projects.vercel.app/api';
+  private baseUrl = 'https://pulsepoints-oi64nchoj-310891s-projects.vercel.app/api';
   private cache = new Map<string, Lesson>();AL LESSON LOADER - True Dynamic Loading
  * Loads lessons from Vercel deployment to eliminate bundle bloat
  * This completely removes lesson content from mobile app bundle
@@ -59,9 +59,9 @@ class ExternalLessonLoader {
    */
   private async fetchLessonFromAPI(lessonId: string): Promise<Lesson | null> {
     try {
-      console.log(`🚀 Fetching from API: ${this.baseUrl}/lessons/${lessonId}`);
+      console.log(`🚀 Fetching from API: ${this.baseUrl}/lesson-${lessonId}.json`);
       
-      const response = await fetch(`${this.baseUrl}/lessons/${lessonId}`, {
+      const response = await fetch(`${this.baseUrl}/lesson-${lessonId}.json`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -120,7 +120,7 @@ class ExternalLessonLoader {
     }
     
     try {
-      const response = await fetch(`${this.baseUrl}/lessons/module/${moduleId}`, {
+      const response = await fetch(`${this.baseUrl}/module-${moduleId}.json`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -213,7 +213,7 @@ class ExternalLessonLoader {
    */
   async healthCheck(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/health`, {
+      const response = await fetch(`${this.baseUrl}/health.json`, {
         method: 'GET',
         signal: AbortSignal.timeout(5000)
       });
