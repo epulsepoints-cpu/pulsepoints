@@ -1,10 +1,18 @@
 /**
- * 🌐 EXTERNAL LESSON LOADER - True Dynamic Loading
- * Loads lessons from Vercel deployment to eliminate bundle bloat
- * This completely removes lesson content from mobile app bundle
+ * 🌐 EXTERNAL LESSON LOADER - Hybrid Approach
+ * Loads lessons 1-5 from embedded data (reliable)
+ * Loads lessons 6+ from external source (bundle optimization)
+ * This ensures app always works with graceful fallback
  */
 
 import { Lesson } from '@/types/learning';
+
+// Import critical lessons that are always embedded (1-5)
+import { optimizedLesson1 } from '@/data/optimized-lesson-1';
+import { optimizedLesson2 } from '@/data/optimized-lesson-2'; 
+import { optimizedLesson3 } from '@/data/optimized-lesson-3';
+import { optimizedLesson4 } from '@/data/optimized-lesson-4';
+import { optimizedLesson5 } from '@/data/optimized-lesson-5';
 
 interface LessonResponse {
   lesson?: Lesson;
@@ -13,19 +21,34 @@ interface LessonResponse {
 }
 
 class ExternalLessonLoader {
-  // Primary URL (Vercel) - fallback to GitHub raw files if needed
+  // For lessons 6+ that are loaded externally
   private baseUrl = 'https://raw.githubusercontent.com/rajkalale/pulsepoints/main/public/lessons-data';
   private cache = new Map<string, Lesson>();
   private moduleCache = new Map<string, Lesson[]>();
   private loadingPromises = new Map<string, Promise<Lesson | null>>();
   
+  // Embedded lessons map (always available)
+  private embeddedLessons = new Map<string, Lesson>([
+    ['1', optimizedLesson1],
+    ['2', optimizedLesson2],
+    ['3', optimizedLesson3], 
+    ['4', optimizedLesson4],
+    ['5', optimizedLesson5]
+  ]);
+  
   /**
-   * Load lesson from external API with caching
+   * Load lesson with hybrid approach: embedded (1-5) + external (6+)
    */
   async loadLesson(lessonId: string): Promise<Lesson | null> {
-    console.log(`🌐 External loading lesson: ${lessonId}`);
+    console.log(`🌐 Hybrid loading lesson: ${lessonId}`);
     
-    // Return cached lesson if available
+    // Check if this is an embedded lesson (1-5)
+    if (this.embeddedLessons.has(lessonId)) {
+      console.log(`📖 Returning embedded lesson: ${lessonId}`);
+      return this.embeddedLessons.get(lessonId)!;
+    }
+    
+    // For lessons 6+, use external loading with caching
     if (this.cache.has(lessonId)) {
       console.log(`📖 Returning cached external lesson: ${lessonId}`);
       return this.cache.get(lessonId)!;
@@ -37,7 +60,7 @@ class ExternalLessonLoader {
       return this.loadingPromises.get(lessonId)!;
     }
     
-    // Start new loading process
+    // Start new loading process for external lessons
     const loadingPromise = this.fetchLessonFromAPI(lessonId);
     this.loadingPromises.set(lessonId, loadingPromise);
     
