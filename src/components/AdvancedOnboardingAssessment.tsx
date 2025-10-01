@@ -1,20 +1,23 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import EnhancedImage from './EnhancedImage';
 import { QuizLayoutFixed } from './QuizLayoutFixed';
 import { 
   CheckCircle,
   XCircle,
   Clock,
-  Zap
+  Zap,
+  ArrowLeft
 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
-import ECGPlaceholder from './ECGPlaceholder';
 import { auth, db } from '@/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useUISounds } from '@/hooks/useUISounds';
+import AnimationFeedback from '@/components/ui/AnimationFeedback';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 interface OnboardingData {
   professionCategory: 'physician' | 'nursing' | 'student' | 'allied-health';
@@ -118,6 +121,29 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
   const [startTime] = useState(Date.now());
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Enhanced UI sounds for better UX
+  const uiSounds = useUISounds();
+  console.log('🔊 Available UI sounds:', Object.keys(uiSounds));
+  const { playClickSound, playPageTurnSound, playCorrectSound, playErrorSound, playRewardSound } = uiSounds;
+
+  // Safe wrapper for page turn sound
+  const safePlayPageTurnSound = useCallback(() => {
+    if (typeof playPageTurnSound === 'function') {
+      playPageTurnSound();
+    } else {
+      console.warn('⚠️ playPageTurnSound is not available:', typeof playPageTurnSound);
+    }
+  }, [playPageTurnSound]);
+
+  // Safe wrapper for reward sound
+  const safePlayRewardSound = useCallback(() => {
+    if (typeof playRewardSound === 'function') {
+      playRewardSound();
+    } else {
+      console.warn('⚠️ playRewardSound is not available:', typeof playRewardSound);
+    }
+  }, [playRewardSound]);
 
   // Check if onboarding should be shown on component mount
   useEffect(() => {
@@ -158,6 +184,7 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
 
   // Enhanced completion handler with Firebase integration
   const handleComplete = async (finalData: OnboardingData) => {
+    console.log('🚀 AdvancedOnboarding: handleComplete called with data:', finalData);
     setIsLoading(true);
     try {
       // Always store locally first
@@ -180,6 +207,7 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
       }
 
       // Call parent completion handler
+      console.log('🚀 AdvancedOnboarding: Calling onComplete callback with data');
       onComplete(finalData);
     } catch (error) {
       console.error('Error completing onboarding:', error);
@@ -275,7 +303,7 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
     {
       id: 'q3',
       question: 'What is the most characteristic feature of this ECG rhythm?',
-      imageUrl: '/ecg/medical_accurate/premature_ventricular_contractions_pvc_3.png',
+      imageUrl: '/ecg/medical_accurate/pvc_85bpm_3.png',
       imageAlt: 'ECG showing premature ventricular contractions',
       options: [
         'Wide, bizarre QRS complexes occurring early',
@@ -347,7 +375,7 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
     {
       id: 'q7',
       question: 'Identify this complex arrhythmia pattern:',
-      imageUrl: '/ecg/medical_accurate/torsades_de_pointes_200bpm_2.png',
+      imageUrl: '/ecg/medical_accurate/ventricular_tachycardia_210bpm_5.png',
       imageAlt: 'Medical ECG showing torsades de pointes',
       options: [
         'Torsades de pointes',
@@ -364,7 +392,7 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
     {
       id: 'q8',
       question: 'What type of heart block pattern is shown in this ECG?',
-      imageUrl: '/ecg/medical_accurate/third_degree_av_block_40bpm_1.png',
+      imageUrl: '/ecg/medical_accurate/bradycardia_40bpm.png',
       imageAlt: 'Medical ECG showing complete heart block',
       options: [
         'Complete heart block (3rd degree)',
@@ -397,19 +425,6 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
     }
   ];
 
-  // Map question IDs to ECG placeholder types (fallback for image loading failures)
-  const getPlaceholderType = (questionId: string): 'afib-rvr' | 'stemi-anterior' | 'complete-heart-block' | 'ventricular-tachycardia' | 'rbbb-pattern' | 'hyperkalemia' => {
-    const mapping = {
-      'q1': 'afib-rvr' as const,           // Maps to atrial fibrillation (351_AFIB.png)
-      'q2': 'stemi-anterior' as const,     // Maps to ST elevation MI (152_LMI.png)
-      'q3': 'complete-heart-block' as const, // Maps to first degree block (placeholder approximation)
-      'q4': 'ventricular-tachycardia' as const, // Maps to ventricular tachycardia
-      'q5': 'rbbb-pattern' as const,       // Maps to right bundle branch block (172_CRBBB.png)
-      'q6': 'ventricular-tachycardia' as const, // Maps to SVT (1299_PSVT.png) - closest placeholder
-    };
-    return mapping[questionId as keyof typeof mapping] || 'afib-rvr';
-  };
-
   // Get questions based on experience level (memoized to prevent infinite re-renders)
   const questions = useMemo(() => {
     const getQuestionsForLevel = (level: 'beginner' | 'intermediate' | 'advanced') => {
@@ -431,24 +446,48 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
       : assessmentQuestions.slice(0, 3); // Default to beginner level
   }, [onboardingData.experienceLevel]);
 
-  const currentQuestionData = questions[currentQuestion];
+  const currentQuestionData = (questions.length > 0 && currentQuestion < questions.length) 
+    ? questions[currentQuestion] 
+    : questions[0];
 
   useEffect(() => {
-    if (currentQuestionData) {
+    if (currentQuestionData && currentQuestion < questions.length) {
       setQuestionStartTime(Date.now());
     }
   }, [currentQuestion]);
 
+  // Reset current question when questions array changes
+  useEffect(() => {
+    if (questions.length > 0 && currentQuestion >= questions.length) {
+      setCurrentQuestion(0);
+      setAnswers([]);
+      setShowExplanation(false);
+      setSelectedAnswer(null);
+    }
+  }, [questions.length, currentQuestion]);
+
   const handleAnswer = (answerIndex: number) => {
     if (showExplanation) return;
     
+    playClickSound();
     setSelectedAnswer(answerIndex);
     const newAnswers = [...answers, answerIndex];
     setAnswers(newAnswers);
     setShowExplanation(true);
     
+    // Play success or error sound based on correctness
+    const isCorrect = answerIndex === questions[currentQuestion].correct;
+    setTimeout(() => {
+      if (isCorrect) {
+        playCorrectSound();
+      } else {
+        playErrorSound();
+      }
+    }, 300);
+    
     setTimeout(() => {
       if (currentQuestion < questions.length - 1) {
+        safePlayPageTurnSound();
         setCurrentQuestion(currentQuestion + 1);
         setShowExplanation(false);
         setSelectedAnswer(null);
@@ -479,12 +518,15 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
           timeSpent,
           recommendedModule 
         }));
+        playRewardSound();
         setCurrentStep('personalization');
       }
     }, 3000);
   };
 
   const handleSkipOnboarding = async () => {
+    playClickSound();
+    
     // Set default onboarding data for skip
     const defaultData: OnboardingData = {
       professionCategory: 'student',
@@ -505,194 +547,448 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
       duration: 3000,
     });
     
-    await handleComplete(defaultData);
+    playRewardSound();
+    
+    // Call onComplete immediately for Android navigation fix
+    console.log('🚀 Skip: Calling onComplete callback immediately');
+    onComplete(defaultData);
   };
 
   const renderProfessionSelection = () => (
-    <div className="space-y-3 p-2">
-      <h2 className="text-base font-bold text-center text-gray-800">
-        Choose Your Profession
-      </h2>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-4 p-4 h-full flex flex-col"
+    >
+      <div className="text-center space-y-2">
+        <h2 className="text-xl font-bold text-gray-800">
+          Choose Your Profession
+        </h2>
+        <p className="text-sm text-gray-600">
+          This helps us personalize your learning experience
+        </p>
+      </div>
       
       {/* Skip Onboarding Option */}
       <div className="flex justify-center">
         <Button
           variant="ghost"
           size="sm"
-          onClick={handleSkipOnboarding}
-          className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors py-1 px-2 rounded text-xs"
+          onClick={() => {
+            console.log('🎯 SKIP BUTTON CLICKED');
+            try {
+              playClickSound();
+              console.log('🎯 Calling handleSkipOnboarding');
+              handleSkipOnboarding();
+            } catch (error) {
+              console.error('❌ Error in skip button:', error);
+            }
+          }}
+          className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
         >
-          Skip →
+          Skip for now →
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        {Object.entries(professionCategories).map(([key, category]) => {
+      <div className="grid grid-cols-1 gap-3 flex-1">
+        {Object.entries(professionCategories).map(([key, category], index) => {
           return (
-            <Card 
+            <motion.div
               key={key}
-              className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-purple-400 active:scale-[0.96] bg-white"
-              onClick={() => {
-                setOnboardingData(prev => ({ ...prev, professionCategory: key as any }));
-                setCurrentStep('experience');
-              }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
             >
-              <CardHeader className="text-center pb-1 pt-3">
-                <CardTitle className="text-xs font-bold text-gray-800">
-                  {category.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0 pb-2">
-                <div className="text-center">
-                  <Badge variant="outline" className="text-xs px-2 py-0.5 bg-gray-50 text-gray-700 border-gray-200">
-                    {category.roles.length} roles
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
+              <Card 
+                className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-blue-400 active:scale-[0.98] bg-gradient-to-r from-white to-blue-50"
+                onClick={() => {
+                  console.log('🎯 PROFESSION CARD CLICKED:', key);
+                  try {
+                    playClickSound();
+                    // Safe call for page turn sound
+                    if (typeof playPageTurnSound === 'function') {
+                      playPageTurnSound();
+                    } else {
+                      console.warn('⚠️ playPageTurnSound is not available:', typeof playPageTurnSound);
+                    }
+                    console.log('🎯 Setting profession category:', key);
+                    setOnboardingData(prev => ({ ...prev, professionCategory: key as any }));
+                    console.log('🎯 Setting current step to experience');
+                    setCurrentStep('experience');
+                    console.log('🎯 Profession selection complete');
+                  } catch (error) {
+                    console.error('❌ Error in profession selection:', error);
+                  }
+                }}
+              >
+                <CardHeader className="text-center pb-2">
+                  <CardTitle className="text-sm font-bold text-gray-800">
+                    {category.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 pb-3">
+                  <div className="text-center">
+                    <Badge variant="outline" className="text-xs px-3 py-1 bg-blue-50 text-blue-700 border-blue-200">
+                      {category.roles.length} specializations
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 
   const renderExperienceLevel = () => (
-    <div className="space-y-3 p-2">
-      <h2 className="text-base font-bold text-center text-gray-800">
-        Experience Level
-      </h2>
-
-      <div className="space-y-2">
-        <Card 
-          className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-green-400 active:scale-[0.98] bg-white"
-          onClick={() => {
-            setOnboardingData(prev => ({ 
-              ...prev, 
-              experienceLevel: 'beginner',
-              recommendedModule: 1,
-              assessmentScore: 0
-            }));
-            setCurrentStep('personalization');
-          }}
-        >
-          <CardHeader className="text-center py-3">
-            <CardTitle className="text-green-600 text-sm font-bold">BEGINNER</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center pt-0 pb-3">
-            <p className="text-xs text-gray-700 mb-2">
-              New to ECG fundamentals
-            </p>
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 px-2 py-1 text-xs">
-              Start Module 1
-            </Badge>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-blue-400 active:scale-[0.98] bg-white"
-          onClick={() => {
-            setOnboardingData(prev => ({ ...prev, experienceLevel: 'intermediate' }));
-            setCurrentStep('assessment');
-          }}
-        >
-          <CardHeader className="text-center py-3">
-            <CardTitle className="text-blue-600 text-sm font-bold">INTERMEDIATE</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center pt-0 pb-3">
-            <p className="text-xs text-gray-700 mb-2">
-              Some ECG knowledge
-            </p>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300 px-2 py-1 text-xs">
-              Assessment (6 Q)
-            </Badge>
-          </CardContent>
-        </Card>
-
-        <Card 
-          className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-purple-400 active:scale-[0.98] bg-white"
-          onClick={() => {
-            setOnboardingData(prev => ({ ...prev, experienceLevel: 'advanced' }));
-            setCurrentStep('assessment');
-          }}
-        >
-          <CardHeader className="text-center py-3">
-            <CardTitle className="text-purple-600 text-sm font-bold">ADVANCED</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center pt-0 pb-3">
-            <p className="text-xs text-gray-700 mb-2">
-              Confident with ECGs
-            </p>
-            <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-300 px-2 py-1 text-xs">
-              Full Test (9 Q)
-            </Badge>
-          </CardContent>
-        </Card>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-4 p-4 h-full flex flex-col"
+    >
+      <div className="text-center space-y-2">
+        <h2 className="text-xl font-bold text-gray-800">
+          Experience Level
+        </h2>
+        <p className="text-sm text-gray-600">
+          Help us customize your learning path
+        </p>
       </div>
-    </div>
+
+      <div className="space-y-3 flex-1">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1, duration: 0.3 }}
+        >
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-green-400 active:scale-[0.98] bg-gradient-to-r from-green-50 to-white"
+            onClick={() => {
+              playClickSound();
+              safePlayPageTurnSound();
+              setOnboardingData(prev => ({ 
+                ...prev, 
+                experienceLevel: 'beginner',
+                recommendedModule: 1,
+                assessmentScore: 0
+              }));
+              setCurrentStep('personalization');
+            }}
+          >
+            <CardHeader className="text-center py-4">
+              <CardTitle className="text-green-600 text-lg font-bold">🌱 BEGINNER</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center pt-0 pb-4">
+              <p className="text-sm text-gray-700 mb-3">
+                New to ECG fundamentals and cardiac anatomy
+              </p>
+              <Badge variant="outline" className="bg-green-100 text-green-700 border-green-300 px-3 py-2">
+                Start with Module 1
+              </Badge>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2, duration: 0.3 }}
+        >
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-blue-400 active:scale-[0.98] bg-gradient-to-r from-blue-50 to-white"
+            onClick={() => {
+              playClickSound();
+              safePlayPageTurnSound();
+              setOnboardingData(prev => ({ ...prev, experienceLevel: 'intermediate' }));
+              setCurrentStep('assessment');
+            }}
+          >
+            <CardHeader className="text-center py-4">
+              <CardTitle className="text-blue-600 text-lg font-bold">📚 INTERMEDIATE</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center pt-0 pb-4">
+              <p className="text-sm text-gray-700 mb-3">
+                Some ECG knowledge - take assessment to find your level
+              </p>
+              <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-300 px-3 py-2">
+                Take Assessment (6 questions)
+              </Badge>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.3 }}
+        >
+          <Card 
+            className="cursor-pointer hover:shadow-lg transition-all duration-300 border-2 hover:border-purple-400 active:scale-[0.98] bg-gradient-to-r from-purple-50 to-white"
+            onClick={() => {
+              playClickSound();
+              safePlayPageTurnSound();
+              setOnboardingData(prev => ({ ...prev, experienceLevel: 'advanced' }));
+              setCurrentStep('assessment');
+            }}
+          >
+            <CardHeader className="text-center py-4">
+              <CardTitle className="text-purple-600 text-lg font-bold">⚡ ADVANCED</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center pt-0 pb-4">
+              <p className="text-sm text-gray-700 mb-3">
+                Confident with ECGs - take full assessment
+              </p>
+              <Badge variant="outline" className="bg-purple-100 text-purple-700 border-purple-300 px-3 py-2">
+                Full Assessment (9 questions)
+              </Badge>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Back button */}
+      <div className="pt-4">
+        <Button
+          variant="ghost"
+          onClick={() => {
+            playClickSound();
+            setCurrentStep('profession');
+          }}
+          className="w-full text-gray-600 hover:text-gray-800"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
+      </div>
+    </motion.div>
   );
 
   const renderAssessment = () => {
     const currentQuestionData = questions[currentQuestion];
     
+    // Add bounds checking to prevent crashes
+    if (!currentQuestionData || currentQuestion >= questions.length) {
+      console.warn('Invalid question index:', currentQuestion, 'of', questions.length);
+      return <div>Loading question...</div>;
+    }
+    
     return (
-      <div className="h-full flex flex-col">
-        {/* Minimal Progress Bar Only */}
-        <div className="p-2 bg-gray-50 rounded-lg shadow-sm mb-2">
-          <div className="space-y-1">
-            <p className="text-gray-600 text-xs font-medium text-center">
-              Q{currentQuestion + 1}/{questions.length}
-            </p>
-            <div className="max-w-full mx-auto">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="h-full flex flex-col max-h-screen overflow-hidden"
+      >
+        {/* Compact Progress Header */}
+        <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                playClickSound();
+                setCurrentStep('experience');
+              }}
+              className="p-1"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            
+            <div className="flex-1 mx-3">
+              <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                <span>Question {currentQuestion + 1}</span>
+                <span>{questions.length} total</span>
+              </div>
               <Progress 
                 value={((currentQuestion + 1) / questions.length) * 100} 
                 className="h-2 bg-gray-200"
               />
             </div>
-            <p className="text-xs text-gray-500 text-center">
+            
+            <div className="text-xs text-gray-500 min-w-[3rem] text-right">
               {Math.round(((currentQuestion + 1) / questions.length) * 100)}%
-            </p>
-          </div>
-        </div>
-
-        {/* Quiz Layout */}
-        <div className="flex-1 px-1">
-          <QuizLayoutFixed
-            title={`Question ${currentQuestion + 1}`}
-            question={currentQuestionData.question}
-            imageUrl={currentQuestionData.imageUrl}
-            imageAlt={currentQuestionData.imageAlt}
-            options={currentQuestionData.options}
-            selectedAnswer={selectedAnswer}
-            showResult={showExplanation}
-            isCorrect={selectedAnswer === currentQuestionData.correct}
-            explanation={currentQuestionData.explanation}
-            category={currentQuestionData.category}
-            points={currentQuestionData.points}
-            onAnswerSelect={handleAnswer}
-            onSubmit={undefined} // Assessment submits immediately
-            className="flex-1"
-          />
-        </div>
-
-        {/* Question Info Footer */}
-        <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-t-3xl mt-4">
-          <div className="flex justify-between items-center text-xs">
-            <Badge variant="outline" className="bg-white border-gray-300 text-gray-600 px-3 py-1">
-              {currentQuestionData.category}
-            </Badge>
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${
-                currentQuestionData.difficulty === 'beginner' ? 'bg-green-500' :
-                currentQuestionData.difficulty === 'intermediate' ? 'bg-blue-500' :
-                currentQuestionData.difficulty === 'advanced' ? 'bg-purple-500' : 'bg-red-500'
-              }`}></div>
-              <span className="text-gray-600 capitalize font-medium">
-                {currentQuestionData.difficulty}
-              </span>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Mobile-optimized Quiz Content */}
+        <div className="flex-1 overflow-hidden">
+          <div className="h-full px-2 py-1">
+            {/* Question */}
+            <div className="mb-2">
+              <h3 className="text-sm font-semibold text-gray-800 leading-tight">
+                {currentQuestionData.question}
+              </h3>
+            </div>
+
+            {/* ECG Image - Compact Medical Accurate */}
+            <div className="mb-3">
+              <div className="relative bg-white rounded-lg border shadow-sm max-w-lg mx-auto overflow-hidden">
+                <img 
+                  src={currentQuestionData.imageUrl}
+                  alt={currentQuestionData.imageAlt}
+                  className="w-full h-auto object-contain rounded-lg"
+                  style={{ 
+                    imageRendering: 'crisp-edges',
+                    maxHeight: '200px',
+                    minHeight: '120px'
+                  }}
+                  onLoad={() => {
+                    console.log('✅ ECG Image loaded successfully:', currentQuestionData.imageUrl);
+                  }}
+                  onError={(e) => {
+                    console.error('❌ Failed to load ECG image:', currentQuestionData.imageUrl);
+                    console.error('Error details:', e);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Answer Options - Compact */}
+            <div className="space-y-2 mb-3">
+              {currentQuestionData.options.map((option, index) => (
+                <div key={index}>
+                  <Button
+                    variant="outline"
+                    className={`w-full text-left p-3 h-auto text-xs transition-all duration-200 ${
+                      selectedAnswer === index 
+                        ? showExplanation
+                          ? index === currentQuestionData.correct
+                            ? 'bg-green-100 border-green-400 text-green-800'
+                            : 'bg-red-100 border-red-400 text-red-800'
+                          : 'bg-blue-100 border-blue-400 text-blue-800'
+                        : 'bg-white hover:bg-gray-50'
+                    }`}
+                    onClick={() => {
+                      if (!showExplanation) {
+                        playClickSound();
+                        handleAnswer(index);
+                      }
+                    }}
+                    disabled={showExplanation}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="flex-1 text-left">{option}</span>
+                      {selectedAnswer === index && showExplanation && (
+                        <div className="ml-2">
+                          {index === currentQuestionData.correct ? (
+                            <span className="text-green-600">✓</span>
+                          ) : (
+                            <span className="text-red-600">✗</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </Button>
+                </div>
+              ))}
+            </div>
+
+            {/* Explanation */}
+            {showExplanation && (
+              <div className="mb-3">
+                <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+                  <CardContent className="p-3">
+                    <div className="flex items-start space-x-2">
+                      <div className="text-blue-600 mt-0.5">
+                        <CheckCircle className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-700 leading-relaxed">
+                          {currentQuestionData.explanation}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom Navigation */}
+        {showExplanation && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-3 bg-white border-t"
+          >
+            <Button
+              onClick={() => {
+                console.log('🎯 BUTTON CLICKED: currentQuestion =', currentQuestion, 'questions.length =', questions.length);
+                safePlayPageTurnSound();
+                if (currentQuestion < questions.length - 1) {
+                  console.log('🎯 NEXT QUESTION: Moving to next question');
+                  setCurrentQuestion(curr => curr + 1);
+                  setSelectedAnswer(null);
+                  setShowExplanation(false);
+                  setQuestionStartTime(Date.now());
+                } else {
+                  console.log('🎯 COMPLETE ASSESSMENT: Starting final score calculation');
+                  // Finish assessment - calculate final score and proceed
+                  const finalAnswers = [...answers];
+                  const correctAnswers = finalAnswers.reduce((count, answer, index) => {
+                    return count + (answer === questions[index].correct ? 1 : 0);
+                  }, 0);
+                  
+                  const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
+                  const earnedPoints = finalAnswers.reduce((sum, answer, index) => {
+                    return sum + (answer === questions[index].correct ? questions[index].points : 0);
+                  }, 0);
+                  
+                  const percentage = (earnedPoints / totalPoints) * 100;
+                  
+                  let recommendedModule = 1;
+                  if (percentage >= 85) recommendedModule = 4;
+                  else if (percentage >= 70) recommendedModule = 3;
+                  else if (percentage >= 50) recommendedModule = 2;
+                  
+                  const timeSpent = Date.now() - startTime;
+                  
+                  setOnboardingData(prev => ({ 
+                    ...prev, 
+                    assessmentScore: correctAnswers,
+                    assessmentAnswers: finalAnswers,
+                    timeSpent,
+                    recommendedModule 
+                  }));
+                  console.log('🎯 COMPLETE ASSESSMENT: Final score calculated, calling safePlayRewardSound');
+                  safePlayRewardSound();
+                  console.log('🎯 COMPLETE ASSESSMENT: Setting current step to personalization');
+                  setCurrentStep('personalization');
+                }
+              }}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3"
+            >
+              {currentQuestion < questions.length - 1 ? (
+                <>Next Question →</>
+              ) : (
+                <>Complete Assessment ✅</>
+              )}
+            </Button>
+          </motion.div>
+        )}
+
+        {/* Question Category Badge */}
+        <div className="absolute top-16 right-3">
+          <Badge 
+            variant="outline" 
+            className={`text-xs px-2 py-1 ${
+              currentQuestionData.difficulty === 'beginner' ? 'bg-green-50 border-green-300 text-green-700' :
+              currentQuestionData.difficulty === 'intermediate' ? 'bg-blue-50 border-blue-300 text-blue-700' :
+              'bg-purple-50 border-purple-300 text-purple-700'
+            }`}
+          >
+            {currentQuestionData.category}
+          </Badge>
+        </div>
+      </motion.div>
     );
   };
 
@@ -726,7 +1022,10 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
                     ? 'bg-blue-500 text-white border-0' 
                     : 'bg-white hover:bg-blue-50 border border-gray-200'
                 }`}
-                onClick={() => setOnboardingData(prev => ({ ...prev, learningGoals: option.time }))}
+                onClick={() => {
+                  playClickSound();
+                  setOnboardingData(prev => ({ ...prev, learningGoals: option.time }));
+                }}
               >
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-2">
@@ -765,7 +1064,10 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
                     ? 'bg-green-500 text-white border-0' 
                     : 'bg-white hover:bg-green-50 border border-gray-200'
                 }`}
-                onClick={() => setOnboardingData(prev => ({ ...prev, dailyGoal: option.goal }))}
+                onClick={() => {
+                  playClickSound();
+                  setOnboardingData(prev => ({ ...prev, dailyGoal: option.goal }));
+                }}
               >
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-2">
@@ -785,10 +1087,12 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
       <div className="pt-3">
         <Button
           onClick={() => {
+            playClickSound();
             // Set default schedule if not selected
             if (!onboardingData.studySchedule) {
               setOnboardingData(prev => ({ ...prev, studySchedule: 'flexible' }));
             }
+            playRewardSound();
             setCurrentStep('complete');
           }}
           disabled={!onboardingData.learningGoals || !onboardingData.dailyGoal}
@@ -866,6 +1170,7 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
         <div className="pt-4">
           <Button
             onClick={async () => {
+              playClickSound();
               if (onboardingData.professionCategory && onboardingData.experienceLevel) {
                 await handleComplete(onboardingData as OnboardingData);
               }
@@ -876,8 +1181,8 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
           >
             {isLoading ? (
               <>
-                <Clock className="w-4 h-4 mr-2 animate-spin" />
-                Saving...
+                <LoadingAnimation size={24} />
+                <span className="ml-2">Saving...</span>
               </>
             ) : (
               <>🚀 Start Module {onboardingData.recommendedModule}</>
@@ -895,23 +1200,23 @@ const AdvancedOnboardingAssessment: React.FC<AdvancedOnboardingAssessmentProps> 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-1">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-50 to-indigo-100 p-1">
       <div className="max-w-sm mx-auto min-h-screen flex flex-col">
         {/* Compact Header */}
         <div className="py-2 text-center">
           <h1 className="text-lg font-bold text-gray-800">ECG Learning Profile</h1>
           <div className="flex justify-center mt-1">
             <div className="flex space-x-1">
-              <div className={`w-2 h-2 rounded-full ${currentStep === 'profession' ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
-              <div className={`w-2 h-2 rounded-full ${currentStep === 'experience' ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
-              <div className={`w-2 h-2 rounded-full ${currentStep === 'assessment' ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
-              <div className={`w-2 h-2 rounded-full ${currentStep === 'personalization' ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
+              <div className={`w-2 h-2 rounded-full ${currentStep === 'profession' ? 'bg-purple-500' : 'bg-gray-300'}`}></div>
+              <div className={`w-2 h-2 rounded-full ${currentStep === 'experience' ? 'bg-purple-500' : 'bg-gray-300'}`}></div>
+              <div className={`w-2 h-2 rounded-full ${currentStep === 'assessment' ? 'bg-purple-500' : 'bg-gray-300'}`}></div>
+              <div className={`w-2 h-2 rounded-full ${currentStep === 'personalization' ? 'bg-purple-500' : 'bg-gray-300'}`}></div>
             </div>
           </div>
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 bg-white rounded-lg shadow-md p-1 mb-1">
+        <div className="flex-1 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-1 mb-1">
           {currentStep === 'profession' && renderProfessionSelection()}
           {currentStep === 'experience' && renderExperienceLevel()}
           {currentStep === 'assessment' && renderAssessment()}

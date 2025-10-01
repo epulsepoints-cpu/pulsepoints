@@ -155,3 +155,5 @@ backend/
 
 # Firebase Admin
 firebase-admin-key.json
+
+.vercel

@@ -8,6 +8,7 @@ import YouTubeVideoTask from './YouTubeVideoTask';
 import LessonVideoTask from './LessonVideoTask';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRewardSound } from '@/hooks/useRewardSound';
+import { useUISounds } from '@/hooks/useUISounds';
 import EnhancedImage from './EnhancedImage';
 
 interface TaskCardProps {
@@ -29,6 +30,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete, modalMode, onClos
   const [timedOut, setTimedOut] = useState(false);
   const [zoomed, setZoomed] = useState(false);
   const { playRewardSound } = useRewardSound();
+  const { playClickSound, playCorrectSound, playErrorSound } = useUISounds();
 
   const getTaskIcon = () => {
     switch (task.type) {
@@ -74,10 +76,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete, modalMode, onClos
       if (isCorrect) {
         setXpFloat(true);
         setMotivation('Nice! Keep it up!');
+        // Play correct answer sound
+        playCorrectSound();
         // Play reward sound for correct answer
         playRewardSound();
       } else {
         setMotivation('Keep trying! Review the explanation.');
+        // Play error sound for wrong answer
+        playErrorSound();
       }
       
       // Complete the task and close modal automatically
@@ -225,7 +231,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete, modalMode, onClos
             {task.options.map((option, index) => (
               <button
                 key={index}
-                onClick={() => setSelectedAnswer(index)}
+                onClick={() => {
+                  playClickSound(); // Play click sound for answer selection
+                  setSelectedAnswer(index);
+                }}
                 className={`w-full p-3 text-left rounded-lg border transition-all duration-300 hover:scale-102 font-medium
                   ${selectedAnswer === index ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-gray-200 hover:border-gray-300'}
                   ${showAnswer ? (index === task.correctAnswer ? 'border-green-500 bg-green-50 animate-pulse' : selectedAnswer === index ? 'border-red-500 bg-red-50 animate-shake' : '') : ''}
@@ -414,7 +423,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onComplete, modalMode, onClos
                 {task.options.map((option, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedAnswer(index)}
+                    onClick={() => {
+                      playClickSound(); // Play click sound for answer selection
+                      setSelectedAnswer(index);
+                    }}
                     className={`w-full p-3 text-left rounded-lg border transition-all duration-300 hover:scale-102 ${
                       selectedAnswer === index
                         ? 'border-blue-500 bg-blue-50 shadow-md'

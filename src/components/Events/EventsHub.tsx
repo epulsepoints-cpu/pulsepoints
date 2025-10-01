@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronRight, Trophy, Lock, Star, Calendar, Target, 
-  Award, Gift, LogIn, UserPlus, ArrowLeft, Zap 
+  Award, Gift, LogIn, UserPlus, ArrowLeft, Zap, Clock 
 } from 'lucide-react';
 import { SimpleEvent } from '../../types/simpleEventTypes';
 import { simpleEventsService } from '../../services/simpleEventsService';
@@ -81,51 +81,104 @@ export const EventsHub: React.FC<EventsHubProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Mobile-optimized full-width layout */}
       <div className="w-full">
-        {/* Welcome Header - Compact for Mobile */}
+        {/* Enhanced Welcome Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3"
+          className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white relative overflow-hidden"
         >
-          <div className="flex items-center justify-between">
-            {/* Navigation and Title */}
-            <div className="flex items-center flex-1">
-              {onBack && (
-                <button
-                  onClick={onBack}
-                  className="flex items-center justify-center w-7 h-7 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors mr-2"
-                >
-                  <ArrowLeft className="w-3 h-3" />
-                </button>
-              )}
-              <div>
-                <h1 className="text-base sm:text-lg font-bold mb-0.5">
-                  ECG Events Hub
-                </h1>
-                <p className="text-blue-100 text-xs">
-                  Master ECG interpretation
-                </p>
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-black bg-opacity-10">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }} />
+          </div>
+
+          <div className="relative z-10 p-4 sm:p-6">
+            <div className="flex items-center justify-between">
+              {/* Navigation and Title */}
+              <div className="flex items-center flex-1">
+                {onBack && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={onBack}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-200 mr-3 backdrop-blur-sm"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </motion.button>
+                )}
+                <div>
+                  <motion.h1 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-xl sm:text-2xl font-bold mb-1 flex items-center gap-2"
+                  >
+                    <Calendar className="w-6 h-6 text-yellow-300" />
+                    ECG Events Hub
+                  </motion.h1>
+                  <motion.p 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-blue-100 text-sm sm:text-base font-medium"
+                  >
+                    Master ECG interpretation through challenges
+                  </motion.p>
+                </div>
               </div>
+              
+              {/* Enhanced stats for mobile */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-right bg-white bg-opacity-15 rounded-lg p-3 backdrop-blur-sm"
+              >
+                <div className="flex items-center gap-2 text-base font-bold mb-1">
+                  <Star className="w-4 h-4 text-yellow-300" />
+                  <span>{userStats.totalXP.toLocaleString()}</span>
+                  <span className="text-xs font-normal opacity-75">XP</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-blue-200">
+                  <Trophy className="w-3 h-3" />
+                  <span>{userStats.eventsCompleted} events completed</span>
+                </div>
+              </motion.div>
             </div>
-            
-            {/* Compact stats for mobile */}
-            <div className="text-right">
-              <div className="flex items-center gap-1 text-sm font-medium">
-                <Star className="w-3 h-3 text-yellow-300" />
-                <span>{userStats.totalXP} XP</span>
+
+            {/* Quick Stats Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-4 flex items-center justify-between bg-white bg-opacity-15 rounded-lg p-3 backdrop-blur-sm"
+            >
+              <div className="flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-1">
+                  <Target className="w-4 h-4 text-green-300" />
+                  <span className="font-medium">{events.filter(e => !e.isUpcoming && e.unlocked).length}</span>
+                  <span className="opacity-75">Available</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Zap className="w-4 h-4 text-orange-300" />
+                  <span className="font-medium">{events.filter(e => e.isUpcoming).length}</span>
+                  <span className="opacity-75">Coming Soon</span>
+                </div>
               </div>
-              <div className="text-xs text-blue-200">
-                {userStats.eventsCompleted} events
+              <div className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">
+                Weekly Challenges
               </div>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
 
-        {/* Events Grid - Full Width with no padding */}
-        <div className="space-y-2">
+        {/* Enhanced Events Grid - Professional Layout */}
+        <div className="p-4 space-y-4">
           {events.map((event, index) => {
             const progress = calculateEventProgress(event);
             const isLocked = !event.unlocked || event.isUpcoming;
@@ -137,15 +190,14 @@ export const EventsHub: React.FC<EventsHubProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
                 className={`
-                  relative bg-white rounded-none shadow-lg overflow-hidden 
-                  transform transition-all duration-300 
-                  border-b-2 border-opacity-30
+                  group relative bg-white rounded-2xl shadow-md overflow-hidden 
+                  transform transition-all duration-300 hover:shadow-xl
+                  border border-gray-100
                   ${isLocked 
-                    ? 'opacity-75 cursor-not-allowed' 
-                    : 'cursor-pointer hover:scale-[1.01] hover:shadow-xl'
+                    ? 'opacity-90 cursor-not-allowed' 
+                    : 'cursor-pointer hover:scale-[1.02] hover:-translate-y-1'
                   }
                 `}
-                style={{ borderColor: event.theme.primary }}
                 onClick={() => {
                   if (isLocked) {
                     // Show detailed coming soon information for locked events
@@ -153,7 +205,7 @@ export const EventsHub: React.FC<EventsHubProps> = ({
                       if (event.isUpcoming) {
                         // Special detailed toast for upcoming events
                         toast({
-                          title: `� ${event.title} - Coming Soon!`,
+                          title: `🚀 ${event.title} - Coming Soon!`,
                           description: (
                             <div className="space-y-2">
                               <p>{event.previewDescription || event.description}</p>
@@ -191,100 +243,96 @@ export const EventsHub: React.FC<EventsHubProps> = ({
                   }
                 }}
               >
-                {/* Notification badge for upcoming events */}
+                {/* Status Badge */}
                 {event.isUpcoming && (
-                  <div className="absolute top-2 right-2 z-30">
+                  <div className="absolute top-4 right-4 z-30">
                     <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.3 + index * 0.1 }}
-                      className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg"
+                      initial={{ scale: 0, rotate: -12 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ 
+                        delay: 0.3 + index * 0.1,
+                        type: "spring",
+                        stiffness: 200 
+                      }}
+                      className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-3 py-1.5 rounded-full font-bold shadow-lg flex items-center gap-1"
                     >
+                      <Zap className="w-3 h-3" />
                       Coming Soon
                     </motion.div>
                   </div>
                 )}
 
-                {/* Lock overlay for upcoming/locked events */}
-                {isLocked && (
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="absolute inset-0 bg-gray-900 bg-opacity-20 z-20 flex items-center justify-center"
-                  >
-                    <motion.div 
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                      className="bg-white bg-opacity-95 rounded-lg p-3 m-4 text-center shadow-lg backdrop-blur-sm"
-                    >
-                      <motion.div
-                        animate={{ 
-                          rotate: [0, -5, 5, -5, 0],
-                          scale: [1, 1.1, 1]
-                        }}
-                        transition={{ 
-                          duration: 2,
-                          repeat: Infinity,
-                          repeatDelay: 3
-                        }}
-                      >
-                        <Lock className="w-6 h-6 text-gray-500 mx-auto mb-2" />
-                      </motion.div>
-                      <p className="text-sm font-semibold text-gray-700 mb-1">
-                        {event.isUpcoming ? '🚀 Coming Soon' : '🔒 Locked'}
-                      </p>
-                      {event.isUpcoming && event.releaseDate && (
-                        <p className="text-xs text-gray-600">
-                          Available: {new Date(event.releaseDate).toLocaleDateString()}
-                        </p>
-                      )}
-                      <p className="text-xs text-blue-600 mt-1 font-medium">
-                        Tap to learn more
-                      </p>
-                    </motion.div>
-                  </motion.div>
-                )}
-
-                {/* Event Header - Extra Compact for mobile */}
-                <div className={`${event.theme.gradient} p-2 text-white relative overflow-hidden ${isLocked ? 'opacity-75' : ''}`}>
-                  <div className="absolute top-0 right-0 text-2xl opacity-10 transform translate-x-1 -translate-y-1">
-                    {event.badgeIcon}
+                {/* Enhanced Header Section */}
+                <div className={`${event.theme.gradient} relative overflow-hidden ${isLocked ? 'opacity-75' : ''}`}>
+                  {/* Background Pattern */}
+                  <div className="absolute inset-0 bg-black bg-opacity-5">
+                    <div className="absolute top-0 right-0 text-6xl opacity-10 transform translate-x-4 -translate-y-2">
+                      {event.badgeIcon}
+                    </div>
                   </div>
-                  <div className="relative z-10">
+                  
+                  <div className="relative z-10 p-5">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="text-sm font-bold mb-0.5 leading-tight">{event.title}</h3>
-                        <p className="text-xs opacity-90 mb-0.5">{event.subtitle}</p>
-                      </div>
-                      <div className="text-right ml-2">
-                        <div className="text-xs opacity-75">{event.totalDays} Days</div>
-                        <div className="text-xs opacity-75">{event.tasksPerDay}/Day</div>
+                        <motion.h3 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 + index * 0.1 }}
+                          className="text-lg font-bold mb-2 text-white leading-tight"
+                        >
+                          {event.title}
+                        </motion.h3>
+                        <motion.p 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 + index * 0.1 }}
+                          className="text-sm text-white text-opacity-90 mb-3 font-medium"
+                        >
+                          {event.subtitle}
+                        </motion.p>
+                        
+                        {/* Duration and Tasks Info */}
+                        <div className="flex items-center gap-4 text-white text-opacity-75">
+                          <div className="flex items-center gap-1 bg-white bg-opacity-15 px-2 py-1 rounded-md">
+                            <Calendar className="w-3 h-3" />
+                            <span className="text-xs font-medium">{event.totalDays} Days</span>
+                          </div>
+                          <div className="flex items-center gap-1 bg-white bg-opacity-15 px-2 py-1 rounded-md">
+                            <Target className="w-3 h-3" />
+                            <span className="text-xs font-medium">{event.tasksPerDay} Tasks/Day</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Progress Section - Extra Compact */}
-                <div className={`p-2 ${isLocked ? 'opacity-75' : ''}`}>
+                {/* Enhanced Content Section */}
+                <div className={`p-5 ${isLocked ? 'opacity-75' : ''}`}>
                   {isLocked && event.isUpcoming ? (
-                    /* Coming Soon Preview */
-                    <div className="mb-1.5">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-medium text-gray-600">Coming Soon</span>
-                        <span className="text-xs font-bold text-orange-600">
+                    /* Enhanced Coming Soon Preview */
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                          <Clock className="w-4 h-4 text-orange-500" />
+                          Coming Soon
+                        </span>
+                        <span className="text-sm font-bold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
                           {event.releaseDate && new Date(event.releaseDate).toLocaleDateString()}
                         </span>
                       </div>
                       
                       {/* Preview features */}
                       {event.features && (
-                        <div className="mb-2">
-                          <p className="text-xs text-gray-600 mb-1">What to expect:</p>
-                          <div className="space-y-0.5">
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                            <Star className="w-4 h-4 text-yellow-500" />
+                            What to expect:
+                          </p>
+                          <div className="space-y-1">
                             {event.features.slice(0, 3).map((feature, idx) => (
-                              <div key={idx} className="text-xs text-gray-500 flex items-center">
-                                <span className="mr-1">•</span>
+                              <div key={idx} className="text-sm text-gray-600 flex items-center">
+                                <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 flex-shrink-0" />
                                 {feature}
                               </div>
                             ))}
@@ -293,120 +341,176 @@ export const EventsHub: React.FC<EventsHubProps> = ({
                       )}
                       
                       {/* Locked progress bar */}
-                      <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
-                        <div className="h-full bg-gray-300 w-0 rounded-full" />
-                      </div>
-                      <div className="text-center mt-1">
-                        <span className="text-xs font-bold text-gray-400">Locked</span>
+                      <div className="space-y-2">
+                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                          <div className="h-full bg-gray-300 w-0 rounded-full" />
+                        </div>
+                        <div className="text-center">
+                          <span className="text-sm font-bold text-gray-400">🔒 Locked - Stay Tuned!</span>
+                        </div>
                       </div>
                     </div>
                   ) : (
-                    /* Normal progress for unlocked events */
-                    <div className="mb-1.5">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-medium text-gray-600">Progress</span>
-                        <span className="text-xs font-bold text-gray-800">
+                    /* Enhanced progress for unlocked events */
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                          <Trophy className="w-4 h-4 text-blue-500" />
+                          Progress
+                        </span>
+                        <span className="text-sm font-bold text-gray-800 bg-blue-50 px-3 py-1 rounded-full">
                           {progress.completedDays}/{progress.totalDays} Days
                         </span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${progress.percentage}%` }}
-                          transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-                          className={`h-full rounded-full ${event.theme.gradient}`}
-                        />
-                      </div>
-                      <div className="text-center mt-1">
-                        <span className="text-xs font-bold" style={{ color: event.theme.primary }}>
-                          {progress.percentage}%
-                        </span>
+                      
+                      {/* Enhanced Progress Bar */}
+                      <div className="space-y-2">
+                        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${progress.percentage}%` }}
+                            transition={{ 
+                              duration: 1.2, 
+                              delay: 0.5 + index * 0.1,
+                              ease: "easeOut"
+                            }}
+                            className={`h-full rounded-full ${event.theme.gradient} shadow-sm relative overflow-hidden`}
+                          >
+                            <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse" />
+                          </motion.div>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-gray-500">
+                            {progress.completedDays * event.tasksPerDay} tasks completed
+                          </span>
+                          <span className="text-sm font-bold" style={{ color: event.theme.primary }}>
+                            {progress.percentage}% Complete
+                          </span>
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Compact description */}
-                  <p className="text-gray-600 text-xs mb-1.5 line-clamp-2">
-                    {isLocked && event.previewDescription ? event.previewDescription : event.description}
-                  </p>
+                  {/* Enhanced description */}
+                  <div className="mt-4">
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {isLocked && event.previewDescription ? event.previewDescription : event.description}
+                    </p>
+                  </div>
 
-                  {/* Extra compact rewards */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-3">
-                      <div className="flex items-center gap-1">
-                        <span className="text-yellow-500 text-xs">⚡</span>
-                        <span className="text-xs text-gray-600">+{event.rewards.daily.xp}</span>
+                  {/* Enhanced rewards section */}
+                  <div className="mt-4 flex justify-between items-center">
+                    <div className="flex gap-4">
+                      <div className="flex items-center gap-1.5 bg-yellow-50 px-3 py-2 rounded-lg">
+                        <span className="text-yellow-600 text-sm">⚡</span>
+                        <span className="text-sm font-semibold text-yellow-700">+{event.rewards.daily.xp}</span>
+                        <span className="text-xs text-yellow-600">XP</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-green-500 text-xs">💎</span>
-                        <span className="text-xs text-gray-600">+{event.rewards.daily.gems}</span>
+                      <div className="flex items-center gap-1.5 bg-green-50 px-3 py-2 rounded-lg">
+                        <span className="text-green-600 text-sm">💎</span>
+                        <span className="text-sm font-semibold text-green-700">+{event.rewards.daily.gems}</span>
+                        <span className="text-xs text-green-600">gems</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-red-500 text-xs">❤️</span>
-                        <span className="text-xs text-gray-600">+{event.rewards.daily.hearts}</span>
+                      <div className="flex items-center gap-1.5 bg-red-50 px-3 py-2 rounded-lg">
+                        <span className="text-red-600 text-sm">❤️</span>
+                        <span className="text-sm font-semibold text-red-700">+{event.rewards.daily.hearts}</span>
+                        <span className="text-xs text-red-600">hearts</span>
                       </div>
                     </div>
                     
-                    {/* Action indicator - smaller */}
-                    <div 
-                      className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                    {/* Enhanced Action Button */}
+                    <motion.div 
+                      whileHover={{ scale: isLocked ? 1 : 1.05 }}
+                      whileTap={{ scale: isLocked ? 1 : 0.95 }}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm shadow-md transition-all duration-200 ${
                         isLocked 
-                          ? 'bg-gray-400 text-white cursor-not-allowed' 
-                          : 'text-white'
+                          ? 'bg-gray-100 text-gray-500 cursor-not-allowed' 
+                          : 'text-white shadow-lg'
                       }`}
                       style={{ 
-                        backgroundColor: isLocked ? '#9CA3AF' : event.theme.primary 
+                        backgroundColor: isLocked ? undefined : event.theme.primary,
+                        boxShadow: isLocked ? undefined : `0 4px 12px ${event.theme.primary}30`
                       }}
                     >
                       {isLocked ? (
                         <>
-                          <Lock className="w-3 h-3" />
+                          <Lock className="w-4 h-4" />
                           <span>{event.isUpcoming ? 'Soon' : 'Locked'}</span>
                         </>
                       ) : progress.percentage === 100 ? (
                         <>
-                          <Trophy className="w-3 h-3" />
-                          <span>Done</span>
+                          <Trophy className="w-4 h-4" />
+                          <span>Completed</span>
                         </>
                       ) : (
                         <>
-                          <span>Day {progress.nextDay}</span>
-                          <ChevronRight className="w-3 h-3" />
+                          <span>Continue Day {progress.nextDay}</span>
+                          <ChevronRight className="w-4 h-4" />
                         </>
                       )}
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
+
+                {/* Lock overlay for upcoming/locked events - More Subtle */}
+                {isLocked && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 bg-gradient-to-br from-gray-900 via-transparent to-gray-900 bg-opacity-5 z-10 pointer-events-none"
+                  />
+                )}
               </motion.div>
             );
           })}
         </div>
 
-        {/* Guest Mode Notice - Extra Compact */}
+        {/* Enhanced Guest Mode Notice */}
         {!user && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-blue-50 border-t border-blue-200 p-3"
+            className="m-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 shadow-lg"
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-blue-800 mb-0.5">
-                  🎯 Sign In to Save Progress
-                </h3>
-                <p className="text-blue-600 text-xs">
-                  Save progress across devices and compete!
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                    <Star className="w-4 h-4 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-blue-800">
+                    🎯 Unlock Your Full Potential
+                  </h3>
+                </div>
+                <p className="text-blue-700 text-sm leading-relaxed mb-3">
+                  Sign in to save your progress, compete with others, and unlock exclusive rewards across all devices!
                 </p>
+                <div className="flex items-center gap-4 text-xs text-blue-600">
+                  <div className="flex items-center gap-1">
+                    <Trophy className="w-3 h-3" />
+                    <span>Save Progress</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Target className="w-3 h-3" />
+                    <span>Compete</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Gift className="w-3 h-3" />
+                    <span>Earn Rewards</span>
+                  </div>
+                </div>
               </div>
               {onShowLogin && (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={onShowLogin}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs ml-2 flex-shrink-0"
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg font-semibold ml-4 flex-shrink-0"
                 >
-                  <LogIn className="w-3 h-3" />
+                  <LogIn className="w-4 h-4" />
                   Sign In
-                </button>
+                </motion.button>
               )}
             </div>
           </motion.div>

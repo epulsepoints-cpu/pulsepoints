@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { SimpleEvent, SimpleDay, SimpleTask } from '../../types/simpleEventTypes';
 import { simpleEventsService } from '../../services/simpleEventsService';
+import { useUISounds } from '../../hooks/useUISounds';
 
 interface EventViewProps {
   eventId: string;
@@ -18,6 +19,7 @@ export const EventView: React.FC<EventViewProps> = ({
   onBack, 
   onStartTask 
 }) => {
+  const { playClickSound, playSwooshSound } = useUISounds();
   const [event, setEvent] = useState<SimpleEvent | null>(null);
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [loading, setLoading] = useState(true);
@@ -60,7 +62,10 @@ export const EventView: React.FC<EventViewProps> = ({
       <div className="text-center py-12">
         <p className="text-gray-500 mb-4">Event not found.</p>
         <button
-          onClick={onBack}
+          onClick={() => {
+            playClickSound();
+            onBack();
+          }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           Go Back
@@ -113,7 +118,10 @@ export const EventView: React.FC<EventViewProps> = ({
           {/* Navigation Header */}
           <div className="flex items-center mb-4">
             <button
-              onClick={onBack}
+              onClick={() => {
+                playClickSound();
+                onBack();
+              }}
               className="flex items-center justify-center w-8 h-8 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors mr-3"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -166,7 +174,12 @@ export const EventView: React.FC<EventViewProps> = ({
                 return (
                   <motion.button
                     key={day.id}
-                    onClick={() => setSelectedDay(day.dayNumber)}
+                    onClick={() => {
+                      if (day.unlocked) {
+                        playClickSound(); // Play click sound for day selection
+                        setSelectedDay(day.dayNumber);
+                      }
+                    }}
                     className={`
                       flex-shrink-0 lg:flex-shrink lg:w-full p-3 rounded-lg border-2 transition-all text-left min-w-[120px] lg:min-w-0
                       ${selectedDay === day.dayNumber
@@ -257,7 +270,13 @@ export const EventView: React.FC<EventViewProps> = ({
                             : 'border-gray-100 bg-gray-50 cursor-not-allowed'
                         }
                       `}
-                      onClick={() => task.unlocked && onStartTask(task.id, task.type)}
+                      onClick={() => {
+                        if (task.unlocked) {
+                          playClickSound(); // Play click sound for task start
+                          playSwooshSound(); // Add swoosh sound for task transition
+                          onStartTask(task.id, task.type);
+                        }
+                      }}
                       whileHover={task.unlocked ? { scale: 1.01 } : {}}
                       whileTap={task.unlocked ? { scale: 0.99 } : {}}
                     >

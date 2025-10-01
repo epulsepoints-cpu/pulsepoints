@@ -27,7 +27,10 @@ const config: CapacitorConfig = {
     allowMixedContent: true,
     webContentsDebuggingEnabled: true,
     appendUserAgent: 'ECGkidApp/1.0.0',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    loggingBehavior: 'debug',
+    // Android WebView optimizations for smooth navigation and dynamic loading
+    overrideUserAgent: 'ECGkidApp/1.0.0 Chrome/91.0.4472.120 Mobile Safari/537.36'
   },
   plugins: {
     FirebaseAuthentication: {

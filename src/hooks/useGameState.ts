@@ -1946,30 +1946,54 @@ export const useGameState = () => {
     }
   }, []);
 
-  // Function to update user profile with onboarding data
+  // Function to update user profile with onboarding data - Android optimized
   const updateUserOnboardingData = useCallback(async (onboardingData: {
     professionCategory: 'physician' | 'nursing' | 'student' | 'allied-health';
     professionRole: string;
     experienceLevel: 'beginner' | 'intermediate' | 'advanced';
     assessmentScore?: number;
+    assessmentAnswers: number[];
+    timeSpent: number;
     recommendedModule: number;
     learningGoals: string;
     dailyGoal: string;
     studySchedule: string;
   }) => {
     try {
-      console.log('📝 Updating user onboarding data:', onboardingData);
+      console.log('📝 Updating user onboarding data (Android optimized):', onboardingData);
+      
+      // Update local state immediately for responsive UI
+      setGameState(prev => ({
+        ...prev,
+        user: prev.user ? {
+          ...prev.user,
+          professionCategory: onboardingData.professionCategory,
+          professionRole: onboardingData.professionRole,
+          experienceLevel: onboardingData.experienceLevel,
+          onboardingAssessmentScore: onboardingData.assessmentScore || 0,
+          onboardingAssessmentAnswers: onboardingData.assessmentAnswers,
+          onboardingTimeSpent: onboardingData.timeSpent,
+          recommendedModule: onboardingData.recommendedModule,
+          learningGoals: onboardingData.learningGoals,
+          dailyGoal: onboardingData.dailyGoal,
+          studySchedule: onboardingData.studySchedule,
+          onboardingCompleted: true,
+          onboardingCompletedDate: new Date().toISOString()
+        } : prev.user
+      }));
       
       if (auth.currentUser && !gameState.isGuestUser) {
         const userId = auth.currentUser.uid;
         const userRef = doc(db, "users", userId);
         
-        // Update Firebase with onboarding data
-        await setDoc(userRef, {
+        // Batch Firebase operations for better performance
+        const updateData = {
           professionCategory: onboardingData.professionCategory,
           professionRole: onboardingData.professionRole,
           experienceLevel: onboardingData.experienceLevel,
           onboardingAssessmentScore: onboardingData.assessmentScore || 0,
+          onboardingAssessmentAnswers: onboardingData.assessmentAnswers,
+          onboardingTimeSpent: onboardingData.timeSpent,
           recommendedModule: onboardingData.recommendedModule,
           learningGoals: onboardingData.learningGoals,
           dailyGoal: onboardingData.dailyGoal,
@@ -1977,68 +2001,43 @@ export const useGameState = () => {
           onboardingCompleted: true,
           onboardingCompletedDate: new Date().toISOString(),
           lastUpdated: new Date().toISOString()
-        }, { merge: true });
+        };
         
-        // Update local state
-        setGameState(prev => ({
-          ...prev,
-          user: prev.user ? {
-            ...prev.user,
-            professionCategory: onboardingData.professionCategory,
-            professionRole: onboardingData.professionRole,
-            experienceLevel: onboardingData.experienceLevel,
-            onboardingAssessmentScore: onboardingData.assessmentScore || 0,
-            recommendedModule: onboardingData.recommendedModule,
-            learningGoals: onboardingData.learningGoals,
-            dailyGoal: onboardingData.dailyGoal,
-            studySchedule: onboardingData.studySchedule,
-            onboardingCompleted: true,
-            onboardingCompletedDate: new Date().toISOString()
-          } : prev.user
-        }));
+        // Update Firebase with optimized single write operation
+        await setDoc(userRef, updateData, { merge: true });
         
-        console.log('✅ Onboarding data updated successfully');
+        console.log('✅ useGameState: Onboarding data updated successfully, onboardingCompleted set to true');
         
-        // Create welcome notification with personalized content
-        await unifiedNotificationService.createNotification({
-          userId,
-          title: `Welcome, ${onboardingData.professionRole}!`,
-          body: `Your personalized ECG learning journey starts with Module ${onboardingData.recommendedModule}. Goal: ${onboardingData.learningGoals}`,
-          type: 'progress'
-        });
+        // Create welcome notification in background (non-blocking)
+        setTimeout(async () => {
+          try {
+            await unifiedNotificationService.createNotification({
+              userId,
+              title: `Welcome, ${onboardingData.professionRole}!`,
+              body: `Your personalized ECG learning journey starts with Module ${onboardingData.recommendedModule}. Goal: ${onboardingData.learningGoals}`,
+              type: 'progress'
+            });
+          } catch (notifError) {
+            console.warn('⚠️ Failed to create welcome notification (non-critical):', notifError);
+          }
+        }, 1000);
         
       } else if (gameState.isGuestUser) {
         // Store onboarding data in localStorage for guest users
         localStorage.setItem('ecg-guest-onboarding', JSON.stringify(onboardingData));
-        
-        // Update local state for guest users
-        setGameState(prev => ({
-          ...prev,
-          user: prev.user ? {
-            ...prev.user,
-            professionCategory: onboardingData.professionCategory,
-            professionRole: onboardingData.professionRole,
-            experienceLevel: onboardingData.experienceLevel,
-            onboardingAssessmentScore: onboardingData.assessmentScore || 0,
-            recommendedModule: onboardingData.recommendedModule,
-            learningGoals: onboardingData.learningGoals,
-            dailyGoal: onboardingData.dailyGoal,
-            studySchedule: onboardingData.studySchedule,
-            onboardingCompleted: true,
-            onboardingCompletedDate: new Date().toISOString()
-          } : prev.user
-        }));
-        
         console.log('✅ Guest onboarding data stored locally');
       }
       
     } catch (error) {
       console.error('❌ Error updating onboarding data:', error);
-      toast({
-        title: "Setup Error",
-        description: "Failed to save your preferences. Please try again.",
-        variant: "destructive",
-      });
+      // Don't show error toast in Android as it might cause additional UI issues
+      if (typeof window !== 'undefined' && !window.navigator.userAgent.includes('Android')) {
+        toast({
+          title: "Setup Error",
+          description: "Failed to save your preferences. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   }, [gameState.isGuestUser]);
 
