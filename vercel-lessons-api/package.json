@@ -1,0 +1,26 @@
+{
+  "name": "pulsepoints-lessons-api",
+  "version": "1.0.0",
+  "description": "External lesson API for PulsePoints mobile app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "test": "node server.js",
+    "build": "next build",
+    "start": "next start",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^41.0.2"
+  }
+}

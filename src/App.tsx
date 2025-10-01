@@ -9,6 +9,7 @@ import { unifiedNotificationService } from "@/services/unifiedNotificationServic
 import verifyFirebaseSetup from "@/lib/firebase-checker";
 import { autoInitializeEventsSystem } from "@/services/autoInitializeEvents";
 import { toast } from "@/components/ui/use-toast";
+import { AndroidLessonDebugger } from "@/utils/androidLessonDebugger";
 
 // Simple loading component
 const LoadingApp = () => (
@@ -98,6 +99,9 @@ const App = () => {
   useEffect(() => {
     const initializeApp = async () => {
       try {
+        // Initialize Android lesson debugging (must be before Firebase)
+        AndroidLessonDebugger.init();
+        
         // Check Firebase connection
         await verifyFirebaseSetup();
         setFirebaseVerified(true);
