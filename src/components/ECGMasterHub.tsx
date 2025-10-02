@@ -67,75 +67,907 @@ import {
 import ECGLearningPath from './ECGLearningPath';
 import EnhancedDuolingoLesson from './EnhancedDuolingoLesson';
 import ECGLearningRoadmap from './ECGLearningRoadmap';
-import VirtualLessonList from './VirtualLessonList';
 
 // Import the comprehensive sample modules
 import { sampleLearningModules } from '@/data/sampleModules';
-// ✅ ANDROID-OPTIMIZED DYNAMIC LOADING: Enhanced lesson loading for Android builds
-import { externalLessonLoader } from '@/services/externalLessonLoader';
-import { useDynamicLesson } from '@/hooks/useDynamicLesson';
-import { DynamicLessonLoading, DynamicLessonError } from '@/components/DynamicLessonLoading';
+import { optimizedLesson1 } from '@/data/optimized-lesson-1';
+import { optimizedLesson2 } from '@/data/optimized-lesson-2';
+import { optimizedLesson3 } from '@/data/optimized-lesson-3';
+import { optimizedLesson4 } from '@/data/optimized-lesson-4';
+import { optimizedLesson5 } from '@/data/optimized-lesson-5';
+import { optimizedLesson6 } from '@/data/optimized-lesson-6';
+import { optimizedLesson7 } from '@/data/optimized-lesson-7';
+import { optimizedLesson8 } from '@/data/optimized-lesson-8';
+import { optimizedLesson9 } from '@/data/optimized-lesson-9';
+import { optimizedLesson10 } from '@/data/optimized-lesson-10';
+import { optimizedLesson11 } from '@/data/optimized-lesson-11';
+import { optimizedLesson12 } from '@/data/optimized-lesson-12';
+import { optimizedLesson13 } from '@/data/optimized-lesson-13';
+import { optimizedLesson14 } from '@/data/optimized-lesson-14';
+import { optimizedLesson15 } from '@/data/optimized-lesson-15';
+import { optimizedLesson16 } from '@/data/optimized-lesson-16';
+import { optimizedLesson17 } from '@/data/optimized-lesson-17';
+import { optimizedLesson18 } from '@/data/optimized-lesson-18';
+import { optimizedLesson19 } from '@/data/optimized-lesson-19';
+import { optimizedLesson20 } from '@/data/optimized-lesson-20';
+import { optimizedLesson21 } from '@/data/optimized-lesson-21';
+import { optimizedLesson22 } from '@/data/optimized-lesson-22';
+import { optimizedLesson23 } from '@/data/optimized-lesson-23';
+import { optimizedLesson24 } from '@/data/optimized-lesson-24';
+import { optimizedLesson25 } from '@/data/optimized-lesson-25';
+import { optimizedLesson26Comprehensive } from '@/data/optimized-lesson-26';
+import { optimizedLesson27Comprehensive } from '@/data/optimized-lesson-27';
+import { optimizedLesson28 } from '@/data/optimized-lesson-28';
+import { optimizedLesson29 } from '@/data/optimized-lesson-29';
+import { optimizedLesson30 } from '@/data/optimized-lesson-30';
+import { optimizedLesson31 } from '@/data/optimized-lesson-31-6unit';
+import { optimizedLesson32 } from '@/data/optimized-lesson-32';
+import { optimizedLesson33 } from '@/data/optimized-lesson-33';
+import { optimizedLesson34 } from '@/data/optimized-lesson-34';
+// Enhanced 6-Unit Lessons
+import { optimizedLesson33 as optimizedLesson33_6Unit } from '@/data/optimized-lesson-33-6unit';
+import { optimizedLesson34 as optimizedLesson34_6Unit } from '@/data/optimized-lesson-34-6unit';
+import { optimizedLesson35 } from '@/data/optimized-lesson-35';
+import { optimizedLesson36 } from '@/data/optimized-lesson-36';
+import { optimizedLesson37 } from '@/data/optimized-lesson-37';
+import { optimizedLesson37 as optimizedLesson37_6Unit } from '@/data/optimized-lesson-37-6unit';
+import { optimizedLesson38 as optimizedLesson38_6Unit } from '@/data/optimized-lesson-38-6unit';
+import { optimizedLesson39 as optimizedLesson39_6Unit } from '@/data/optimized-lesson-39-6unit';
+import { optimizedLesson40 as optimizedLesson40_6Unit } from '@/data/optimized-lesson-40-6unit';
+import { optimizedLesson41 as optimizedLesson41_6Unit } from '@/data/optimized-lesson-41-6unit';
+import { optimizedLesson42 as optimizedLesson42_6Unit } from '@/data/optimized-lesson-42-6unit';
+import { optimizedLesson43 as optimizedLesson43_6Unit } from '@/data/optimized-lesson-43-6unit';
+import { optimizedLesson38 } from '@/data/optimized-lesson-38';
+import { optimizedLesson39 } from '@/data/optimized-lesson-39';
+import { optimizedLesson39Module4 } from '@/data/optimized-lesson-39-module4';
+import { optimizedLesson40 } from '@/data/optimized-lesson-40';
+import { optimizedLesson41 } from '@/data/optimized-lesson-41';
+import { optimizedLesson42 } from '@/data/optimized-lesson-42';
+import { optimizedLesson43 } from '@/data/optimized-lesson-43';
+import { optimizedLesson44 } from '@/data/optimized-lesson-44';
+import { optimizedLesson45 } from '@/data/optimized-lesson-45';
+import { optimizedLesson46 } from '@/data/optimized-lesson-46';
+import { optimizedLesson47 } from '@/data/optimized-lesson-47';
+import { optimizedLesson48 } from '@/data/optimized-lesson-48';
+import { optimizedLesson49 } from '@/data/optimized-lesson-49';
+import { optimizedLesson50 } from '@/data/optimized-lesson-50';
+import { optimizedLesson51 } from '@/data/optimized-lesson-51';
+import { optimizedLesson52 } from '@/data/optimized-lesson-52';
+import { optimizedLesson53 } from '@/data/optimized-lesson-53';
+import { optimizedLesson54 } from '@/data/optimized-lesson-54';
+import { optimizedLesson55 } from '@/data/optimized-lesson-55';
+import { optimizedLesson56 } from '@/data/optimized-lesson-56';
+import { optimizedLesson57 } from '@/data/optimized-lesson-57';
+import { optimizedLesson58 } from '@/data/optimized-lesson-58';
+import { optimizedLesson59 } from '@/data/optimized-lesson-59';
+import { optimizedLesson60 } from '@/data/optimized-lesson-60';
+import { optimizedLesson61 } from '@/data/optimized-lesson-61';
+import { optimizedLesson62 } from '@/data/optimized-lesson-62';
+import { optimizedLesson63 } from '@/data/optimized-lesson-63';
+import { optimizedLesson64 } from '@/data/optimized-lesson-64';
+import { optimizedLesson65 } from '@/data/optimized-lesson-65';
+import { optimizedLesson66 } from '@/data/optimized-lesson-66';
+import { optimizedLesson67 } from '@/data/optimized-lesson-67';
+import { optimizedLesson68 } from '@/data/optimized-lesson-68';
+import { optimizedLesson69 } from '@/data/optimized-lesson-69-6unit';
+import { optimizedLesson70 } from '@/data/optimized-lesson-70-6unit';
+import { optimizedLesson71 } from '@/data/optimized-lesson-71-6unit';
+import { optimizedLesson72 } from '@/data/optimized-lesson-72-6unit';
+import { optimizedLesson73 } from '@/data/optimized-lesson-73';
+import { optimizedLesson74 } from '@/data/optimized-lesson-74';
+import { optimizedLesson75 } from '@/data/optimized-lesson-75';
+import { optimizedLesson76 } from '@/data/optimized-lesson-76';
+import { optimizedLesson77 } from '@/data/optimized-lesson-77';
+import { optimizedLesson78 } from '@/data/optimized-lesson-78';
+import { optimizedLesson79 } from '@/data/optimized-lesson-79';
+import { optimizedLesson80 } from '@/data/optimized-lesson-80';
+import { optimizedLesson81 } from '@/data/optimized-lesson-81';
+import { optimizedLesson82 } from '@/data/optimized-lesson-82';
+import { optimizedLesson83 } from '@/data/optimized-lesson-83';
+import { optimizedLesson84 } from '@/data/optimized-lesson-84';
 import { LearningModule, Lesson, ModuleProgress } from '@/types/learning';
 import { GameState } from '@/types/game';
-import { androidSafeAsync, androidSafeStateUpdate, isAndroidWebView, androidResourcePreloader } from '@/utils/AndroidPerformanceUtils';
 
-// ✅ DYNAMIC LOADING: Convert sample modules with dynamic lesson loading
-// ✅ ANDROID PERFORMANCE: Ultra-lazy module loading to prevent UI freeze
-const createMinimalModules = (): LearningModule[] => {
-  console.log('🚀 Creating minimal modules to prevent UI freeze...');
-  
+// Convert sample modules to full LearningModule format with proper IDs
+const convertToFullModules = (): LearningModule[] => {
   return sampleLearningModules.map((module, index) => ({
     ...module,
     id: `module-${index + 1}`,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    unlocked: true,
+    unlocked: true, // All modules now unlocked by default
     order: index + 1,
     tags: ['ecg', 'cardiology', module.category],
     featured: false,
-    // ⚡ PERFORMANCE: Create empty lessons array initially - load on demand
-    lessons: [] // Start with empty array to prevent processing 84 lessons
+    lessons: module.lessons.map((lesson, lessonIndex) => {
+      const lessonId = `module-${index + 1}-lesson-${lessonIndex + 1}`;
+      
+      // Use enhanced lesson for module-1-lesson-1
+      if (lessonId === 'module-1-lesson-1') {
+        console.log('🎯 CREATING OPTIMIZED LESSON for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson1.title,
+          tasksCount: optimizedLesson1.tasks?.length,
+          slidesCount: optimizedLesson1.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson1,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-2
+      if (lessonId === 'module-1-lesson-2') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 2 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson2.title,
+          tasksCount: optimizedLesson2.tasks?.length,
+          slidesCount: optimizedLesson2.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson2,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-3
+      if (lessonId === 'module-1-lesson-3') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 3 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson3.title,
+          tasksCount: optimizedLesson3.tasks?.length,
+          slidesCount: optimizedLesson3.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson3,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-4
+      if (lessonId === 'module-1-lesson-4') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 4 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson4.title,
+          tasksCount: optimizedLesson4.tasks?.length,
+          slidesCount: optimizedLesson4.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson4,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-5
+      if (lessonId === 'module-1-lesson-5') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 5 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson5.title,
+          tasksCount: optimizedLesson5.tasks?.length,
+          slidesCount: optimizedLesson5.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson5,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-6
+      if (lessonId === 'module-1-lesson-6') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 6 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson6.title,
+          tasksCount: optimizedLesson6.tasks?.length,
+          slidesCount: optimizedLesson6.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson6,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-7
+      if (lessonId === 'module-1-lesson-7') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 7 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson7.title,
+          tasksCount: optimizedLesson7.tasks?.length,
+          slidesCount: optimizedLesson7.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson7,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-8
+      if (lessonId === 'module-1-lesson-8') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 8 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson8.title,
+          tasksCount: optimizedLesson8.tasks?.length,
+          slidesCount: optimizedLesson8.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson8,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-9
+      if (lessonId === 'module-1-lesson-9') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 9 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson9.title,
+          tasksCount: optimizedLesson9.tasks?.length,
+          slidesCount: optimizedLesson9.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson9,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Use enhanced lesson for module-1-lesson-10
+      if (lessonId === 'module-1-lesson-10') {
+        console.log('🎯 CREATING OPTIMIZED LESSON 10 for', lessonId, {
+          originalTitle: lesson.title,
+          optimizedTitle: optimizedLesson10.title,
+          tasksCount: optimizedLesson10.tasks?.length,
+          slidesCount: optimizedLesson10.content?.slides?.length
+        });
+        
+        return {
+          ...optimizedLesson10,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 2 optimized lessons (lesson-2-1 through lesson-2-10)
+      if (lessonId === 'module-2-lesson-1') {
+        return {
+          ...optimizedLesson11,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-2') {
+        return {
+          ...optimizedLesson12,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-3') {
+        return {
+          ...optimizedLesson13,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-4') {
+        return {
+          ...optimizedLesson14,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-5') {
+        return {
+          ...optimizedLesson15,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-6') {
+        return {
+          ...optimizedLesson16,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-7') {
+        return {
+          ...optimizedLesson17,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-8') {
+        return {
+          ...optimizedLesson18,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-9') {
+        return {
+          ...optimizedLesson19,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-2-lesson-10') {
+        return {
+          ...optimizedLesson20,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 3 optimized lessons (lesson-3-1 through lesson-3-8)
+      if (lessonId === 'module-3-lesson-1') {
+        return {
+          ...optimizedLesson21,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-3-lesson-2') {
+        return {
+          ...optimizedLesson22,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-3-lesson-3') {
+        return {
+          ...optimizedLesson23,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-3-lesson-4') {
+        return {
+          ...optimizedLesson24,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-3-lesson-5') {
+        return {
+          ...optimizedLesson25,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-3-lesson-6') {
+        return {
+          ...optimizedLesson26Comprehensive,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-3-lesson-7') {
+        return {
+          ...optimizedLesson27Comprehensive,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-3-lesson-8') {
+        return {
+          ...optimizedLesson28,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 4 optimized lessons (lesson-4-1 through lesson-4-8)
+      if (lessonId === 'module-4-lesson-1') {
+        return {
+          ...optimizedLesson69,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-4-lesson-2') {
+        return {
+          ...optimizedLesson70,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-4-lesson-3') {
+        return {
+          ...optimizedLesson71,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-4-lesson-4') {
+        return {
+          ...optimizedLesson72,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-4-lesson-5') {
+        return {
+          ...optimizedLesson73,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-4-lesson-6') {
+        return {
+          ...optimizedLesson74,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-4-lesson-7') {
+        return {
+          ...optimizedLesson75,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-4-lesson-8') {
+        return {
+          ...optimizedLesson76,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 5: Ventricular Rhythms - Optimized Lessons 39-44
+      if (lessonId === 'module-5-lesson-1') {
+        return {
+          ...optimizedLesson37_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-5-lesson-2') {
+        return {
+          ...optimizedLesson38_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-5-lesson-3') {
+        return {
+          ...optimizedLesson39_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-5-lesson-4') {
+        return {
+          ...optimizedLesson40_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-5-lesson-5') {
+        return {
+          ...optimizedLesson41_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-5-lesson-6') {
+        return {
+          ...optimizedLesson42_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-5-lesson-7') {
+        return {
+          ...optimizedLesson43_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-5-lesson-8') {
+        return {
+          ...optimizedLesson44,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 6 - AV Blocks & Complex Arrhythmias
+      if (lessonId === 'module-6-lesson-1') {
+        return {
+          ...optimizedLesson45,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-6-lesson-2') {
+        return {
+          ...optimizedLesson46,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-6-lesson-3') {
+        return {
+          ...optimizedLesson47,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-6-lesson-4') {
+        return {
+          ...optimizedLesson48,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-6-lesson-5') {
+        return {
+          ...optimizedLesson49,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-6-lesson-6') {
+        return {
+          ...optimizedLesson50,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-6-lesson-7') {
+        return {
+          ...optimizedLesson51,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-6-lesson-8') {
+        return {
+          ...optimizedLesson52,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 7 - Emergency Arrhythmias
+      if (lessonId === 'module-7-lesson-1') {
+        return {
+          ...optimizedLesson53,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-7-lesson-2') {
+        return {
+          ...optimizedLesson54,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-7-lesson-3') {
+        return {
+          ...optimizedLesson55,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-7-lesson-4') {
+        return {
+          ...optimizedLesson56,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-7-lesson-5') {
+        return {
+          ...optimizedLesson57,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-7-lesson-6') {
+        return {
+          ...optimizedLesson58,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-7-lesson-7') {
+        return {
+          ...optimizedLesson59,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-7-lesson-8') {
+        return {
+          ...optimizedLesson60,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 8: Electrolytes & Medications
+      if (lessonId === 'module-8-lesson-1') {
+        return {
+          ...optimizedLesson61,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-8-lesson-2') {
+        return {
+          ...optimizedLesson62,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-8-lesson-3') {
+        return {
+          ...optimizedLesson63,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-8-lesson-4') {
+        return {
+          ...optimizedLesson64,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-8-lesson-5') {
+        return {
+          ...optimizedLesson65,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-8-lesson-6') {
+        return {
+          ...optimizedLesson66,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-8-lesson-7') {
+        return {
+          ...optimizedLesson67,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-8-lesson-8') {
+        return {
+          ...optimizedLesson68,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 9: Junctional Rhythms
+      if (lessonId === 'module-9-lesson-1') {
+        return {
+          ...optimizedLesson30,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-9-lesson-2') {
+        return {
+          ...optimizedLesson31,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-9-lesson-3') {
+        return {
+          ...optimizedLesson32,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-9-lesson-4') {
+        return {
+          ...optimizedLesson33_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-9-lesson-5') {
+        return {
+          ...optimizedLesson34_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-9-lesson-6') {
+        return {
+          ...optimizedLesson35,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-9-lesson-7') {
+        return {
+          ...optimizedLesson36,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-9-lesson-8') {
+        return {
+          ...optimizedLesson37_6Unit,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      // Module 10: Special ECG Patterns & Advanced Topics
+      if (lessonId === 'module-10-lesson-1') {
+        return {
+          ...optimizedLesson77,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-10-lesson-2') {
+        return {
+          ...optimizedLesson78,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-10-lesson-3') {
+        return {
+          ...optimizedLesson79,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-10-lesson-4') {
+        return {
+          ...optimizedLesson80,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-10-lesson-5') {
+        return {
+          ...optimizedLesson81,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-10-lesson-6') {
+        return {
+          ...optimizedLesson82,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-10-lesson-7') {
+        return {
+          ...optimizedLesson83,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+
+      if (lessonId === 'module-10-lesson-8') {
+        return {
+          ...optimizedLesson84,
+          id: lessonId,
+          moduleId: `module-${index + 1}`
+        };
+      }
+      
+      // For other lessons, create a complete lesson with default properties
+      return {
+        ...lesson,
+        id: lessonId,
+        moduleId: `module-${index + 1}`,
+        content: {
+          type: 'mixed' as const,
+          introduction: lesson.description,
+          sections: [],
+          slides: [],
+          summary: `Complete the ${lesson.title} lesson.`,
+          keyPoints: [lesson.title],
+          resources: []
+        },
+        tasks: [],
+        completed: false,
+        attempts: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+    })
   }));
 };
 
-// ✅ ANDROID OPTIMIZATION: Ultra-lightweight lesson metadata loading
-const loadModuleLessonMetadata = (moduleIndex: number): Lesson[] => {
-  console.log(`📚 Loading lightweight lesson metadata for module ${moduleIndex + 1}...`);
-  
-  const module = sampleLearningModules[moduleIndex];
-  if (!module?.lessons) return [];
-  
-  // Only create lesson metadata (no heavy content)
-  return module.lessons.map((lesson, lessonIndex) => {
-    const lessonId = `module-${moduleIndex + 1}-lesson-${lessonIndex + 1}`;
-    
-    return {
-      id: lessonId,
-      moduleId: `module-${moduleIndex + 1}`,
-      title: lesson.title || `Lesson ${lessonIndex + 1}`,
-      description: lesson.description || `ECG lesson ${lessonIndex + 1}`,
-      order: lessonIndex + 1,
-      estimatedTime: lesson.estimatedTime || 15,
-      isDynamicallyLoaded: true,
-      content: { 
-        type: 'mixed' as const,
-        introduction: '',
-        sections: [],
-        slides: [],
-        summary: '',
-        keyPoints: [],
-        resources: []
-      }, // Minimal content structure
-      tasks: [],
-      completed: false,
-      attempts: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    } as Lesson;
-  });
-};
-
-// ⚡ VIRTUAL SCROLLING: No pagination needed with virtual scrolling
+const comprehensiveModules = convertToFullModules();
 
 interface ECGMasterHubProps {
   onLessonComplete: (moduleId: string, lessonId: string, score: number, timeSpent: number, perfect?: boolean) => void;
@@ -207,13 +1039,6 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
   const [achievements, setAchievements] = useState<any[]>([]);
   const [progressStats, setProgressStats] = useState<any>(null);
   const [isLoadingData, setIsLoadingData] = useState(false); // Changed from true to false initially
-  
-  // ⚡ PERFORMANCE: Lazy module loading to prevent UI freeze
-  const [comprehensiveModules, setComprehensiveModules] = useState<LearningModule[]>([]);
-  const [modulesLoaded, setModulesLoaded] = useState(false);
-
-  // ⚡ PERFORMANCE: Pagination for lesson lists to prevent rendering 84 lessons at once
-  // ⚡ VIRTUAL SCROLLING: No pagination state needed
   
   // ECG Mastery Paths - structured learning routes
   const masteryPaths: MasteryPath[] = [
@@ -333,78 +1158,6 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
     }
   }, [gameState.isAuthenticated, gameState.user?.id]);
 
-  // ⚡ PERFORMANCE: Ultra-lazy load modules to prevent UI freeze with 84 lessons
-  useEffect(() => {
-    const loadModulesMinimal = async () => {
-      if (modulesLoaded) return;
-      
-      console.log('⚡ Starting ultra-lazy module loading to prevent UI freeze...');
-      setIsLoadingData(true);
-      
-      try {
-        // Use androidSafeAsync for Android-safe loading
-        await androidSafeAsync(async () => {
-          // Create minimal modules without lessons using requestIdleCallback
-          const modules = await new Promise<LearningModule[]>((resolve) => {
-            if (typeof requestIdleCallback !== 'undefined') {
-              requestIdleCallback(() => {
-                const loadedModules = createMinimalModules();
-                console.log(`✅ Loaded ${loadedModules.length} modules with minimal data (no lessons loaded yet)`);
-                resolve(loadedModules);
-              });
-            } else {
-              // Fallback for environments without requestIdleCallback
-              setTimeout(() => {
-                const loadedModules = createMinimalModules();
-                console.log(`✅ Loaded ${loadedModules.length} modules (fallback minimal loading)`);
-                resolve(loadedModules);
-              }, 0);
-            }
-          });
-          
-          setComprehensiveModules(modules);
-          setModulesLoaded(true);
-          setIsLoadingData(false);
-          
-          console.log('🎉 Minimal module loading complete - UI should be very responsive now');
-        });
-      } catch (error) {
-        console.error('❌ Error loading modules:', error);
-        setIsLoadingData(false);
-      }
-    };
-
-    loadModulesMinimal();
-  }, [modulesLoaded]);
-
-  // ✅ ANDROID OPTIMIZATION: Initialize lesson availability on component mount
-  useEffect(() => {
-    const initializeAndroidLessons = async () => {
-      console.log('🤖 Initializing Android-optimized lesson system...');
-      
-      // Detect Android WebView
-      const isAndroid = isAndroidWebView();
-      console.log(`📱 Android WebView detected: ${isAndroid}`);
-      
-      const availableLessons = externalLessonLoader.getAvailableLessons();
-      console.log(`✅ External lesson system ready: ${availableLessons.length} lessons available`);
-      console.log('Available lessons:', availableLessons.slice(0, 10).join(', '), '...');
-      
-      // Preload first few lessons for better performance
-      if (isAndroid && availableLessons.length > 0) {
-        console.log('🔄 Preloading initial lessons for Android performance...');
-        try {
-          await androidResourcePreloader.preloadLessons(availableLessons.slice(0, 5));
-          console.log('✅ Initial lesson preloading complete');
-        } catch (error) {
-          console.warn('⚠️ Lesson preloading failed:', error);
-        }
-      }
-    };
-
-    initializeAndroidLessons();
-  }, []); // Run once on mount
-
   const loadUserData = async () => {
     if (!gameState.user?.id) return;
     
@@ -467,7 +1220,7 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
   const lessonsThisWeek = progressStats?.lessonsThisWeek || 3;
   
   // Calculate real progress from comprehensive modules and gameState
-  const totalLessonsAcrossAllModules = comprehensiveModules?.reduce((sum, module) => sum + module.lessons.length, 0) || 0;
+  const totalLessonsAcrossAllModules = comprehensiveModules.reduce((sum, module) => sum + module.lessons.length, 0);
   const completedLessonsAcrossAllModules = Object.values(learningProgress).reduce((sum, progress) => sum + progress.completedLessons, 0);
   
   const totalLessons = progressStats?.totalLessons || user?.totalTasksCompleted || completedLessonsAcrossAllModules;
@@ -683,70 +1436,31 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
     return converted;
   };
 
-  const handleLearningPathClick = (path: MasteryPath) => {
-    console.log('🎯 Learning path clicked:', path.title, 'Modules:', path.modules);
-    
-    // Get the first available module from this learning path
-    const firstModuleId = path.modules[0];
-    const firstModule = comprehensiveModules?.find(m => m.id === firstModuleId);
-    
-    if (firstModule) {
-      console.log('📖 Navigating to first module:', firstModule.title);
-      
-      // Navigate directly to the first module in this learning path
-      setSelectedModule(firstModuleId);
-      setCurrentView('module-detail');
-      
-      // Update breadcrumbs to show the learning path context
-      setBreadcrumbs([
-        { label: 'ECG Master', view: 'home', icon: <Home className="w-4 h-4" /> },
-        { label: 'Learning Paths', view: 'learning-path', icon: <Route className="w-4 h-4" /> },
-        { label: firstModule.title, view: 'module-detail', icon: <BookOpen className="w-4 h-4" /> }
-      ]);
-      
-      // Show notification about starting the learning path
-      if (gameState.user?.id) {
-        unifiedNotificationService.createNotification({
-          userId: gameState.user.id,
-          title: `🎯 ${path.title} Started!`,
-          body: `Welcome to your structured learning journey. Starting with ${firstModule.title}.`,
-          type: 'system',
-          actionUrl: `/ecg-master?module=${firstModuleId}`,
-          category: 'info',
-          priority: 'normal'
-        });
-      }
-    } else {
-      console.warn('⚠️ No modules found for learning path:', path.title);
-      
-      // Fallback to general learning view
-      navigateToView('learn', 'Quick Learn', <BookOpen className="w-4 h-4" />);
-    }
-  };
-
   const handleLessonSelect = async (moduleId: string, lessonId: string) => {
-    const module = comprehensiveModules?.find(m => m.id === moduleId);
+    const module = comprehensiveModules.find(m => m.id === moduleId);
     const lesson = module?.lessons.find(l => l.id === lessonId);
     
     if (lesson && module) {
-      console.log('🔄 Android-optimized lesson loading started for:', lessonId);
-      
-      // ✅ ANDROID OPTIMIZATION: Check lesson availability first to prevent crashes
-      if (!externalLessonLoader.isLessonAvailable(lessonId)) {
-        console.warn('⚠️ Lesson not available in Android build:', lessonId);
-        setSelectedLesson({
-          ...lesson,
-          content: {
-            type: 'mixed' as const,
-            introduction: `This lesson (${lessonId}) is being optimized for Android. Please try another lesson.`,
-            sections: [{
-              title: 'Available Lessons',
-              content: `Try one of these optimized lessons: ${externalLessonLoader.getAvailableLessons().slice(0, 5).join(', ')}`
-            }],
-            slides: []
-          }
+      // Simplified: All lessons are now accessible (no module-based unlocking)
+      console.log('✅ Lesson selected:', {
+        moduleId,
+        lessonId,
+        title: lesson.title,
+        description: lesson.description,
+        currentView,
+        breadcrumbs: breadcrumbs.map(b => b.view)
+      });
+
+      // 🚨 Debug: Check if this is our optimized lesson
+      if (lessonId === 'module-1-lesson-1') {
+        console.log('🎯 OPTIMIZED LESSON SELECTED!', {
+          title: lesson.title,
+          description: lesson.description,
+          tasksCount: lesson.tasks?.length,
+          hasSlides: lesson.content?.slides?.length,
+          isOptimized: lesson.title?.includes('Heart Anatomy'),
+          fullLesson: lesson
         });
-        return;
       }
       
       // Check if user has hearts remaining (only for authenticated users)
@@ -766,111 +1480,16 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
         return;
       }
       
-      // ✨ ANDROID-ENHANCED: Dynamic lesson loading with WebView optimization
-      console.time(`Loading lesson ${lessonId}`);
-      try {
-        // Set a loading placeholder first - immediate UI update
-        const loadingPlaceholder = {
-          ...lesson,
-          isLoading: true,
-          content: {
-            type: 'mixed' as const,
-            introduction: 'Loading lesson content...',
-            sections: [],
-            slides: [],
-            summary: 'Loading...',
-            keyPoints: ['Loading lesson content...'],
-            resources: []
-          }
-        };
-        
-        playClickSound(); // Play click sound when lesson is selected
-        setSelectedLesson(loadingPlaceholder);
-        
-        // ✅ ANDROID OPTIMIZATION: Use async scheduling to prevent UI blocking
-        const loadLessonAsync = async () => {
-          return androidSafeAsync(
-            async () => {
-              const externalLesson = await externalLessonLoader.loadLesson(lessonId);
-              
-              if (externalLesson) {
-                console.log('✅ External lesson loaded successfully:', {
-                  lessonId,
-                  title: externalLesson.title,
-                  hasSlides: externalLesson.content?.slides?.length || 0,
-                  hasTasks: externalLesson.tasks?.length || 0,
-                  cached: true // External loader provides caching
-                });
-                
-                // ✅ EXTERNAL: Use safe state update to prevent UI blocking
-                androidSafeStateUpdate(setSelectedLesson, externalLesson);
-                console.timeEnd(`Loading lesson ${lessonId}`);
-                
-                // Preload next lesson for smooth navigation
-                const availableLessons = externalLessonLoader.getAvailableLessons();
-                const currentIndex = availableLessons.indexOf(lessonId);
-                if (currentIndex >= 0 && currentIndex < availableLessons.length - 1) {
-                  const nextLessonId = availableLessons[currentIndex + 1];
-                  androidResourcePreloader.preloadLessons([nextLessonId]);
-                }
-                
-              } else {
-                console.warn('⚠️ Android lesson loading failed, using fallback');
-                const fallbackLesson = {
-                  ...lesson,
-                  content: {
-                    type: 'mixed' as const,
-                    introduction: 'This lesson is being optimized for Android. Please try another lesson.',
-                    sections: [{
-                      id: 'available-lessons',
-                      title: 'Available Lessons',
-                      content: `Try one of these optimized lessons: ${externalLessonLoader.getAvailableLessons().slice(0, 3).join(', ')}`
-                    }],
-                    slides: [],
-                    summary: 'Lesson not available',
-                    keyPoints: ['Try another lesson'],
-                    resources: []
-                  }
-                };
-                androidSafeStateUpdate(setSelectedLesson, fallbackLesson);
-              }
-            },
-            {
-              timeout: 100,
-              onProgress: (message) => console.log(`📱 Android loading: ${message}`)
-            }
-          );
-        };
-        
-        // Execute the async loading
-        await loadLessonAsync();
-        
-      } catch (error) {
-        console.error('❌ Critical Android lesson loading error:', error);
-        // Final fallback
-        const errorFallback = {
-          ...lesson,
-          content: {
-            type: 'mixed' as const,
-            introduction: 'Critical error loading lesson content. Please try another lesson.',
-            sections: [{
-              id: 'error-section',
-              title: 'Error',
-              content: `Please try one of these lessons: ${externalLessonLoader.getAvailableLessons().slice(0, 3).join(', ')}`
-            }],
-            slides: [],
-            summary: 'Critical loading error',
-            keyPoints: ['Try another lesson'],
-            resources: []
-          }
-        };
-        androidSafeStateUpdate(setSelectedLesson, errorFallback);
-      }
+      console.log('✅ Setting selected lesson:', lesson);
+      playClickSound(); // Play click sound when lesson is selected
+      setSelectedLesson(lesson);
       
-      // Set up navigation and breadcrumbs
+      // Ensure we have the proper breadcrumb trail
+      // If we're not currently in module-detail view, navigate there first
       if (currentView !== 'module-detail' || selectedModule !== moduleId) {
         console.log('🔄 Setting up module context before lesson');
         setSelectedModule(moduleId);
+        // Set up breadcrumbs to include module detail
         const moduleLabel = `${module.title}`;
         setBreadcrumbs([
           { label: 'ECG Master', view: 'home', icon: <Home className="w-4 h-4" /> },
@@ -878,6 +1497,7 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
           { label: lesson.title, view: 'lesson', icon: <BookOpen className="w-4 h-4" /> }
         ]);
       } else {
+        // We're already in module-detail, just add lesson to breadcrumbs
         navigateToView('lesson', lesson.title, <BookOpen className="w-4 h-4" />);
       }
       
@@ -1158,27 +1778,8 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
 
   // Render Module Detail View
   const renderModuleDetail = () => {
-    const module = comprehensiveModules?.find(m => m.id === selectedModule);
+    const module = comprehensiveModules.find(m => m.id === selectedModule);
     if (!module) return null;
-
-    // ⚡ PERFORMANCE: Load lessons on demand when module is accessed
-    if (module.lessons.length === 0) {
-      console.log(`📚 Loading lessons on demand for module: ${module.id}`);
-      
-      // Load lesson metadata using the Android-safe async function
-      androidSafeAsync(async () => {
-        const moduleIndex = parseInt(module.id.split('-')[1]) - 1;
-        const lessons = loadModuleLessonMetadata(moduleIndex);
-        
-        // Update the module with loaded lessons
-        const updatedModules = comprehensiveModules.map(m => 
-          m.id === module.id ? { ...m, lessons } : m
-        );
-        setComprehensiveModules(updatedModules);
-        
-        console.log(`✅ Loaded ${lessons.length} lessons for module: ${module.id}`);
-      });
-    }
 
     const progress = learningProgress[module.id];
     const progressPercentage = progress ? (progress.completedLessons / progress.totalLessons) * 100 : 0;
@@ -1219,22 +1820,105 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
           <CardContent className="p-6">
             <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
               <BookOpen className="w-6 h-6 text-green-500" />
-              Module Lessons {module.lessons.length > 0 && (
-                <Badge variant="secondary" className="ml-2">
-                  {module.lessons.length} total
-                </Badge>
-              )}
+              Module Lessons
             </h3>
-            
-            {/* ⚡ VIRTUAL SCROLLING: High-performance lesson list for 84+ lessons */}
-            <VirtualLessonList
-              lessons={module.lessons}
-              onLessonClick={(lesson, index) => handleLessonSelect(module.id, lesson.id)}
-              gameState={gameState}
-              progress={progress}
-              moduleId={module.id}
-              startIndex={0}
-            />
+            <div className="space-y-4">
+              {module.lessons.map((lesson, index) => {
+                const lessonOrder = lesson.order || (index + 1);
+                const completedLessons = progress?.completedLessons || 0;
+                
+                // Use proper progression-based unlocking (matching ModuleDetail logic)
+                const isCompleted = completedLessons >= lessonOrder;
+                const isProgressionUnlocked = lessonOrder === 1 || completedLessons >= (lessonOrder - 1);
+                const hasHearts = gameState.isGuestUser || (gameState.user?.hearts || 5) > 0;
+                const isAvailable = isProgressionUnlocked && (gameState.isGuestUser || hasHearts || isCompleted);
+                const isNext = completedLessons === lessonOrder - 1 && !isCompleted;
+
+                console.log(`🎓 Lesson status for "${lesson.title}" (Order: ${lessonOrder}):`, {
+                  completedLessons,
+                  isAvailable,
+                  isCompleted,
+                  isNext,
+                  isProgressionUnlocked,
+                  hasHearts,
+                  moduleId: module.id
+                });
+
+                const isLocked = !isAvailable;
+                const isHeartLocked = isProgressionUnlocked && !gameState.isGuestUser && !hasHearts && !isCompleted;
+                const isProgressLocked = !isProgressionUnlocked;
+
+                return (
+                  <Card 
+                    key={lesson.id}
+                    className={`transition-all duration-300 hover:shadow-md ${
+                      isLocked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                    } ${isCompleted ? 'bg-green-50 border-green-200' :
+                      isNext ? 'bg-blue-50 border-blue-200 shadow-md' :
+                      'bg-white border-gray-200 hover:bg-gray-50'
+                    }`}
+                    onClick={() => isAvailable && handleLessonSelect(module.id, lesson.id)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold ${
+                          isLocked ? 'bg-gray-300' :
+                          isCompleted ? 'bg-green-500' :
+                          isNext ? 'bg-blue-500' :
+                          'bg-gray-400'
+                        }`}>
+                          {isHeartLocked ? <Heart className="w-6 h-6 text-red-400" /> :
+                           isProgressLocked ? <Lock className="w-6 h-6 text-gray-400" /> :
+                           isCompleted ? <CheckCircle className="w-6 h-6" /> :
+                           isNext ? <Play className="w-6 h-6" /> :
+                           index + 1}
+                        </div>
+                        
+                        <div className="flex-1">
+                          <h4 className="font-bold text-gray-900 mb-1">{lesson.title}</h4>
+                          <p className="text-gray-600 text-sm mb-2">{lesson.description}</p>
+                          <div className="flex items-center gap-3 text-xs text-gray-500">
+                            <span>⏱️ {lesson.estimatedTime} min</span>
+                            <span>📖 {lesson.content.sections?.length || 1} sections</span>
+                            {lesson.content.slides && (
+                              <span>🖼️ {lesson.content.slides.length} slides</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          {isCompleted && (
+                            <div className="text-green-600 font-bold">
+                              ✓ Completed
+                            </div>
+                          )}
+                          {isNext && isAvailable && (
+                            <Badge className="bg-blue-500 text-white">
+                              Continue
+                            </Badge>
+                          )}
+                          {isHeartLocked && (
+                            <Badge className="bg-red-100 text-red-700">
+                              💔 No Hearts
+                            </Badge>
+                          )}
+                          {isProgressLocked && (
+                            <Badge className="bg-gray-100 text-gray-700">
+                              🔒 Locked
+                            </Badge>
+                          )}
+                          {!isCompleted && !isNext && isAvailable && (
+                            <Badge className="bg-gray-500 text-white">
+                              Available
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -1266,41 +1950,16 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
           return (
             <Card 
               key={path.id}
-              className={`transition-all duration-300 ${
+              className={`cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 ${
                 isUnlocked 
-                  ? 'cursor-pointer hover:shadow-xl hover:scale-105 bg-gradient-to-br from-white to-blue-50 border-blue-200' 
-                  : 'bg-gray-50 border-gray-200 opacity-75 cursor-not-allowed'
+                  ? 'bg-gradient-to-br from-white to-blue-50 border-blue-200' 
+                  : 'bg-gray-50 border-gray-200 opacity-75'
               }`}
-              onClick={() => {
-                if (isUnlocked) {
-                  handleLearningPathClick(path);
-                } else {
-                  // Show tooltip or notification about prerequisites
-                  if (gameState.user?.id) {
-                    unifiedNotificationService.createNotification({
-                      userId: gameState.user.id,
-                      title: '🔒 Prerequisites Required',
-                      body: `Complete ${path.prerequisites?.join(' and ')} mastery path(s) first to unlock ${path.title}.`,
-                      type: 'system',
-                      actionUrl: '/ecg-master?tab=learning-paths',
-                      category: 'info',
-                      priority: 'normal'
-                    });
-                  }
-                }
-              }}
+              onClick={() => isUnlocked && navigateToView('learn', 'Quick Learn', <BookOpen className="w-4 h-4" />)}
             >
               <CardContent className="p-6">
-                {!isUnlocked && (
-                  <div className="absolute top-2 right-2">
-                    <div className="bg-gray-500 text-white p-1 rounded-full">
-                      <Lock className="w-4 h-4" />
-                    </div>
-                  </div>
-                )}
                 <div className="text-center mb-4">
                   <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white font-bold text-xl mb-3 ${
-                    !isUnlocked ? 'bg-gray-400' :
                     path.difficulty === 'beginner' ? 'bg-green-500' :
                     path.difficulty === 'intermediate' ? 'bg-blue-500' : 'bg-purple-500'
                   }`}>
@@ -1325,45 +1984,6 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
                   </div>
                   
                   <div className="pt-2 border-t border-gray-200">
-                    <p className="text-xs text-gray-500 mb-2">Modules included:</p>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {path.modules.map((moduleId, index) => {
-                        const module = comprehensiveModules?.find(m => m.id === moduleId);
-                        const moduleProgress = learningProgress[moduleId];
-                        const isCompleted = moduleProgress?.status === 'completed';
-                        
-                        return (
-                          <Badge 
-                            key={index} 
-                            variant="outline" 
-                            className={`text-xs ${
-                              isCompleted ? 'bg-green-100 text-green-800 border-green-300' : 
-                              !isUnlocked ? 'bg-gray-100 text-gray-500' : 'bg-blue-100 text-blue-800'
-                            }`}
-                          >
-                            {isCompleted && '✓ '}
-                            {module?.title.replace('Module ', 'M') || `Module ${index + 1}`}
-                          </Badge>
-                        );
-                      })}
-                    </div>
-                    
-                    {path.prerequisites && !isUnlocked && (
-                      <div className="mb-3">
-                        <p className="text-xs text-amber-600 mb-1">📋 Prerequisites:</p>
-                        <div className="flex flex-wrap gap-1">
-                          {path.prerequisites.map((prereqId, index) => {
-                            const prereqPath = masteryPaths.find(p => p.id === prereqId);
-                            return (
-                              <Badge key={index} variant="outline" className="text-xs bg-amber-50 text-amber-700 border-amber-300">
-                                {prereqPath?.title || prereqId}
-                              </Badge>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                    
                     <p className="text-xs text-gray-500 mb-2">You'll learn:</p>
                     <div className="flex flex-wrap gap-1">
                       {path.skillsLearned.slice(0, 3).map((skill, index) => (
@@ -1396,44 +2016,18 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
   );
 
   if (currentView === 'lesson' && selectedLesson) {
-    // ✅ ANDROID OPTIMIZATION: Find current module for lesson context
-    const currentModule = comprehensiveModules?.find(m => m.id === selectedLesson.moduleId);
-    const currentLessonIndex = currentModule?.lessons.findIndex(l => l.id === selectedLesson.id) || 0;
-    
     return (
       <div className="fixed inset-0 bg-white z-50 flex flex-col">
-        {/* Full-screen lesson content - Android optimized */}
+        {/* Full-screen lesson content - premium scrolling experience */}
         <div className="flex-1 lesson-viewer-scroll mobile-scroll-optimized scroll-indicator">
-          {selectedLesson.isLoading ? (
-            /* ✨ Android-optimized loading indicator */
-            <DynamicLessonLoading 
-              lessonId={selectedLesson.id}
-              message="Loading optimized lesson content..."
-              showProgress={true}
-            />
-          ) : (
-            /* ✅ ANDROID-SAFE: Use EnhancedDuolingoLesson for optimized lesson rendering */
-            <EnhancedDuolingoLesson
-              lesson={selectedLesson}
-              onComplete={(score, timeSpent) => {
-                // ✅ ANDROID: Use safe async completion
-                androidSafeAsync(async () => {
-                  await handleLessonComplete(score, timeSpent);
-                });
-              }}
-              onExit={navigateBack}
-              userHearts={gameState?.user?.hearts || 5}
-              onHeartLost={() => {
-                // ✅ ANDROID: Safe heart loss handling
-                androidSafeAsync(async () => {
-                  if (onHeartLost) {
-                    onHeartLost();
-                  }
-                });
-              }}
-              isFullScreen={true}
-            />
-          )}
+          <EnhancedDuolingoLesson
+            lesson={selectedLesson}
+            onComplete={handleLessonComplete}
+            onExit={navigateBack}
+            userHearts={hearts}
+            onHeartLost={onHeartLost}
+            isFullScreen={true}
+          />
         </div>
       </div>
     );
@@ -1530,24 +2124,6 @@ const ECGMasterHub: React.FC<ECGMasterHubProps> = ({
           userXP={user?.xp || 0}
           userLevel={userLevel}
         />
-      </div>
-    );
-  }
-
-  // ⚡ Show loading state while modules are being loaded to prevent UI freeze
-  if (!modulesLoaded || isLoadingData) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 w-full overflow-x-hidden flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold text-gray-800">Loading ECG Lessons</h2>
-            <p className="text-sm text-gray-600">Preparing your learning experience...</p>
-            <div className="w-64 bg-gray-200 rounded-full h-2 mx-auto">
-              <div className="bg-indigo-600 h-2 rounded-full w-3/4 animate-pulse"></div>
-            </div>
-          </div>
-        </div>
       </div>
     );
   }

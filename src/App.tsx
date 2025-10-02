@@ -5,11 +5,10 @@ import { App as CapacitorApp } from '@capacitor/app';
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { NetworkStatusIndicator } from "@/hooks/useNetworkStatus";
 import { AuthProvider } from "@/hooks/useAuth";
-import { initializeNotifications } from "@/services/NotificationManager";
+import { unifiedNotificationService } from "@/services/unifiedNotificationService";
 import verifyFirebaseSetup from "@/lib/firebase-checker";
 import { autoInitializeEventsSystem } from "@/services/autoInitializeEvents";
 import { toast } from "@/components/ui/use-toast";
-import { AndroidLessonDebugger } from "@/utils/androidLessonDebugger";
 
 // Simple loading component
 const LoadingApp = () => (
@@ -99,9 +98,6 @@ const App = () => {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        // Initialize Android lesson debugging (must be before Firebase)
-        AndroidLessonDebugger.init();
-        
         // Check Firebase connection
         await verifyFirebaseSetup();
         setFirebaseVerified(true);
@@ -111,13 +107,13 @@ const App = () => {
         await autoInitializeEventsSystem();
         console.log('✅ Events system ready');
         
-        // Initialize unified notification service for all platforms
-        console.log('🔔 Initializing unified notification service...');
-        const notificationInit = await initializeNotifications();
+        // Initialize notification service for all platforms
+        console.log('🔔 Initializing notification service...');
+        const notificationInit = await unifiedNotificationService.initialize();
         if (notificationInit) {
-          console.log('✅ Unified notification service initialized successfully');
+          console.log('✅ Notification service initialized successfully');
         } else {
-          console.error('❌ Unified notification service initialization failed');
+          console.error('❌ Notification service initialization failed');
         }
         
         console.log('✅ App initialization complete');

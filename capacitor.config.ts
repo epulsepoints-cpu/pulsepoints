@@ -5,32 +5,21 @@ const config: CapacitorConfig = {
   appName: 'ECGkid PulsePoints',
   webDir: 'dist',
   server: {
-    // � HYBRID: Local app with remote lesson content
-    // Remove URL to use local build, but allow navigation to Vercel for lessons
-    cleartext: true,
     androidScheme: 'https',
     allowNavigation: [
-      'app.ecgkid.com',
       'ecgkid-pulsepoint.firebaseapp.com',
       'accounts.google.com',
       'firebase.google.com',
-      '*.googleapis.com',
-      '*.vercel.app',
-      '*.githubusercontent.com'
-    ],
-    // 🚀 PERFORMANCE: Enable caching for remote lesson content
-    hostname: 'localhost',
-    // 🔧 NETWORK: Optimize for hybrid lesson loading
-    errorPath: '/error.html'
+      '*.googleapis.com'
+    ]
   },
   android: {
     allowMixedContent: true,
+    captureInput: true,
     webContentsDebuggingEnabled: true,
     appendUserAgent: 'ECGkidApp/1.0.0',
     backgroundColor: '#ffffff',
-    loggingBehavior: 'debug',
-    // Android WebView optimizations for smooth navigation and dynamic loading
-    overrideUserAgent: 'ECGkidApp/1.0.0 Chrome/91.0.4472.120 Mobile Safari/537.36'
+    loggingBehavior: 'debug'
   },
   plugins: {
     FirebaseAuthentication: {
