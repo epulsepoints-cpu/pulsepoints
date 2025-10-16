@@ -1,0 +1,26 @@
+# Ignore Python files and dependencies (used for local ECG processing only)
+*.py
+requirements.txt
+setup_ptbxl.*
+ptbxl_ecg_processor.*
+
+# Ignore Android build files
+android/
+android/**/*
+
+# Ignore development files
+node_modules/
+.env.local
+.env.development
+
+# Ignore temporary files
+temp-deploy/
+*.log
+*.tmp
+
+# Ignore PowerShell scripts (Windows development only)
+*.ps1
+
+# Ignore large datasets and processing files
+**/*ecg_database/
+**/*ptbxl*/
