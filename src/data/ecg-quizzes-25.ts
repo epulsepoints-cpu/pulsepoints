@@ -1,9 +1,9 @@
 const ecgQuizzes25 = {
   "metadata": {
-    "version": "1.0",
-    "created_date": "2025-10-14",
-    "description": "ECG Master Quiz Database - 25 Comprehensive Medical ECG Questions",
-    "total_quizzes": 25,
+    "version": "2.0",
+    "created_date": "2025-10-16",
+    "description": "ECG Master Quiz Database - 35 Comprehensive Medical ECG Questions",
+    "total_quizzes": 35,
     "categories": ["normal_sinus", "bradycardia", "tachycardia", "atrial_fibrillation", "ventricular_tachycardia", "bundle_branch_blocks", "av_blocks", "other_arrhythmias"],
     "difficulty_levels": ["easy", "medium", "hard"]
   },
@@ -531,6 +531,216 @@ const ecgQuizzes25 = {
         "mechanism": "Very rapid ventricular ectopic focus overwhelming normal conduction",
         "clinical_significance": "Immediately life-threatening, high risk of cardiac arrest",
         "management": "Immediate defibrillation/cardioversion, advanced cardiac life support"
+      }
+    },
+    {
+      "id": "quiz_026",
+      "question": "Evaluate this ECG strip - what rhythm do you recognize?",
+      "imageUrl": "/ecg/medical_accurate/pacs_irregular.png",
+      "options": [
+        "Normal Sinus Rhythm with PACs",
+        "Atrial Fibrillation",
+        "Multifocal Atrial Tachycardia",
+        "Sinus Arrhythmia"
+      ],
+      "correctAnswer": "Normal Sinus Rhythm with PACs",
+      "explanation": "This ECG shows normal sinus rhythm interrupted by premature atrial contractions (PACs). The PACs have different P wave morphology and come early in the cycle, followed by a compensatory pause.",
+      "category": "other_arrhythmias",
+      "difficulty": "medium",
+      "tags": ["PACs", "premature", "atrial", "irregular"],
+      "medicalContext": {
+        "mechanism": "Ectopic atrial focus fires prematurely, resetting the sinus cycle",
+        "clinical_significance": "Usually benign, may increase with caffeine, stress, or electrolyte imbalance",
+        "management": "Usually no treatment needed, address underlying triggers"
+      }
+    },
+    {
+      "id": "quiz_027",
+      "question": "Recognize the rhythm pattern in this ECG - what is your diagnosis?",
+      "imageUrl": "/ecg/medical_accurate/junctional_escape.png",
+      "options": [
+        "Junctional Escape Rhythm",
+        "Idioventricular Rhythm",
+        "Sinus Bradycardia",
+        "Third Degree AV Block"
+      ],
+      "correctAnswer": "Junctional Escape Rhythm",
+      "explanation": "This ECG demonstrates a junctional escape rhythm. The QRS complexes are narrow and regular but there are no visible P waves, indicating the rhythm originates from the AV junction rather than the sinus node.",
+      "category": "bradycardia",
+      "difficulty": "medium",
+      "tags": ["junctional", "escape", "narrow_QRS", "no_P_waves"],
+      "medicalContext": {
+        "mechanism": "AV junction acts as pacemaker when sinus node fails or is suppressed",
+        "clinical_significance": "Backup rhythm, indicates sinus node dysfunction or high vagal tone",
+        "management": "Investigate cause, may need permanent pacing if persistent"
+      }
+    },
+    {
+      "id": "quiz_028", 
+      "question": "Diagnose the rhythm abnormality shown in this ECG trace:",
+      "imageUrl": "/ecg/medical_accurate/complete_heart_block.png",
+      "options": [
+        "First Degree AV Block",
+        "Second Degree AV Block Type I",
+        "Second Degree AV Block Type II", 
+        "Complete (Third Degree) AV Block"
+      ],
+      "correctAnswer": "Complete (Third Degree) AV Block",
+      "explanation": "This ECG shows complete AV dissociation with P waves and QRS complexes occurring independently. The atrial rate is faster than the ventricular rate, and there is no relationship between P waves and QRS complexes.",
+      "category": "av_blocks",
+      "difficulty": "hard",
+      "tags": ["complete_block", "AV_dissociation", "independent", "emergency"],
+      "medicalContext": {
+        "mechanism": "Complete interruption of conduction between atria and ventricles",
+        "clinical_significance": "High risk of cardiac arrest, syncope, and sudden death",
+        "management": "Immediate temporary pacing, urgent permanent pacemaker implantation"
+      }
+    },
+    {
+      "id": "quiz_029",
+      "question": "Evaluate this ECG - what specific type of tachycardia is present?",
+      "imageUrl": "/ecg/medical_accurate/svt_narrow_complex.png", 
+      "options": [
+        "Sinus Tachycardia",
+        "Atrial Flutter",
+        "Supraventricular Tachycardia (SVT)",
+        "Ventricular Tachycardia"
+      ],
+      "correctAnswer": "Supraventricular Tachycardia (SVT)",
+      "explanation": "This ECG shows a narrow-complex tachycardia with a very regular rhythm and rate around 180 BPM. The QRS complexes are narrow, indicating supraventricular origin, and P waves are not clearly visible, consistent with SVT.",
+      "category": "tachycardia",
+      "difficulty": "medium", 
+      "tags": ["SVT", "narrow_complex", "180bpm", "regular"],
+      "medicalContext": {
+        "mechanism": "Re-entrant circuit involving AV node or accessory pathway",
+        "clinical_significance": "May cause palpitations, chest pain, or hemodynamic compromise",
+        "management": "Vagal maneuvers, adenosine, or synchronized cardioversion if unstable"
+      }
+    },
+    {
+      "id": "quiz_030",
+      "question": "Identify the conduction abnormality in this 12-lead ECG:",
+      "imageUrl": "/ecg/medical_accurate/rbbb_complete.png",
+      "options": [
+        "Left Bundle Branch Block",
+        "Right Bundle Branch Block", 
+        "Bifascicular Block",
+        "Normal Conduction"
+      ],
+      "correctAnswer": "Right Bundle Branch Block",
+      "explanation": "This ECG shows complete right bundle branch block (RBBB) with characteristic RSR' pattern in V1-V2, wide S waves in leads I and V6, and QRS duration >120ms. The right ventricle depolarizes late and separately.",
+      "category": "bundle_branch_blocks",
+      "difficulty": "medium",
+      "tags": ["RBBB", "RSR_prime", "wide_QRS", "conduction_delay"],
+      "medicalContext": {
+        "mechanism": "Delayed conduction through right bundle branch system",
+        "clinical_significance": "May be benign or indicate structural heart disease",
+        "management": "Investigate underlying cause, monitor for progression to complete heart block"
+      }
+    },
+    {
+      "id": "quiz_031",
+      "question": "What is the primary rhythm disturbance in this ECG recording?",
+      "imageUrl": "/ecg/medical_accurate/torsades_de_pointes.png",
+      "options": [
+        "Ventricular Tachycardia",
+        "Torsades de Pointes",
+        "Atrial Fibrillation with RVR",
+        "Polymorphic Ventricular Tachycardia"
+      ],
+      "correctAnswer": "Torsades de Pointes", 
+      "explanation": "This ECG shows Torsades de Pointes, a specific type of polymorphic ventricular tachycardia with characteristic 'twisting' QRS morphology around the baseline. This is associated with prolonged QT interval.",
+      "category": "ventricular_tachycardia",
+      "difficulty": "hard",
+      "tags": ["torsades", "polymorphic", "QT_prolongation", "emergency"],
+      "medicalContext": {
+        "mechanism": "Triggered activity from early afterdepolarizations in prolonged QT",
+        "clinical_significance": "Life-threatening, can degenerate to ventricular fibrillation",
+        "management": "IV magnesium, correct electrolytes, temporary pacing, avoid QT-prolonging drugs"
+      }
+    },
+    {
+      "id": "quiz_032",
+      "question": "Recognize the arrhythmia pattern - what does this ECG demonstrate?",
+      "imageUrl": "/ecg/medical_accurate/multifocal_atrial_tach.png",
+      "options": [
+        "Atrial Fibrillation",
+        "Atrial Flutter", 
+        "Multifocal Atrial Tachycardia",
+        "Sinus Tachycardia with PACs"
+      ],
+      "correctAnswer": "Multifocal Atrial Tachycardia",
+      "explanation": "This ECG shows multifocal atrial tachycardia (MAT) with at least three different P wave morphologies, irregular rhythm, and rapid rate. This is commonly seen in patients with severe COPD or heart failure.",
+      "category": "tachycardia", 
+      "difficulty": "hard",
+      "tags": ["MAT", "multiple_P_waves", "COPD", "irregular"],
+      "medicalContext": {
+        "mechanism": "Multiple ectopic atrial foci firing at rapid rates",
+        "clinical_significance": "Often indicates severe underlying pulmonary or cardiac disease",
+        "management": "Treat underlying condition, rate control with calcium channel blockers"
+      }
+    },
+    {
+      "id": "quiz_033",
+      "question": "Evaluate this rhythm strip - what conduction pattern do you observe?",
+      "imageUrl": "/ecg/medical_accurate/second_degree_type1.png",
+      "options": [
+        "Normal Sinus Rhythm",
+        "First Degree AV Block",
+        "Second Degree AV Block Type I (Wenckebach)",
+        "Second Degree AV Block Type II"
+      ],
+      "correctAnswer": "Second Degree AV Block Type I (Wenckebach)",
+      "explanation": "This ECG shows second degree AV block Type I (Wenckebach) with progressive PR interval prolongation followed by a dropped QRS complex. This creates a group beating pattern with pause.",
+      "category": "av_blocks",
+      "difficulty": "medium",
+      "tags": ["wenckebach", "progressive_PR", "group_beating", "dropped_QRS"],
+      "medicalContext": {
+        "mechanism": "Progressive fatigue of AV nodal conduction until conduction fails",
+        "clinical_significance": "Usually benign, may be seen with increased vagal tone or medications",
+        "management": "Monitor, usually no treatment needed unless symptomatic"
+      }
+    },
+    {
+      "id": "quiz_034", 
+      "question": "Diagnose the rhythm - what abnormality is shown in this ECG?",
+      "imageUrl": "/ecg/medical_accurate/ventricular_bigeminy.png",
+      "options": [
+        "Normal Sinus Rhythm",
+        "Ventricular Bigeminy",
+        "Atrial Bigeminy", 
+        "Sinus Rhythm with PACs"
+      ],
+      "correctAnswer": "Ventricular Bigeminy",
+      "explanation": "This ECG shows ventricular bigeminy with alternating normal sinus beats and premature ventricular contractions (PVCs). Every other beat is a wide, bizarre PVC followed by a compensatory pause.",
+      "category": "other_arrhythmias",
+      "difficulty": "medium",
+      "tags": ["bigeminy", "PVCs", "wide_complex", "compensatory_pause"],
+      "medicalContext": {
+        "mechanism": "Ectopic ventricular focus fires after every normal sinus beat",
+        "clinical_significance": "May indicate underlying heart disease or electrolyte imbalance", 
+        "management": "Investigate triggers, antiarrhythmic therapy if symptomatic or frequent"
+      }
+    },
+    {
+      "id": "quiz_035",
+      "question": "What is the most likely diagnosis for this wide-complex irregular rhythm?",
+      "imageUrl": "/ecg/medical_accurate/afib_with_aberrancy.png",
+      "options": [
+        "Ventricular Tachycardia",
+        "Atrial Fibrillation with Aberrant Conduction", 
+        "Multifocal Ventricular Tachycardia",
+        "Atrial Flutter with Variable Block"
+      ],
+      "correctAnswer": "Atrial Fibrillation with Aberrant Conduction",
+      "explanation": "This ECG shows atrial fibrillation with some beats conducted with aberrancy (wide QRS). The irregularly irregular pattern is characteristic of AF, but some beats are wide due to rate-related bundle branch block.",
+      "category": "atrial_fibrillation",
+      "difficulty": "hard",
+      "tags": ["AF_aberrancy", "wide_narrow_mix", "irregular", "rate_related"],
+      "medicalContext": {
+        "mechanism": "Atrial fibrillation with intermittent bundle branch block due to rapid rates",
+        "clinical_significance": "Important to distinguish from ventricular arrhythmias",
+        "management": "Rate control and anticoagulation as per standard AF protocols"
       }
     }
   ]

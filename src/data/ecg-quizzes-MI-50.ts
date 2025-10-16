@@ -1,10 +1,10 @@
 ﻿// ECG Quiz Database - MI Focused (50 Questions) - Auto-converted from JSON
 const ecgQuizzesMI50 = {
     "metadata":  {
-                     "version":  "1.0",
-                     "created_date":  "2025-10-15",
-                     "description":  "ECG MI Quiz Database - 50 Comprehensive Myocardial Infarction Questions",
-                     "total_quizzes":  50,
+                     "version":  "2.0",
+                     "created_date":  "2025-10-16",
+                     "description":  "ECG MI Quiz Database - 60 Comprehensive Myocardial Infarction Questions",
+                     "total_quizzes":  60,
                      "categories":  [
                                         "anterior_mi",
                                         "inferior_mi",
@@ -1276,6 +1276,266 @@ const ecgQuizzesMI50 = {
                                                "mechanism":  "Scar tissue creates reentrant circuits for VT/VF",
                                                "clinical_significance":  "Leading cause of mortality post-MI",
                                                "management":  "ICD evaluation for primary prevention if EF \u003c35%"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_051",
+                        "question":  "Evaluate this ECG - what acute MI pattern do you recognize?",
+                        "imageUrl":  "/ecg/MI_ecg_database/Posterior_wall_MI/posterior_mi_v7v8v9.jpg",
+                        "options":  [
+                                        "Anterior STEMI",
+                                        "Posterior STEMI",
+                                        "Lateral STEMI", 
+                                        "Inferior STEMI"
+                                    ],
+                        "correctAnswer":  "Posterior STEMI",
+                        "explanation":  "This ECG demonstrates posterior STEMI with ST elevation in posterior leads V7-V9 and reciprocal ST depression in anterior leads V1-V3. Posterior MI is often missed without posterior lead evaluation.",
+                        "category":  "posterior_mi",
+                        "difficulty":  "hard",
+                        "tags":  [
+                                     "posterior_stemi",
+                                     "reciprocal_changes",
+                                     "v7v8v9",
+                                     "missed_diagnosis"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "RCA or LCX occlusion affecting posterior wall of left ventricle",
+                                               "clinical_significance":  "Often overlooked without posterior leads, significant territory",
+                                               "management":  "Primary PCI, always obtain posterior leads in suspected cases"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_052",
+                        "question":  "Recognize the infarct pattern - what does this ECG demonstrate?",
+                        "imageUrl":  "/ecg/MI_ecg_database/Lateral_wall_MI/lateral_mi_i_avl_v5v6.jpg",
+                        "options":  [
+                                        "High Lateral MI",
+                                        "Low Lateral MI",
+                                        "Anterolateral MI",
+                                        "Inferolateral MI"
+                                    ],
+                        "correctAnswer":  "High Lateral MI",
+                        "explanation":  "This ECG shows high lateral MI with ST elevation in leads I, aVL, and sometimes V5-V6. This pattern indicates occlusion of a diagonal branch or obtuse marginal artery affecting the high lateral wall.",
+                        "category":  "lateral_mi",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "high_lateral",
+                                     "lead_I_aVL",
+                                     "diagonal_branch",
+                                     "obtuse_marginal"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Diagonal or obtuse marginal artery occlusion",
+                                               "clinical_significance":  "Smaller territory but still requires urgent revascularization",
+                                               "management":  "Primary PCI, assess for multivessel disease"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_053",
+                        "question":  "Diagnose the MI location from this ECG - what do you see?",
+                        "imageUrl":  "/ecg/MI_ecg_database/Inferolateral_MI/inferolateral_stemi.jpg",
+                        "options":  [
+                                        "Isolated Inferior MI",
+                                        "Isolated Lateral MI", 
+                                        "Inferolateral MI",
+                                        "Anterolateral MI"
+                                    ],
+                        "correctAnswer":  "Inferolateral MI",
+                        "explanation":  "This ECG demonstrates inferolateral MI with ST elevation in inferior leads (II, III, aVF) and lateral leads (I, aVL, V5-V6). This suggests a large RCA or dominant LCX occlusion.",
+                        "category":  "lateral_mi",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "inferolateral",
+                                     "large_territory",
+                                     "rca_lcx",
+                                     "multileads"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Large RCA or dominant LCX occlusion affecting multiple territories",
+                                               "clinical_significance":  "Extensive MI with higher risk of complications",
+                                               "management":  "Urgent primary PCI, monitor for cardiogenic shock"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_054",
+                        "question":  "Evaluate this ECG pattern - what hyperacute changes do you identify?",
+                        "imageUrl":  "/ecg/MI_ecg_database/Anterior_wall_MI/hyperacute_anterior_mi.jpg",
+                        "options":  [
+                                        "Normal T waves",
+                                        "Hyperacute T waves in V2-V4",
+                                        "T wave inversions",
+                                        "Pathological Q waves"
+                                    ],
+                        "correctAnswer":  "Hyperacute T waves in V2-V4",
+                        "explanation":  "This ECG shows hyperacute T waves in anterior leads V2-V4, indicating very early anterior MI before ST elevation develops. These tall, peaked T waves are the earliest ECG sign of acute coronary occlusion.",
+                        "category":  "anterior_mi",
+                        "difficulty":  "hard",
+                        "tags":  [
+                                     "hyperacute_t_waves",
+                                     "early_mi",
+                                     "peaked_t_waves",
+                                     "pre_stemi"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Earliest phase of myocardial ischemia before cell death",
+                                               "clinical_significance":  "Critical window for intervention before irreversible damage",
+                                               "management":  "Immediate cath lab activation, do not wait for ST elevation"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_055",
+                        "question":  "Recognize the evolved MI pattern - what does this ECG show?",
+                        "imageUrl":  "/ecg/MI_ecg_database/Post_MI_evolved_MI/old_inferior_mi_q_waves.jpg",
+                        "options":  [
+                                        "Acute Inferior MI",
+                                        "Old Inferior MI with Q waves",
+                                        "Inferior Ischemia",
+                                        "Normal Variant"
+                                    ],
+                        "correctAnswer":  "Old Inferior MI with Q waves",
+                        "explanation":  "This ECG demonstrates old inferior MI with pathological Q waves in leads II, III, and aVF. The Q waves are \u003e1/3 the height of the R wave and \u003e40ms wide, indicating prior inferior wall infarction with scar tissue.",
+                        "category":  "post_mi_evolved", 
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "old_mi",
+                                     "pathological_q_waves",
+                                     "inferior_scar",
+                                     "prior_infarct"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Scar tissue replacement of infarcted myocardium",
+                                               "clinical_significance":  "Indicates prior MI, assess for residual viable myocardium",
+                                               "management":  "Optimize medical therapy, assess LV function, consider ICD"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_056",
+                        "question":  "What specific MI complication is suggested by this ECG?",
+                        "imageUrl":  "/ecg/MI_ecg_database/RV_infarction/rv_infarction_v3r_v4r.jpg",
+                        "options":  [
+                                        "Anterior Extension",
+                                        "Right Ventricular Infarction",
+                                        "Posterior Extension",
+                                        "Lateral Extension"
+                                    ],
+                        "correctAnswer":  "Right Ventricular Infarction",
+                        "explanation":  "This ECG shows ST elevation in right-sided leads V3R and V4R, indicating right ventricular infarction. This commonly accompanies inferior MI and has specific hemodynamic implications requiring careful fluid management.",
+                        "category":  "inferior_mi",
+                        "difficulty":  "hard",
+                        "tags":  [
+                                     "rv_infarction",
+                                     "right_sided_leads",
+                                     "v3r_v4r",
+                                     "hemodynamic"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Proximal RCA occlusion affecting both inferior LV and RV",
+                                               "clinical_significance":  "Preload dependent, avoid nitrates and diuretics",
+                                               "management":  "Maintain preload, avoid venodilators, urgent reperfusion"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_057",
+                        "question":  "Identify the reperfusion marker in this post-PCI ECG:",
+                        "imageUrl":  "/ecg/MI_ecg_database/Reperfusion_markers/st_resolution_post_pci.jpg",
+                        "options":  [
+                                        "Persistent ST Elevation",
+                                        "ST Resolution (\u003e50%)",
+                                        "New Q Wave Formation",
+                                        "T Wave Inversion"
+                                    ],
+                        "correctAnswer":  "ST Resolution (\u003e50%)",
+                        "explanation":  "This post-PCI ECG shows significant ST resolution (\u003e50%) indicating successful reperfusion. ST resolution is the most reliable ECG marker of restored coronary flow and tissue-level perfusion.",
+                        "category":  "anterior_mi",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "st_resolution",
+                                     "reperfusion_marker",
+                                     "successful_pci",
+                                     "tissue_perfusion"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Restored coronary flow normalizing transmural electrical activity",
+                                               "clinical_significance":  "Indicates successful reperfusion and better prognosis",
+                                               "management":  "Continue GDMT, monitor for reperfusion arrhythmias"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_058", 
+                        "question":  "Evaluate this ECG - what wellens pattern do you recognize?",
+                        "imageUrl":  "/ecg/MI_ecg_database/Wellens_pattern/wellens_type_a_v2v3.jpg",
+                        "options":  [
+                                        "Normal T waves",
+                                        "Wellens Type A (Biphasic T waves)",
+                                        "Wellens Type B (Deep T inversions)",
+                                        "Hyperacute T waves"
+                                    ],
+                        "correctAnswer":  "Wellens Type A (Biphasic T waves)",
+                        "explanation":  "This ECG demonstrates Wellens Type A pattern with biphasic T waves in V2-V3. This indicates critical LAD stenosis with high risk of anterior STEMI within days if not urgently revascularized.",
+                        "category":  "anterior_mi",
+                        "difficulty":  "hard",
+                        "tags":  [
+                                     "wellens_type_a",
+                                     "biphasic_t_waves",
+                                     "critical_lad",
+                                     "pre_stemi"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Critical LAD stenosis with transient occlusion and reperfusion",
+                                               "clinical_significance":  "High risk of massive anterior MI within hours to days",
+                                               "management":  "Urgent cardiology consultation, avoid stress testing, early catheterization"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_059",
+                        "question":  "Diagnose the territorial extent of this MI from the ECG:",
+                        "imageUrl":  "/ecg/MI_ecg_database/Extensive_anterior_MI/extensive_anterior_v1_v6.jpg",
+                        "options":  [
+                                        "Limited Anterior MI",
+                                        "Extensive Anterior MI",
+                                        "Anteroseptal MI only",
+                                        "Anterolateral MI only"
+                                    ],
+                        "correctAnswer":  "Extensive Anterior MI",
+                        "explanation":  "This ECG shows extensive anterior MI with ST elevation across all anterior leads V1-V6, indicating occlusion of a large LAD (wraparound LAD) supplying a massive territory of the anterior wall.",
+                        "category":  "anterior_mi",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "extensive_anterior",
+                                     "v1_through_v6",
+                                     "wraparound_lad",
+                                     "large_territory"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Proximal LAD occlusion in large dominant vessel",
+                                               "clinical_significance":  "High risk of cardiogenic shock and mechanical complications",
+                                               "management":  "Emergent primary PCI, prepare for mechanical circulatory support"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_mi_060",
+                        "question":  "What evolution phase of MI does this ECG represent?",
+                        "imageUrl":  "/ecg/MI_ecg_database/T_wave_inversions/evolving_t_inversions_v2_v4.jpg",
+                        "options":  [
+                                        "Hyperacute Phase",
+                                        "Acute Phase with ST elevation",
+                                        "Evolving Phase with T inversions",
+                                        "Chronic Phase with Q waves"
+                                    ],
+                        "correctAnswer":  "Evolving Phase with T inversions",
+                        "explanation":  "This ECG shows the evolving phase of anterior MI with symmetric T wave inversions in V2-V4. This typically occurs days to weeks after the acute event as the ST elevation resolves and T waves invert.",
+                        "category":  "anterior_mi",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "evolving_mi",
+                                     "t_wave_inversions",
+                                     "symmetric",
+                                     "days_to_weeks"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Ongoing myocardial healing with electrical remodeling",
+                                               "clinical_significance":  "Normal evolution, may normalize over months",
+                                               "management":  "Continue optimal medical therapy, cardiac rehabilitation"
                                            }
                     }
                 ]

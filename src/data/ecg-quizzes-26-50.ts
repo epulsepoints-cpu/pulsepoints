@@ -1,10 +1,10 @@
 ﻿// ECG Quiz Database - Batch 2 (Quizzes 26-50) - Auto-converted from JSON
 const ecgQuizzes2650 = {
     "metadata":  {
-                     "version":  "1.0",
-                     "created_date":  "2025-10-14",
-                     "description":  "ECG Master Quiz Database - Batch 2 (Quizzes 26-50)",
-                     "total_quizzes":  25,
+                     "version":  "2.0",
+                     "created_date":  "2025-10-16",
+                     "description":  "ECG Master Quiz Database - Batch 2 (Quizzes 26-58)",
+                     "total_quizzes":  33,
                      "batch_number":  2,
                      "categories":  [
                                         "normal_sinus",
@@ -671,6 +671,214 @@ const ecgQuizzes2650 = {
                                                "mechanism":  "Mild elevation in sinus rate due to physiologic or pathologic stimulus",
                                                "clinical_significance":  "Usually well-tolerated, may indicate treatable underlying condition",
                                                "management":  "Evaluate for fever, dehydration, medications, thyroid function, anxiety"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_051",
+                        "question":  "Evaluate this ECG rhythm - what do you diagnose?",
+                        "imageUrl":  "/ecg/medical_accurate/sinus_pause.png",
+                        "options":  [
+                                        "Normal Sinus Rhythm",
+                                        "Sinus Pause/Arrest",
+                                        "Second Degree AV Block",
+                                        "Junctional Escape Beat"
+                                    ],
+                        "correctAnswer":  "Sinus Pause/Arrest",
+                        "explanation":  "This ECG shows a sinus pause where the sinus node fails to fire for several seconds. The pause is longer than expected for normal sinus arrhythmia and may require evaluation for sinus node dysfunction.",
+                        "category":  "bradycardia",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "sinus_pause",
+                                     "node_dysfunction",
+                                     "pause",
+                                     "irregular"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Temporary failure of sinus node to generate impulses",
+                                               "clinical_significance":  "May indicate sinus node disease or excessive vagal stimulation",
+                                               "management":  "Monitor for symptoms, consider Holter monitor, pacemaker if symptomatic"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_052", 
+                        "question":  "Recognize the pattern in this ECG strip - what rhythm is present?",
+                        "imageUrl":  "/ecg/medical_accurate/accelerated_junctional.png",
+                        "options":  [
+                                        "Sinus Tachycardia",
+                                        "Accelerated Junctional Rhythm",
+                                        "Atrial Tachycardia",
+                                        "Ventricular Tachycardia"
+                                    ],
+                        "correctAnswer":  "Accelerated Junctional Rhythm",
+                        "explanation":  "This ECG shows accelerated junctional rhythm with narrow QRS complexes at a rate of 60-100 BPM without visible P waves. The rhythm originates from the AV junction faster than the usual junctional escape rate.",
+                        "category":  "other_arrhythmias",
+                        "difficulty":  "medium", 
+                        "tags":  [
+                                     "accelerated",
+                                     "junctional",
+                                     "narrow_QRS",
+                                     "no_P_waves"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Enhanced automaticity of AV junctional tissue",
+                                               "clinical_significance":  "May indicate digitalis toxicity, ischemia, or electrolyte imbalance",
+                                               "management":  "Investigate underlying cause, monitor, treat precipitating factors"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_053",
+                        "question":  "What specific arrhythmia pattern do you identify in this ECG?",
+                        "imageUrl":  "/ecg/medical_accurate/ventricular_trigeminy.png",
+                        "options":  [
+                                        "Ventricular Bigeminy",
+                                        "Ventricular Trigeminy", 
+                                        "Multifocal PVCs",
+                                        "Couplets of PVCs"
+                                    ],
+                        "correctAnswer":  "Ventricular Trigeminy",
+                        "explanation":  "This ECG demonstrates ventricular trigeminy with a pattern of two normal sinus beats followed by a PVC, repeating throughout the rhythm strip. This creates a characteristic 3-beat grouping pattern.",
+                        "category":  "other_arrhythmias",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "trigeminy",
+                                     "PVCs",
+                                     "pattern",
+                                     "grouped_beats"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Ectopic ventricular focus fires after every two normal beats",
+                                               "clinical_significance":  "May indicate underlying heart disease or metabolic abnormalities",
+                                               "management":  "Evaluate for structural heart disease, electrolytes, consider antiarrhythmics"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_054",
+                        "question":  "Diagnose the conduction abnormality shown in this 12-lead ECG:",
+                        "imageUrl":  "/ecg/medical_accurate/left_anterior_fascicular_block.png",
+                        "options":  [
+                                        "Left Bundle Branch Block",
+                                        "Left Anterior Fascicular Block",
+                                        "Left Posterior Fascicular Block", 
+                                        "Right Bundle Branch Block"
+                                    ],
+                        "correctAnswer":  "Left Anterior Fascicular Block",
+                        "explanation":  "This ECG shows left anterior fascicular block (LAFB) with left axis deviation, small Q waves in leads I and aVL, and small R waves in leads II, III, and aVF. QRS duration is typically normal or slightly prolonged.",
+                        "category":  "bundle_branch_blocks",
+                        "difficulty":  "hard",
+                        "tags":  [
+                                     "LAFB",
+                                     "left_axis",
+                                     "fascicular",
+                                     "conduction_delay"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Block in left anterior fascicle of left bundle branch system",
+                                               "clinical_significance":  "May indicate underlying coronary artery disease or cardiomyopathy",
+                                               "management":  "Investigate for structural heart disease, monitor for progression"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_055",
+                        "question":  "Evaluate this ECG - what type of heart block is demonstrated?",
+                        "imageUrl":  "/ecg/medical_accurate/second_degree_type2.png",
+                        "options":  [
+                                        "First Degree AV Block",
+                                        "Second Degree AV Block Type I",
+                                        "Second Degree AV Block Type II",
+                                        "Complete Heart Block"
+                                    ],
+                        "correctAnswer":  "Second Degree AV Block Type II",
+                        "explanation":  "This ECG shows second degree AV block Type II (Mobitz II) with constant PR intervals and sudden dropped QRS complexes without preceding PR prolongation. This is more serious than Type I block.",
+                        "category":  "av_blocks",
+                        "difficulty":  "hard",
+                        "tags":  [
+                                     "mobitz_II",
+                                     "constant_PR",
+                                     "dropped_QRS",
+                                     "high_risk"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Intermittent failure of conduction below AV node in His-Purkinje system",
+                                               "clinical_significance":  "High risk of progression to complete heart block",
+                                               "management":  "Urgent pacemaker evaluation, avoid AV nodal blocking agents"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_056",
+                        "question":  "Recognize this arrhythmia - what does the ECG show?",
+                        "imageUrl":  "/ecg/medical_accurate/atrial_flutter_2to1.png",
+                        "options":  [
+                                        "Atrial Fibrillation", 
+                                        "Atrial Flutter with 2:1 Block",
+                                        "Sinus Tachycardia",
+                                        "Supraventricular Tachycardia"
+                                    ],
+                        "correctAnswer":  "Atrial Flutter with 2:1 Block",
+                        "explanation":  "This ECG shows atrial flutter with 2:1 AV conduction. Flutter waves are visible at ~300 BPM with every second flutter wave conducting to give a ventricular rate of ~150 BPM. The sawtooth pattern is characteristic.",
+                        "category":  "other_arrhythmias",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "atrial_flutter",
+                                     "2to1_block",
+                                     "sawtooth",
+                                     "150bpm"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Atrial macro-reentrant circuit with 2:1 AV nodal conduction",
+                                               "clinical_significance":  "May cause palpitations and reduced exercise tolerance",
+                                               "management":  "Rate control, anticoagulation, consider cardioversion or ablation"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_057", 
+                        "question":  "What is the primary finding in this ECG evaluation?",
+                        "imageUrl":  "/ecg/medical_accurate/prolonged_qt_interval.png",
+                        "options":  [
+                                        "Normal ECG",
+                                        "Prolonged QT Interval",
+                                        "Short QT Interval",
+                                        "ST Segment Elevation"
+                                    ],
+                        "correctAnswer":  "Prolonged QT Interval",
+                        "explanation":  "This ECG shows prolonged QT interval (>440ms in men, >460ms in women). This increases risk of Torsades de Pointes and sudden cardiac death. May be congenital or acquired from medications/electrolyte abnormalities.",
+                        "category":  "other_arrhythmias",
+                        "difficulty":  "medium",
+                        "tags":  [
+                                     "prolonged_QT",
+                                     "torsades_risk",
+                                     "sudden_death",
+                                     "repolarization"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Delayed ventricular repolarization extending electrical recovery time",
+                                               "clinical_significance":  "Predisposes to potentially fatal ventricular arrhythmias",
+                                               "management":  "Identify and correct causes, avoid QT-prolonging drugs, consider ICD"
+                                           }
+                    },
+                    {
+                        "id":  "quiz_058",
+                        "question":  "Identify the rhythm disturbance in this ECG strip:",
+                        "imageUrl":  "/ecg/medical_accurate/wandering_pacemaker.png",
+                        "options":  [
+                                        "Normal Sinus Rhythm",
+                                        "Wandering Atrial Pacemaker",
+                                        "Multifocal Atrial Tachycardia",
+                                        "Sinus Arrhythmia"
+                                    ],
+                        "correctAnswer":  "Wandering Atrial Pacemaker",
+                        "explanation":  "This ECG shows wandering atrial pacemaker with at least 3 different P wave morphologies and normal heart rate. The pacemaker site shifts between sinus node, atrium, and AV junction.",
+                        "category":  "other_arrhythmias",
+                        "difficulty":  "medium", 
+                        "tags":  [
+                                     "wandering_pacemaker",
+                                     "variable_P_waves",
+                                     "benign",
+                                     "multiple_foci"
+                                 ],
+                        "medicalContext":  {
+                                               "mechanism":  "Dominant pacemaker shifts between multiple atrial sites",
+                                               "clinical_significance":  "Usually benign, often seen in athletes or elderly patients",
+                                               "management":  "Usually no treatment required, monitor for progression"
                                            }
                     }
                 ]
