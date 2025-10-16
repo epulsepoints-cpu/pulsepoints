@@ -11,8 +11,12 @@ import { useUISounds } from '@/hooks/useUISounds';
 import { usePulseStore } from '@/components/usePulseStore';
 import MedicalAnimation from '@/components/MedicalAnimation';
 
+// Import quiz data
+import quizBatch1 from '@/data/ecg-quizzes-25.json';
+import quizBatch2 from '@/data/ecg-quizzes-26-50.json';
+import quizBatch3 from '@/data/ecg-quizzes-MI-50.json';
 // Import video-quiz modules
-import VIDEO_QUIZ_MODULES, { VideoQuizModule } from '../data/videoQuizModules';
+import VIDEO_QUIZ_MODULES, { VideoQuizModule } from '@/data/videoQuizModules';
 
 interface ECGSimulatorProps {
   onBack: () => void;
@@ -73,57 +77,90 @@ const GAME_MODES = {
   }
 };
 
-// Static Quiz Database - Essential quiz questions for ECG learning
-const createQuizDatabase = (): ECGQuestion[] => {
+// Comprehensive Quiz Database - Load and combine all quiz batches
+const loadQuizDatabase = (): ECGQuestion[] => {
   const allQuizzes: ECGQuestion[] = [];
   
-  // Sample quiz questions - Basic ECG patterns
-  const sampleQuizzes = [
-    {
-      id: 'quiz_001',
-      question: 'What is the rhythm pattern shown in this ECG strip?',
-      imageUrl: '/ecg/medical_accurate/normal_75bpm.png',
-      options: ['Normal Sinus Rhythm', 'Sinus Bradycardia', 'Sinus Tachycardia', 'First Degree AV Block'],
-      correct_answer: 0,
-      explanation: 'This ECG shows a normal sinus rhythm with a regular rate of approximately 75 beats per minute.',
-      category: 'normal_sinus',
-      difficulty: 'easy'
-    },
-    {
-      id: 'quiz_002',
-      question: 'Identify the ECG abnormality in this strip:',
-      imageUrl: '/ecg/medical_accurate/atrial_fibrillation.png',
-      options: ['Atrial Fibrillation', 'Atrial Flutter', 'Ventricular Tachycardia', 'Normal Sinus Rhythm'],
-      correct_answer: 0,
-      explanation: 'This ECG shows atrial fibrillation with irregular RR intervals and absence of distinct P waves.',
-      category: 'atrial_fibrillation',
-      difficulty: 'medium'
-    }
-  ];
-  
-  // Convert sample quizzes to ECGQuestion format
-  sampleQuizzes.forEach((quiz: any) => {
-    allQuizzes.push({
-      id: quiz.id,
-      question: quiz.question,
-      imageUrl: quiz.imageUrl,
-      correctAnswer: quiz.correct_answer,
-      options: quiz.options,
-      explanation: quiz.explanation,
-      difficulty: quiz.difficulty as 'easy' | 'medium' | 'hard',
-      category: quiz.category,
-      tags: [],
-      heartRate: undefined,
-      medicalContext: quiz.explanation
+  try {
+    console.log('📚 Loading Quiz Batches:', {
+      batch1Available: !!quizBatch1,
+      batch1HasQuizzes: !!(quizBatch1 as any)?.quizzes,
+      batch2Available: !!quizBatch2,
+      batch2HasQuizzes: !!(quizBatch2 as any)?.quizzes,
+      batch3Available: !!quizBatch3,
+      batch3HasQuizzes: !!(quizBatch3 as any)?.quizzes
     });
-  });
+    
+    // Load quiz batch 1 (quizzes 1-25)
+    if ((quizBatch1 as any)?.quizzes) {
+      (quizBatch1 as any).quizzes.forEach((quiz: any) => {
+        allQuizzes.push({
+          id: quiz.id,
+          question: quiz.question,
+          imageUrl: quiz.imageUrl,
+          correctAnswer: quiz.correctAnswer,
+          options: quiz.options,
+          explanation: quiz.explanation,
+          difficulty: quiz.difficulty as 'easy' | 'medium' | 'hard',
+          category: quiz.category,
+          tags: quiz.tags,
+          heartRate: quiz.heartRate,
+          medicalContext: quiz.medicalContext
+        });
+      });
+      console.log('✅ Loaded Batch 1:', (quizBatch1 as any).quizzes.length, 'quizzes');
+    }
+    
+    // Load quiz batch 2 (quizzes 26-50)
+    if ((quizBatch2 as any)?.quizzes) {
+      (quizBatch2 as any).quizzes.forEach((quiz: any) => {
+        allQuizzes.push({
+          id: quiz.id,
+          question: quiz.question,
+          imageUrl: quiz.imageUrl,
+          correctAnswer: quiz.correctAnswer,
+          options: quiz.options,
+          explanation: quiz.explanation,
+          difficulty: quiz.difficulty as 'easy' | 'medium' | 'hard',
+          category: quiz.category,
+          tags: quiz.tags,
+          heartRate: quiz.heartRate,
+          medicalContext: quiz.medicalContext
+        });
+      });
+      console.log('✅ Loaded Batch 2:', (quizBatch2 as any).quizzes.length, 'quizzes');
+    }
+    
+    // Load quiz batch 3 (MI-focused quizzes)
+    if ((quizBatch3 as any)?.quizzes) {
+      (quizBatch3 as any).quizzes.forEach((quiz: any) => {
+        allQuizzes.push({
+          id: quiz.id,
+          question: quiz.question,
+          imageUrl: quiz.imageUrl,
+          correctAnswer: quiz.correctAnswer,
+          options: quiz.options,
+          explanation: quiz.explanation,
+          difficulty: quiz.difficulty as 'easy' | 'medium' | 'hard',
+          category: quiz.category,
+          tags: quiz.tags,
+          heartRate: quiz.heartRate,
+          medicalContext: quiz.medicalContext
+        });
+      });
+      console.log('✅ Loaded Batch 3:', (quizBatch3 as any).quizzes.length, 'MI-focused quizzes');
+    }
+    
+    console.log('🎯 Total Quizzes Loaded:', allQuizzes.length);
+  } catch (error) {
+    console.error('❌ Error loading quiz database:', error);
+  }
   
-  console.log('✅ Created quiz database with', allQuizzes.length, 'questions');
   return allQuizzes;
 };
 
 // Initialize comprehensive quiz database
-const COMPREHENSIVE_QUIZ_DATABASE = createQuizDatabase();
+const COMPREHENSIVE_QUIZ_DATABASE = loadQuizDatabase();
 
 // Debug: Log quiz database loading (only show summary)
 if (COMPREHENSIVE_QUIZ_DATABASE.length > 0) {
