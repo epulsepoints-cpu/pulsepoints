@@ -12,9 +12,9 @@ import { usePulseStore } from '@/components/usePulseStore';
 import MedicalAnimation from '@/components/MedicalAnimation';
 
 // Import quiz data
-import quizBatch1 from '@/data/ecg-quizzes-25.json';
-import quizBatch2 from '@/data/ecg-quizzes-26-50.json';
-import quizBatch3 from '@/data/ecg-quizzes-MI-50.json';
+import quizBatch1 from '@/data/ecg-quizzes-25';
+import quizBatch2 from '@/data/ecg-quizzes-26-50';
+import quizBatch3 from '@/data/ecg-quizzes-MI-50';
 // Import video-quiz modules
 import VIDEO_QUIZ_MODULES, { VideoQuizModule } from '@/data/videoQuizModules';
 
