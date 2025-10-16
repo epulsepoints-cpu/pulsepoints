@@ -1,9 +1,0 @@
-MIT-BIH Record 231
-Condition: Left Bundle Branch Block
-Files: 231.dat, 231.hea, 231.atr
-
-This is a placeholder file. To generate actual ECG images, you need:
-1. Python with wfdb, matplotlib, numpy packages
-2. Run the full processing script
-
-The raw ECG data files have been downloaded to the temp directory.

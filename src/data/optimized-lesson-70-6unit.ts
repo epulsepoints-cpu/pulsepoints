@@ -33,7 +33,7 @@ export const optimizedLesson70: Lesson = {
         backgroundColor: '#f0f9ff',
         textColor: '#1e40af',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/ISCAL_ischemic_in_anterolateral_leads/clean_00135_ischemic in anterolateral leads.png',
+        imageUrl: '/ecg/MI_ecg_database/Anterolateral_MI/ANTEROLATERAL.jpg',
         imageAlt: 'Classic NSTEMI pattern showing ischemic changes in anterolateral leads',
         highlights: [
           '💔 Most common ACS type',
@@ -54,7 +54,7 @@ export const optimizedLesson70: Lesson = {
         backgroundColor: '#f0f9ff',
         textColor: '#1e40af',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/INJAL_subendocardial_injury_in_anterolateral_leads/clean_00530_subendocardial injury in anterolateral leads.png',
+        imageUrl: '/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_AWMI.jpg',
         imageAlt: 'NSTEMI showing subendocardial injury pattern'
       },
 
@@ -196,7 +196,7 @@ export const optimizedLesson70: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c3aed',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/NST__non-specific_ST_changes/clean_00026_non-specific ST changes.png',
+        imageUrl: '/ecg/MI_ecg_database/Lateral_wall_MI/lmi (2).jpg',
         imageAlt: 'ECG showing non-specific ST changes pattern',
         highlights: [
           '⬇️ Horizontal ST depression',
@@ -325,7 +325,7 @@ export const optimizedLesson70: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c3aed',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/ISCAS_ischemic_in_anteroseptal_leads/clean_00485_ischemic in anteroseptal leads.png',
+        imageUrl: '/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_IWMI.jpg',
         imageAlt: 'ECG showing ischemic changes in anteroseptal leads'
       },
 
@@ -1121,7 +1121,7 @@ export const optimizedLesson70: Lesson = {
       type: 'final-assessment',
       xp: 50,
       images: {
-        mainImage: '/ecg/ecg_dataset_clean/ISCAL_ischemic_in_anterolateral_leads/clean_00135_ischemic in anterolateral leads.png',
+        mainImage: '/ecg/MI_ecg_database/Anterolateral_MI/ANTEROLATERAL.jpg',
         slideImages: []
       },
       content: {
@@ -1139,7 +1139,7 @@ export const optimizedLesson70: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! Rising troponin with ST depression and appropriate clinical presentation confirms NSTEMI. The lateral leads (V4-V6) indicate lateral territory involvement.",
-            imageUrl: "/ecg/ecg_dataset_clean/INJAL_subendocardial_injury_in_anterolateral_leads/clean_00530_subendocardial injury in anterolateral leads.png"
+            imageUrl: "/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_AWMI.jpg"
           },
           {
             id: "st-depression-pattern-assessment",
@@ -1153,7 +1153,7 @@ export const optimizedLesson70: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! Horizontal ST depression ≥1mm is most specific for myocardial ischemia and indicates significant coronary artery disease requiring urgent evaluation.",
-            imageUrl: "/ecg/ecg_dataset_clean/NST__non-specific_ST_changes/clean_00026_non-specific ST changes.png"
+            imageUrl: "/ecg/MI_ecg_database/Lateral_wall_MI/lmi (2).jpg"
           },
           {
             id: "risk-stratification-assessment",

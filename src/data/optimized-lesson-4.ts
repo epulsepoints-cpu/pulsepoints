@@ -267,7 +267,7 @@ export const optimizedLesson4: Lesson = {
         title: 'P Wave Measurement Technique',
         type: 'steps',
         animation: 'fade',
-        imageUrl: '/lessonimages/p-wave-measurement-technique.png',
+        imageUrl: '/lessonimages/p-wave-analysis-overview.png',
         imageAlt: 'P wave measurement technique demonstration',
         audioUrl: '/lessonaudio/ecg-waveforms/p-wave-measurement.mp3',
         steps: [
@@ -622,7 +622,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/qt-interval-t-wave.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'QT interval and T wave relationship',
         hint: '⏱️ QT interval includes T wave!'
       },
@@ -637,7 +637,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/electrolyte-t-waves.png',
+        imageUrl: '/lessonimages/hyperkalemia.png',
         imageAlt: 'Electrolyte effects on T waves',
         hint: '🧪 Electrolytes change T wave shape!'
       },
@@ -650,7 +650,7 @@ export const optimizedLesson4: Lesson = {
         layout: 'centered',
         animation: 'fade',
         audioUrl: '/lessonaudio/ecg-waveforms/t-wave-clinical.mp3',
-        imageUrl: '/lessonimages/t-wave-normal.png',
+        imageUrl: '/lessonimages/t-wave-normal-vs-abnormal.png',
         imageAlt: 'T wave clinical analysis audio',
         hint: '🔊 Clinical T wave expertise!'
       },
@@ -663,7 +663,7 @@ export const optimizedLesson4: Lesson = {
         type: 'quiz',
         layout: 'centered',
         animation: 'slide',
-        imageUrl: '/lessonimages/t-wave-normal.png',
+        imageUrl: '/lessonimages/t-wave-normal-vs-abnormal.png',
         imageAlt: 'T wave analysis quiz',
         hint: '🧠 Test your Unit 4 knowledge!',
         question: "What do tall, peaked, symmetric T waves typically indicate?",
@@ -758,7 +758,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/qt-interval.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'QT interval measurement and correction',
         hint: '📏 QTc = rate-corrected repolarization time!'
       },
@@ -773,7 +773,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/st-segment.png',
+        imageUrl: '/lessonimages/t-wave-normal-vs-abnormal.png',
         imageAlt: 'ST segment analysis and measurement',
         hint: '📊 ST segment = ischemia indicator!'
       },
@@ -788,7 +788,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/waveform-relationships.png',
+        imageUrl: '/lessonimages/p-qrs-t-wave-sequence.png',
         imageAlt: 'ECG waveform relationships and patterns',
         hint: '🔗 Relationships reveal rhythm secrets!'
       },
@@ -803,7 +803,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/rhythm-morphology.png',
+        imageUrl: '/lessonimages/rhythm-patterns-examples.png',
         imageAlt: 'Rhythm versus morphology analysis',
         hint: '🎵 Rhythm + morphology = complete picture!'
       },
@@ -816,7 +816,7 @@ export const optimizedLesson4: Lesson = {
         layout: 'centered',
         animation: 'fade',
         videoUrl: '/lessonvideos/ecg-waveform-analysis.mp4',
-        imageUrl: '/lessonimages/complete-ecg-cycle.png',
+        imageUrl: '/lessonimages/p-qrs-t-wave-sequence.png',
         imageAlt: 'Complete waveform analysis video',
         hint: '🎬 See integration in practice!'
       },
@@ -829,7 +829,7 @@ export const optimizedLesson4: Lesson = {
         type: 'quiz',
         layout: 'centered',
         animation: 'slide',
-        imageUrl: '/lessonimages/complete-ecg-cycle.png',
+        imageUrl: '/lessonimages/p-qrs-t-wave-sequence.png',
         imageAlt: 'Waveform integration quiz',
         hint: '🧠 Test your Unit 5 knowledge!',
         question: "What is the normal range for the PR interval?",
@@ -854,7 +854,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/clinical-ecg.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
         imageAlt: 'Clinical ECG interpretation overview',
         hint: '🏥 Clinical application mastery!'
       },
@@ -869,7 +869,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/pathological-patterns.png',
+        imageUrl: '/lessonimages/basic-ecg-waveforms.png',
         imageAlt: 'Common pathological ECG patterns',
         hint: '🚨 Patterns = rapid diagnosis!'
       },
@@ -883,7 +883,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/mi-evolution.png',
+        imageUrl: '/lessonimages/inferior-mi.png',
         imageAlt: 'Acute MI waveform evolution stages',
         hint: '⏰ Evolution = MI timing!'
       },
@@ -900,7 +900,7 @@ export const optimizedLesson4: Lesson = {
         ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ischemic-patterns.png',
+        imageUrl: '/lessonimages/inferior-mi.png',
         imageAlt: 'Ischemic ECG waveform patterns',
         hint: '💔 Ischemia = specific patterns!'
       },
@@ -915,7 +915,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/drug-electrolyte-effects.png',
+        imageUrl: '/lessonimages/hyperkalemia.png',
         imageAlt: 'Drug and electrolyte effects on ECG',
         hint: '💊 Drugs/electrolytes = ECG mimics!'
       },
@@ -930,7 +930,7 @@ export const optimizedLesson4: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/clinical-correlation.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
         imageAlt: 'Clinical correlation with ECG findings',
         hint: '🩺 Clinical context = accurate diagnosis!'
       },
@@ -942,7 +942,7 @@ export const optimizedLesson4: Lesson = {
         type: 'audio',
         layout: 'centered',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-waveform-overview.png',
+        imageUrl: '/lessonimages/basic-ecg-waveforms.png',
         imageAlt: 'ECG waveforms mastery celebration',
         hint: '🏆 You\'re a waveform expert!'
       },
@@ -955,7 +955,7 @@ export const optimizedLesson4: Lesson = {
         type: 'quiz',
         layout: 'centered',
         animation: 'slide',
-        imageUrl: '/lessonimages/clinical-ecg.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
         imageAlt: 'Clinical interpretation quiz',
         hint: '🧠 Test your Unit 6 knowledge!',
         question: "ST elevation in leads II, III, and aVF indicates which coronary territory?",
@@ -1016,7 +1016,7 @@ export const optimizedLesson4: Lesson = {
         }
       },
       images: {
-        mainImage: '/lessonimages/ecg-waveform-overview.png',
+        mainImage: '/lessonimages/basic-ecg-waveforms.png',
         slideImages: []
       },
       content: {

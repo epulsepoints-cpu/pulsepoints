@@ -32,7 +32,7 @@ export const optimizedLesson43: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c2d12',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/IVCD_intraventricular_conduction_delay/clean_00003_intraventricular conduction delay.png',
+        imageUrl: '/ecg/medical_accurate/rbbb_70bpm_1.png',
         hint: '⚡ Master IVCD foundations!'
       },
       
@@ -387,7 +387,7 @@ export const optimizedLesson43: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c2d12',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/IVCD_intraventricular_conduction_delay/clean_00015_intraventricular conduction delay.png',
+        imageUrl: '/ecg/medical_accurate/lbbb_90bpm_4.png',
         hint: '📈 Master advanced IVCD patterns!'
       },
 

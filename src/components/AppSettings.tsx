@@ -36,7 +36,7 @@ const AppSettings: React.FC<AppSettingsProps> = ({ isOpen, onClose }) => {
 
   // Load preferences from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('ecgkid-app-preferences');
+    const saved = localStorage.getItem('e-pulsepoints-app-preferences');
     if (saved) {
       setPreferences(JSON.parse(saved));
     }
@@ -45,7 +45,7 @@ const AppSettings: React.FC<AppSettingsProps> = ({ isOpen, onClose }) => {
   // Save preferences to localStorage
   const savePreferences = (newPrefs: AppPreferences) => {
     setPreferences(newPrefs);
-    localStorage.setItem('ecgkid-app-preferences', JSON.stringify(newPrefs));
+    localStorage.setItem('e-pulsepoints-app-preferences', JSON.stringify(newPrefs));
   };
 
   const updatePreference = <K extends keyof AppPreferences>(

@@ -969,7 +969,7 @@ export const optimizedLesson2: Lesson = {
         backgroundColor: '#f0fff4',
         textColor: '#22543d',
         animation: 'fade',
-        imageUrl: '/lessonimages/systematic-ecg-reading.png',
+        imageUrl: '/lessonimages/rhythm-vs-rate-overview.png',
         imageAlt: 'Step-by-step ECG interpretation approach',
         steps: [
           {
@@ -1150,7 +1150,7 @@ export const optimizedLesson2: Lesson = {
         backgroundColor: '#f0f9ff',
         textColor: '#1e40af',
         animation: 'slide',
-        imageUrl: '/lessonimages/ecg-interpretation-overview.png',
+        imageUrl: '/lessonimages/rhythm-vs-rate-overview.png',
         imageAlt: 'ECG interpretation assessment',
         hint: '🧠 Test your Unit 5 knowledge!',
         question: "What is typically the best lead for rhythm analysis?",
@@ -1191,7 +1191,7 @@ export const optimizedLesson2: Lesson = {
         backgroundColor: '#fef2f2',
         textColor: '#991b1b',
         animation: 'fade',
-        imageUrl: '/lessonimages/stemi-examples.png',
+        imageUrl: '/lessonimages/inferior-mi.png',
         imageAlt: 'STEMI ECG examples and recognition patterns',
         tabs: [
           {

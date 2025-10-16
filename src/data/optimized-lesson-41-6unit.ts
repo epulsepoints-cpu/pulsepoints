@@ -32,7 +32,7 @@ export const optimizedLesson41: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c2d12',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00172_complete right bundle branch block.png',
+        imageUrl: '/ecg/medical_accurate/rbbb_80bpm_2.png',
         hint: '🫀 Master RBBB foundations!'
       },
       

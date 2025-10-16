@@ -10,21 +10,21 @@ interface BadgeSystemProps {
 }
 
 const RANK_BADGES: { [key in Rank]: Badge } = {
-  'ECGKid Intern': {
+  'E-Pulsepoints Intern': {
     id: 'intern-badge',
     name: 'ECG Explorer',
     description: 'Welcome to the ECG learning journey!',
     icon: '🩺',
     rarity: 'common',
-    rank: 'ECGKid Intern'
+    rank: 'E-Pulsepoints Intern'
   },
-  'ECGKid Resident': {
+  'E-Pulsepoints Resident': {
     id: 'resident-badge',
     name: 'Heart Apprentice',
     description: 'Learning the basics of cardiac rhythms',
     icon: '💚',
     rarity: 'common',
-    rank: 'ECGKid Resident'
+    rank: 'E-Pulsepoints Resident'
   },
   'ECG Cadet': {
     id: 'cadet-badge',
@@ -239,8 +239,8 @@ export const BadgeSystem: React.FC<BadgeSystemProps> = ({ userRank, userBadges, 
   }, [userRank, userBadges, onBadgeUnlocked]);
 
   const RANK_ORDER: Rank[] = [
-    'ECGKid Intern',
-    'ECGKid Resident', 
+    'E-Pulsepoints Intern',
+    'E-Pulsepoints Resident', 
     'ECG Cadet',
     'Rhythm Specialist',
     'Wave Virtuoso',

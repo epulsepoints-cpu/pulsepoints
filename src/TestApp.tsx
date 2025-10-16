@@ -5,7 +5,7 @@ const TestApp = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">
-          ECGkid PulsePoints Test
+          E-Pulsepoints Test
         </h1>
         <p className="text-gray-600">
           App is loading... This is a test to verify basic functionality.

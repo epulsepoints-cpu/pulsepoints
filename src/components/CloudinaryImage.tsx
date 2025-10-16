@@ -47,7 +47,7 @@ export const LessonImage: React.FC<Omit<CloudinaryImageProps, 'preset' | 'folder
   <CloudinaryImage 
     {...props} 
     preset="lessonImage" 
-    folder="ecgkid/lesson-images"
+    folder="e-pulsepoints/lesson-images"
   />
 );
 
@@ -55,7 +55,7 @@ export const ECGStripImage: React.FC<Omit<CloudinaryImageProps, 'preset' | 'fold
   <CloudinaryImage 
     {...props} 
     preset="ecgStrip" 
-    folder="ecgkid/ecg-strips"
+    folder="e-pulsepoints/ecg-strips"
   />
 );
 
@@ -63,7 +63,7 @@ export const AnatomyImage: React.FC<Omit<CloudinaryImageProps, 'preset' | 'folde
   <CloudinaryImage 
     {...props} 
     preset="lessonImage" 
-    folder="ecgkid/anatomy"
+    folder="e-pulsepoints/anatomy"
   />
 );
 

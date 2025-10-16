@@ -142,7 +142,7 @@ const AdminDashboardPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-4">
-                  Welcome, {gameState.user?.username || gameState.user?.email || 'Admin'}! You have full administrative access to ECGkid PulsePoints.
+                  Welcome, {gameState.user?.username || gameState.user?.email || 'Admin'}! You have full administrative access to E-Pulsepoints.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {adminSections.map((section) => {

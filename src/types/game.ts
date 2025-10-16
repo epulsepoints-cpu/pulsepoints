@@ -57,7 +57,7 @@ export interface User {
   learningLevel?: number;
 }
 
-export type Rank = 'ECGKid Intern' | 'ECGKid Resident' | 'ECG Cadet' | 'Rhythm Specialist' | 'Wave Virtuoso' | 'ECG Grandmaster' | 'Cardiac Supreme';
+export type Rank = 'E-Pulsepoints Intern' | 'E-Pulsepoints Resident' | 'ECG Cadet' | 'Rhythm Specialist' | 'Wave Virtuoso' | 'ECG Grandmaster' | 'Cardiac Supreme';
 
 export interface Badge {
   id: string;
@@ -141,8 +141,8 @@ export interface GameState {
 }
 
 export const RANK_THRESHOLDS: { rank: Rank; xpRequired: number; gemCost: number }[] = [
-  { rank: 'ECGKid Intern', xpRequired: 0, gemCost: 0 },
-  { rank: 'ECGKid Resident', xpRequired: 500, gemCost: 50 },
+  { rank: 'E-Pulsepoints Intern', xpRequired: 0, gemCost: 0 },
+  { rank: 'E-Pulsepoints Resident', xpRequired: 500, gemCost: 50 },
   { rank: 'ECG Cadet', xpRequired: 1000, gemCost: 100 },
   { rank: 'Rhythm Specialist', xpRequired: 2500, gemCost: 300 },
   { rank: 'Wave Virtuoso', xpRequired: 5000, gemCost: 800 },

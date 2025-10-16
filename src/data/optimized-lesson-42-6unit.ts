@@ -32,7 +32,7 @@ export const optimizedLesson42: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c2d12',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00014_left anterior fascicular block.png',
+        imageUrl: '/ecg/medical_accurate/lbbb_65bpm_1.png',
         hint: '🌿 Master fascicular foundations!'
       },
       
@@ -361,7 +361,7 @@ export const optimizedLesson42: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c2d12',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/LPFB_left_posterior_fascicular_block/clean_00008_left posterior fascicular block.png',
+        imageUrl: '/ecg/medical_accurate/lbbb_85bpm_3.png',
         hint: '📈 Master advanced fascicular recognition!'
       },
 

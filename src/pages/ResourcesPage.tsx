@@ -62,7 +62,7 @@ export default function ResourcesPage() {
             letterSpacing: "-1px",
           }}
         >
-          ECGkid Resources
+          E-Pulsepoints Resources
         </h1>
         <div
           style={{

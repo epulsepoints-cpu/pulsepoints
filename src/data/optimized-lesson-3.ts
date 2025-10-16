@@ -29,7 +29,7 @@ export const optimizedLesson3: Lesson = {
         title: '🎯 Unit 1: Paper Fundamentals',
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-paper-grid.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG paper grid system overview',
         videoUrl: '/lessonvideos/ecg-measurement-techniques.mp4',
         highlights: [
@@ -77,7 +77,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Small vs Large Squares',
         type: 'steps',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-paper-grid.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'Comparison of small and large squares on ECG paper',
         audioUrl: '/lessonaudio/ecg-measurements/paper-grid-intro.mp3',
         steps: [
@@ -105,7 +105,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Paper Speed Standard',
         type: 'accordion',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-paper-grid.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG paper speed demonstration',
         accordionItems: [
           {
@@ -129,7 +129,7 @@ export const optimizedLesson3: Lesson = {
         title: 'ECG Coordinate System',
         type: 'tabs',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-paper-grid.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG coordinate system showing time and voltage axes',
         tabs: [
           {
@@ -153,7 +153,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Measurement Precision',
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-paper-grid.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'Precise ECG measurement tools',
         highlights: [
           '⚠️ ECG measurements must be precise!',
@@ -170,7 +170,7 @@ export const optimizedLesson3: Lesson = {
         type: 'audio',
         animation: 'fade',
         audioUrl: '/lessonaudio/ecg-measurements/paper-grid-intro.mp3',
-        imageUrl: '/lessonimages/ecg-paper-grid.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG paper fundamentals audio lesson',
         audio: {
           transcript: 'Comprehensive overview of ECG paper fundamentals. Learn how the standardized grid system enables precise medical measurements and forms the foundation of all ECG analysis.'
@@ -186,7 +186,7 @@ export const optimizedLesson3: Lesson = {
         type: 'quiz',
         layout: 'centered',
         animation: 'slide',
-        imageUrl: '/lessonimages/ecg-paper-grid.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG paper fundamentals quiz',
         hint: '🧠 Test your Unit 1 knowledge!',
         question: "What is the standard paper speed for ECG recordings?",
@@ -208,7 +208,7 @@ export const optimizedLesson3: Lesson = {
         title: '🎯 Unit 2: Time Measurements',
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-time-measurements.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'ECG time measurements overview',
         highlights: [
           '⏱️ Master the horizontal time axis',
@@ -239,7 +239,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Square Time Values',
         type: 'accordion',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-time-measurements.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'Square time value demonstration',
         accordionItems: [
           {
@@ -320,7 +320,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Time Measurement Techniques',
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-time-measurements.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'ECG time measurement techniques',
         highlights: [
           '🔧 Use calipers for maximum precision',
@@ -353,7 +353,7 @@ export const optimizedLesson3: Lesson = {
         type: 'quiz',
         layout: 'centered',
         animation: 'slide',
-        imageUrl: '/lessonimages/ecg-measurements/rate-calculation-methods.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'Time measurements quiz',
         hint: '🧠 Test your Unit 2 knowledge!',
         question: "If there are 4 large squares between R waves, what is the heart rate?",
@@ -375,7 +375,7 @@ export const optimizedLesson3: Lesson = {
         title: '🎯 Unit 3: Voltage Measurements',
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-voltage-measurements.png',
+        imageUrl: '/lessonimages/qrs-duration-comparison.png',
         imageAlt: 'ECG voltage measurements overview',
         highlights: [
           '⚡ Master the vertical voltage axis',
@@ -406,7 +406,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Standard Voltage Calibration',
         type: 'tabs',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-voltage-measurements.png',
+        imageUrl: '/lessonimages/qrs-duration-comparison.png',
         imageAlt: 'ECG voltage calibration standard',
         tabs: [
           {
@@ -430,7 +430,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Measuring Wave Amplitudes',
         type: 'steps',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-measurements/qrs-voltage-measurement.png',
+        imageUrl: '/lessonimages/qrs-complex-components.png',
         imageAlt: 'ECG wave amplitude measurements',
         audioUrl: '/lessonaudio/ecg-measurements/voltage-measurement.mp3',
         steps: [
@@ -463,7 +463,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Normal Voltage Ranges',
         type: 'accordion',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-measurements/p-wave-amplitude-measurement.png',
+        imageUrl: '/lessonimages/p-wave-analysis-overview.png',
         imageAlt: 'Normal ECG voltage ranges',
         accordionItems: [
           {
@@ -487,7 +487,7 @@ export const optimizedLesson3: Lesson = {
         title: 'ST Segment Measurement',
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-measurements/st-elevation-measurement.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'ST segment measurement technique',
         highlights: [
           '🚨 Measure 80ms (2 small squares) after J-point',
@@ -504,7 +504,7 @@ export const optimizedLesson3: Lesson = {
         type: 'audio',
         animation: 'fade',
         audioUrl: '/lessonaudio/ecg-measurements/voltage-measurements.mp3',
-        imageUrl: '/lessonimages/ecg-measurements/qrs-voltage-measurement.png',
+        imageUrl: '/lessonimages/qrs-complex-components.png',
         imageAlt: 'Voltage measurements audio lesson',
         audio: {
           transcript: 'Comprehensive voltage measurement techniques. Learn calibration verification, amplitude calculations, and clinical significance of voltage changes in cardiac diagnosis.'
@@ -520,7 +520,7 @@ export const optimizedLesson3: Lesson = {
         type: 'quiz',
         layout: 'centered',
         animation: 'slide',
-        imageUrl: '/lessonimages/ecg-measurements/qrs-voltage-measurement.png',
+        imageUrl: '/lessonimages/qrs-complex-components.png',
         imageAlt: 'Voltage measurements quiz',
         hint: '🧠 Test your Unit 3 knowledge!',
         question: "If a QRS complex is 20mm tall, what is its voltage amplitude?",
@@ -542,7 +542,7 @@ export const optimizedLesson3: Lesson = {
         title: '🎯 Unit 4: Calibration & Standards',
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-calibration-pulse.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG calibration and standards overview',
         highlights: [
           '🎯 Master calibration pulse verification',
@@ -573,7 +573,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Standard Calibration Settings',
         type: 'tabs',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-calibration-pulse.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'Standard ECG calibration settings',
         tabs: [
           {
@@ -597,7 +597,7 @@ export const optimizedLesson3: Lesson = {
         title: 'Gain Setting Variations',
         type: 'accordion',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-calibration-pulse.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG gain setting variations',
         accordionItems: [
           {
@@ -646,7 +646,7 @@ export const optimizedLesson3: Lesson = {
         type: 'highlight',
         layout: 'centered',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-calibration-pulse.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'ECG calibration troubleshooting guide',
         hint: '🔧 Fix calibration, fix diagnosis!'
       },
@@ -661,7 +661,7 @@ export const optimizedLesson3: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-calibration-pulse.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'Clinical importance of ECG calibration',
         hint: '💔 Wrong calibration = missed diagnosis!'
       },
@@ -674,7 +674,7 @@ export const optimizedLesson3: Lesson = {
         layout: 'centered',
         animation: 'fade',
         audioUrl: '/lessonaudio/ecg-measurements/calibration-mastery.mp3',
-        imageUrl: '/lessonimages/ecg-calibration-pulse.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         imageAlt: 'Calibration mastery audio lesson',
         hint: '🔊 Master calibration expertise!'
       },
@@ -742,7 +742,7 @@ export const optimizedLesson3: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-time-measurements.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'ECG interval measurement landmarks',
         hint: '📍 Consistent landmarks = accurate intervals!'
       },
@@ -757,7 +757,7 @@ export const optimizedLesson3: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-time-measurements.png',
+        imageUrl: '/lessonimages/qt-measurement-technique.png',
         imageAlt: 'Irregular rhythm measurement techniques',
         hint: '📊 Average multiple measurements!'
       },
@@ -772,7 +772,7 @@ export const optimizedLesson3: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-voltage-measurements.png',
+        imageUrl: '/lessonimages/qrs-duration-comparison.png',
         imageAlt: 'ECG amplitude measurement techniques',
         hint: '📏 Baseline to peak = amplitude!'
       },
@@ -853,7 +853,7 @@ export const optimizedLesson3: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-voltage-measurements.png',
+        imageUrl: '/lessonimages/qrs-duration-comparison.png',
         imageAlt: 'Clinical ECG applications overview',
         hint: '🏥 Real-world measurement skills!'
       },
@@ -868,7 +868,7 @@ export const optimizedLesson3: Lesson = {
       ],
         type: 'highlight',
         animation: 'fade',
-        imageUrl: '/lessonimages/ecg-voltage-measurements.png',
+        imageUrl: '/lessonimages/qrs-duration-comparison.png',
         imageAlt: 'ECG diagnostic thresholds',
         hint: '🚨 Critical thresholds = life/death!'
       },
@@ -1015,7 +1015,7 @@ export const optimizedLesson3: Lesson = {
         }
       },
       images: {
-        mainImage: '/lessonimages/ecg-paper-grid.png',
+        mainImage: '/lessonimages/rate-calculation-methods.png',
         slideImages: []
       },
       content: {

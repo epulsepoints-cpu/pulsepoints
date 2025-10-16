@@ -710,7 +710,7 @@ export const optimizedLesson71: Lesson = {
         }
       },
       images: {
-        mainImage: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00311_anterior myocardial infarction.png',
+        mainImage: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI.jpg',
         slideImages: []
       },
       content: {
@@ -728,7 +728,7 @@ export const optimizedLesson71: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! Right dominance (85%) where RCA supplies both inferior wall (II, III, aVF) and posterior wall. This explains both the inferior STEMI and posterior extension pattern.",
-            imageUrl: "/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00008_inferior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Inferior_wall_MI/IMI.jpg"
           },
           {
             id: "proximal-lad-assessment",
@@ -742,7 +742,7 @@ export const optimizedLesson71: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! Proximal LAD occlusion: widespread anterior elevation (V1-V6), reciprocal inferior depression, and new LBBB (septal perforator involvement). This is a massive anterior STEMI requiring urgent intervention.",
-            imageUrl: "/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00418_anterior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Anterior_wall_MI/AMI3.jpg"
           },
           {
             id: "rca-vs-lcx-assessment",
@@ -756,7 +756,7 @@ export const optimizedLesson71: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! RCA occlusion features: ST elevation III > II (vs LCX where II ≥ III), and AV block (RCA supplies AV node in 90%). LCX inferior STEMI typically shows lateral involvement without conduction blocks.",
-            imageUrl: "/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00153_inferior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Inferior_wall_MI/imi (2).jpg"
           },
           {
             id: "posterior-recognition-assessment",
@@ -770,7 +770,7 @@ export const optimizedLesson71: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! Tall R waves V1-V2 + ST depression V1-V3 = mirror image of posterior STEMI. This is the reciprocal pattern seen from anterior leads. Posterior leads V7-V9 would show direct ST elevation.",
-            imageUrl: "/ecg/ecg_dataset_clean/PMI_posterior_myocardial_infarction/clean_01781_posterior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Posterior_wall_MI/PMI.jpg"
           },
           {
             id: "left-main-equivalent-assessment",
@@ -826,7 +826,7 @@ export const optimizedLesson71: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! Proximal LAD supplies 40% of LV mass (anterior wall + septum + apex). Large anterior STEMI has highest cardiogenic shock risk (15%) and mechanical complications. Requires urgent revascularization.",
-            imageUrl: "/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00486_anterior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Anterior_wall_MI/AMI5.jpg"
           }
         ]
       }

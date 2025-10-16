@@ -1,13 +1,13 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.ecgkid.pulsepoints',
-  appName: 'ECGkid PulsePoints',
+  appId: 'com.epulsepoints.app',
+  appName: 'E-Pulsepoints',
   webDir: 'dist',
   server: {
     androidScheme: 'https',
     allowNavigation: [
-      'ecgkid-pulsepoint.firebaseapp.com',
+      'e-pulsepoints.firebaseapp.com',
       'accounts.google.com',
       'firebase.google.com',
       '*.googleapis.com'
@@ -17,7 +17,7 @@ const config: CapacitorConfig = {
     allowMixedContent: true,
     captureInput: true,
     webContentsDebuggingEnabled: true,
-    appendUserAgent: 'ECGkidApp/1.0.0',
+    appendUserAgent: 'E-Pulsepoints/1.0.0',
     backgroundColor: '#ffffff',
     loggingBehavior: 'debug'
   },

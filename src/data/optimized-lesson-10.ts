@@ -35,7 +35,7 @@ export const optimizedLesson10: Lesson = {
         backgroundColor: '#f0fff4',
         textColor: '#047857',
         animation: 'fade',
-        imageUrl: '/lessonimages/module1-completion-celebration.png',
+        imageUrl: '/lessonimages/module-1-completion.png',
         imageAlt: 'Module 1 completion celebration',
         highlights: [
           '🏆 5 lessons completed successfully',
@@ -190,7 +190,7 @@ export const optimizedLesson10: Lesson = {
         backgroundColor: '#fffbeb',
         textColor: '#92400e',
         animation: 'fade',
-        imageUrl: '/lessonimages/video-review-intro.png',
+        imageUrl: '/lessonimages/module-1-completion.png',
         imageAlt: 'Video summary review introduction',
         highlights: [
           '🎬 4 comprehensive review videos',
@@ -313,7 +313,7 @@ export const optimizedLesson10: Lesson = {
         backgroundColor: '#f0fff4',
         textColor: '#047857',
         animation: 'fade',
-        imageUrl: '/lessonimages/confidence-boost-celebration.png',
+        imageUrl: '/lessonimages/module-1-completion.png',
         imageAlt: 'Confidence boost for final assessment',
         highlights: [
           '🧠 You\'ve absorbed 180+ comprehensive slides',
@@ -468,7 +468,7 @@ export const optimizedLesson10: Lesson = {
         correctAnswer: 0,
         explanation: 'Perfect! Standard ECG paper runs at 25 mm/sec with 10 mm/mV calibration. This allows accurate measurement of intervals and voltages.',
         hint: 'Remember the standard settings for all clinical ECGs',
-        imageUrl: '/lessonimages/ecg-paper-calibration.png',
+        imageUrl: '/lessonimages/rate-calculation-methods.png',
         completionMessage: 'Excellent! ECG basics mastered! +15 XP! 📜',
         retryMessage: 'Review the ECG paper fundamentals and try again.'
       }
@@ -491,7 +491,7 @@ export const optimizedLesson10: Lesson = {
         correctAnswer: 1,
         explanation: 'Excellent! The systematic approach is: Rate → Rhythm → Axis → Intervals → Morphology. This sequence ensures nothing is missed.',
         hint: 'Remember the logical sequence that builds from basic to complex',
-        imageUrl: '/lessonimages/systematic-approach-sequence.png',
+        imageUrl: '/lessonimages/rhythm-vs-rate-overview.png',
         completionMessage: 'Outstanding! Systematic approach mastered! +15 XP! 🔄',
         retryMessage: 'Review the systematic interpretation method and try again.'
       }
@@ -514,7 +514,7 @@ export const optimizedLesson10: Lesson = {
         correctAnswer: 2,
         explanation: 'Perfect! Patient movement and muscle artifact are the most common causes of irregular baseline that can mimic dangerous arrhythmias like VT.',
         hint: 'Think about what causes the most frequent false alarms',
-        imageUrl: '/lessonimages/movement-artifact-example.png',
+        imageUrl: '/lessonimages/artifact-vs-real-rhythm.png',
         completionMessage: 'Excellent! Artifact recognition mastered! +15 XP! 🔍',
         retryMessage: 'Review artifact types and their appearances.'
       }
@@ -537,7 +537,7 @@ export const optimizedLesson10: Lesson = {
         correctAnswer: 2,
         explanation: 'Excellent! Lead I negative + aVF positive = Right axis deviation (+90° to +180°). This is the classic quadrant method application.',
         hint: 'Use the two-lead quadrant method systematically',
-        imageUrl: '/lessonimages/quadrant-method-example.png',
+        imageUrl: '/lessonimages/qrs-complex-components.png',
         completionMessage: 'Outstanding! Axis mastery achieved! +15 XP! 🧭',
         retryMessage: 'Review the quadrant method for axis determination.'
       }
@@ -596,7 +596,7 @@ export const optimizedLesson10: Lesson = {
         correctAnswer: 2,
         explanation: 'Perfect clinical judgment! Patient comfort and movement suggest artifact. Always correlate ECG findings with clinical presentation. Movement artifact commonly mimics dangerous rhythms.',
         hint: 'Consider clinical context and patient appearance',
-        imageUrl: '/lessonimages/case2-movement-artifact.png',
+        imageUrl: '/lessonimages/artifact-vs-real-rhythm.png',
         completionMessage: 'Excellent clinical correlation! +20 XP! 👩‍⚕️',
         retryMessage: 'Remember to always correlate ECG with clinical presentation.'
       }
@@ -624,7 +624,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Correct! Each large box (5 mm) represents 0.20 seconds at standard 25 mm/sec paper speed.',
             hint: 'Large box = 5 small boxes × 0.04 seconds each',
-            imageUrl: '/lessonimages/ecg-paper-timing.png',
+            imageUrl: '/lessonimages/rate-calculation-methods.png',
             imageAlt: 'ECG paper timing diagram'
           },
           
@@ -636,7 +636,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Excellent! Lead II provides the best view of the inferior wall and is commonly used for rhythm monitoring.',
             hint: 'Think about anatomical positioning of leads',
-            imageUrl: '/lessonimages/lead-anatomy-correlation.png',
+            imageUrl: '/lessonimages/limb-vs-precordial-leads.png',
             imageAlt: 'Lead anatomical correlation diagram'
           },
 
@@ -660,7 +660,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Correct! The P wave represents atrial depolarization, the electrical activation of the atria.',
             hint: 'Think about the first electrical event in each heartbeat',
-            imageUrl: '/lessonimages/p-wave-physiology.png',
+            imageUrl: '/lessonimages/p-wave-characteristics-nsr.png',
             imageAlt: 'P wave physiological correlation'
           },
 
@@ -685,7 +685,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 0,
             explanation: 'Perfect! Rate is always first in systematic interpretation. It determines patient stability and guides subsequent analysis.',
             hint: 'Think about what determines immediate patient status',
-            imageUrl: '/lessonimages/systematic-step1-rate.png',
+            imageUrl: '/lessonimages/rate-calculation-methods.png',
             imageAlt: 'Systematic approach step 1 - rate assessment'
           },
 
@@ -709,7 +709,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Correct! Rhythm regularity is assessed by measuring R-R intervals. Equal intervals = regular rhythm.',
             hint: 'Consistent spacing between similar waveforms',
-            imageUrl: '/lessonimages/rhythm-regularity-assessment.png',
+            imageUrl: '/lessonimages/regular-rhythm-intervals.png',
             imageAlt: 'Rhythm regularity assessment technique'
           },
 
@@ -721,7 +721,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Perfect! QT interval represents total ventricular depolarization and repolarization time.',
             hint: 'From start of ventricular activation to end of recovery',
-            imageUrl: '/lessonimages/qt-interval-physiology.png',
+            imageUrl: '/lessonimages/qt-measurement-technique.png',
             imageAlt: 'QT interval physiological significance'
           },
 
@@ -733,7 +733,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Excellent! ST segment analysis comes after rate, rhythm, axis, and intervals as part of morphology assessment.',
             hint: 'Follow the systematic sequence completely',
-            imageUrl: '/lessonimages/systematic-sequence-complete.png',
+            imageUrl: '/lessonimages/rhythm-vs-rate-overview.png',
             imageAlt: 'Complete systematic interpretation sequence'
           },
 
@@ -746,7 +746,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Perfect! Patient movement creates irregular baseline activity that closely mimics ventricular tachycardia patterns.',
             hint: 'Think about what creates irregular, rapid-appearing complexes',
-            imageUrl: '/lessonimages/movement-artifact-vt-mimic.png',
+            imageUrl: '/lessonimages/artifact-vs-real-rhythm.png',
             imageAlt: 'Movement artifact mimicking VT'
           },
 
@@ -758,7 +758,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Excellent! Clinical correlation is key. Patients with true dangerous arrhythmias look sick; artifact patients appear well.',
             hint: 'The patient\'s appearance tells the story',
-            imageUrl: '/lessonimages/clinical-correlation-importance.png',
+            imageUrl: '/lessonimages/clinical-applications-overview.png',
             imageAlt: 'Clinical correlation in artifact detection'
           },
 
@@ -770,7 +770,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Correct! 60 Hz interference comes from nearby electrical devices like monitors, pumps, or poor electrical grounding.',
             hint: 'Think about the frequency of household electricity',
-            imageUrl: '/lessonimages/60hz-interference-sources.png',
+            imageUrl: '/lessonimages/artifact-causes-overview.png',
             imageAlt: '60 Hz electrical interference sources'
           },
 
@@ -782,7 +782,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Perfect! Always check the patient first, then electrode placement. This quickly differentiates artifact from real emergency.',
             hint: 'Patient assessment comes before technical intervention',
-            imageUrl: '/lessonimages/artifact-response-protocol.png',
+            imageUrl: '/lessonimages/artifact-causes-overview.png',
             imageAlt: 'Artifact response protocol flowchart'
           },
 
@@ -794,7 +794,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Excellent! Right arm-left arm reversal dramatically changes the ECG appearance and can mimic pathology.',
             hint: 'Limb lead reversals have the biggest impact',
-            imageUrl: '/lessonimages/limb-lead-reversal-effects.png',
+            imageUrl: '/lessonimages/limb-vs-precordial-leads.png',
             imageAlt: 'Effects of limb lead reversal'
           },
 
@@ -819,7 +819,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Excellent! Lead I positive + aVF negative = Left axis deviation (-30° to -90°).',
             hint: 'Use the two-lead quadrant method systematically',
-            imageUrl: '/lessonimages/quadrant-method-lad.png',
+            imageUrl: '/lessonimages/qrs-complex-components.png',
             imageAlt: 'Quadrant method showing left axis deviation'
           },
 
@@ -831,7 +831,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Perfect! Left anterior fascicular block (LAFB) is the most common cause of left axis deviation.',
             hint: 'Think about conduction system abnormalities',
-            imageUrl: '/lessonimages/lafb-common-cause.png',
+            imageUrl: '/lessonimages/lbbb.png',
             imageAlt: 'LAFB as common cause of LAD'
           },
 
@@ -843,7 +843,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Excellent! In adults, right axis deviation often indicates right ventricular hypertrophy from pulmonary disease.',
             hint: 'RAD in adults is usually pathological',
-            imageUrl: '/lessonimages/rad-rvh-correlation.png',
+            imageUrl: '/lessonimages/qrs-complex-components.png',
             imageAlt: 'Right axis deviation and RVH correlation'
           },
 
@@ -855,7 +855,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 3,
             explanation: 'Outstanding! Extreme axis deviation requires immediate consideration of both lead misplacement and ventricular tachycardia.',
             hint: 'Always consider both technical and pathological causes',
-            imageUrl: '/lessonimages/extreme-axis-differential.png',
+            imageUrl: '/lessonimages/qrs-complex-components.png',
             imageAlt: 'Extreme axis deviation differential diagnosis'
           },
 
@@ -880,7 +880,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Excellent clinical correlation! Lead I negative + aVF positive = RAD, consistent with RVH from COPD/pulmonary hypertension.',
             hint: 'Connect axis findings with patient\'s underlying disease',
-            imageUrl: '/lessonimages/copd-rad-case.png',
+            imageUrl: '/lessonimages/qrs-complex-components.png',
             imageAlt: 'COPD patient with right axis deviation'
           },
 
@@ -904,7 +904,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Perfect clinical judgment! Comfortable, talking patient with "VT" suggests artifact. Always check patient first.',
             hint: 'Clinical appearance doesn\'t match ECG severity',
-            imageUrl: '/lessonimages/artifact-vs-vt-case.png',
+            imageUrl: '/lessonimages/artifact-vs-real-rhythm.png',
             imageAlt: 'Artifact mimicking VT in comfortable patient'
           },
 
@@ -921,7 +921,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Excellent! Complete systematic interpretation requires: Rate → Rhythm → Axis → Intervals → Morphology. Never skip steps.',
             hint: 'All five components prevent missed findings',
-            imageUrl: '/lessonimages/complete-systematic-approach.png',
+            imageUrl: '/lessonimages/rhythm-vs-rate-overview.png',
             imageAlt: 'Complete systematic ECG interpretation approach'
           },
 
@@ -938,7 +938,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 2,
             explanation: 'Perfect! When ECG and clinical presentation don\'t match, suspect artifact and obtain repeat ECG with careful electrode placement.',
             hint: 'Clinical correlation is always essential',
-            imageUrl: '/lessonimages/ecg-clinical-correlation.png',
+            imageUrl: '/lessonimages/clinical-applications-overview.png',
             imageAlt: 'Importance of ECG-clinical correlation'
           },
 
@@ -955,7 +955,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 1,
             explanation: 'Outstanding! Systematic interpretation ensures consistent, complete analysis and prevents missed findings through standardized approach.',
             hint: 'Consistency and completeness prevent errors',
-            imageUrl: '/lessonimages/systematic-goals.png',
+            imageUrl: '/lessonimages/rhythm-vs-rate-overview.png',
             imageAlt: 'Goals of systematic ECG interpretation'
           }
         ],
@@ -997,7 +997,7 @@ export const optimizedLesson10: Lesson = {
             correctAnswer: 0,
             explanation: '🎉 CONGRATULATIONS! You have mastered ECG fundamentals! Your certificate and comprehensive study materials are now available for download. You\'re ready for advanced ECG interpretation!',
             hint: 'Celebrate your achievement and get your materials!',
-            imageUrl: '/lessonimages/module1-certificate.png',
+            imageUrl: '/lessonimages/module-1-completion.png',
             imageAlt: 'Module 1 completion certificate'
           }
         ],

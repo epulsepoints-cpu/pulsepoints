@@ -710,7 +710,7 @@ export const optimizedLesson72: Lesson = {
         }
       },
       images: {
-        mainImage: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00418_anterior myocardial infarction.png',
+        mainImage: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI3.jpg',
         slideImages: []
       },
       content: {
@@ -742,7 +742,7 @@ export const optimizedLesson72: Lesson = {
             ],
             correctAnswer: 2,
             explanation: "Correct! Convex ST elevation with reciprocal changes in opposite territory confirms acute anterior STEMI. Convex morphology distinguishes from pericarditis (concave) and early repolarization.",
-            imageUrl: "/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00486_anterior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Anterior_wall_MI/AMI5.jpg"
           },
           {
             id: "q-wave-timing-assessment",
@@ -756,7 +756,7 @@ export const optimizedLesson72: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! Q waves appearing 6-24 hours post-MI indicate established transmural necrosis. Persistent ST elevation at 18 hours is expected in acute STEMI before gradual resolution.",
-            imageUrl: "/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00311_anterior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Anterior_wall_MI/AMI.jpg"
           },
           {
             id: "tombstone-pattern-assessment",
@@ -812,7 +812,7 @@ export const optimizedLesson72: Lesson = {
             ],
             correctAnswer: 2,
             explanation: "Correct! Q waves + deep T inversions without ST elevation = recent/subacute MI (days to weeks old). Deep symmetric T inversions indicate ongoing healing process.",
-            imageUrl: "/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00161_inferior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Inferior_wall_MI/imi (3).jpg"
           },
           {
             id: "chronic-complications-assessment",

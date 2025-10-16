@@ -15,7 +15,7 @@ export const CloudinaryAudio: React.FC<CloudinaryAudioProps> = ({
   autoPlay = false,
   loop = false,
   className = '',
-  folder = 'ecgkid/lesson-audio'
+  folder = 'e-pulsepoints/lesson-audio'
 }) => {
   // Remove file extension for Cloudinary public_id
   const publicId = src.replace(/\.[^/.]+$/, '');

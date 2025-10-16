@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, Play, RotateCcw, Award, Clock, Zap, Target, Heart, Activity, Pause, BookOpen, Brain, Trophy, Stethoscope, Waves, AlertTriangle, Shuffle, TrendingUp, AlertCircle, Check, X, CheckCircle, Rocket, GitBranch } from 'lucide-react';
+import { ArrowLeft, Play, RotateCcw, Award, Clock, Zap, Target, Heart, Activity, Pause, BookOpen, Brain, Trophy, Stethoscope, Waves, AlertTriangle, Shuffle, TrendingUp, AlertCircle, Check, X, CheckCircle, Rocket, GitBranch, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,19 +11,34 @@ import { useUISounds } from '@/hooks/useUISounds';
 import { usePulseStore } from '@/components/usePulseStore';
 import MedicalAnimation from '@/components/MedicalAnimation';
 
+// Import quiz data
+import quizBatch1 from '@/data/ecg-quizzes-25.json';
+import quizBatch2 from '@/data/ecg-quizzes-26-50.json';
+import quizBatch3 from '@/data/ecg-quizzes-MI-50.json';
+// Import video-quiz modules
+import VIDEO_QUIZ_MODULES, { VideoQuizModule } from '@/data/videoQuizModules';
+
 interface ECGSimulatorProps {
   onBack: () => void;
 }
 
-// ECG question interface for static image library
+// ECG question interface - Enhanced to match comprehensive quiz structure
 interface ECGQuestion {
   id: string;
+  question: string;              // Quiz question text (required)
   imageUrl: string;              // Static ECG image path
   correctAnswer: string;
   options: string[];
   explanation: string;
   difficulty: 'easy' | 'medium' | 'hard';
-  category: string;
+  category?: string;             // Optional for compatibility
+  tags?: string[];               // Additional tags for categorization
+  heartRate?: number;            // Heart rate for the ECG
+  medicalContext?: {             // Medical context information
+    mechanism?: string;
+    clinical_significance?: string;
+    management?: string;
+  };
 }
 
 // Game modes - Enhanced with unlimited challenge mode using static medical images
@@ -62,6 +77,98 @@ const GAME_MODES = {
   }
 };
 
+// Comprehensive Quiz Database - Load and combine all quiz batches
+const loadQuizDatabase = (): ECGQuestion[] => {
+  const allQuizzes: ECGQuestion[] = [];
+  
+  try {
+    console.log('📚 Loading Quiz Batches:', {
+      batch1Available: !!quizBatch1,
+      batch1HasQuizzes: !!(quizBatch1 as any)?.quizzes,
+      batch2Available: !!quizBatch2,
+      batch2HasQuizzes: !!(quizBatch2 as any)?.quizzes,
+      batch3Available: !!quizBatch3,
+      batch3HasQuizzes: !!(quizBatch3 as any)?.quizzes
+    });
+    
+    // Load quiz batch 1 (quizzes 1-25)
+    if ((quizBatch1 as any)?.quizzes) {
+      (quizBatch1 as any).quizzes.forEach((quiz: any) => {
+        allQuizzes.push({
+          id: quiz.id,
+          question: quiz.question,
+          imageUrl: quiz.imageUrl,
+          correctAnswer: quiz.correctAnswer,
+          options: quiz.options,
+          explanation: quiz.explanation,
+          difficulty: quiz.difficulty as 'easy' | 'medium' | 'hard',
+          category: quiz.category,
+          tags: quiz.tags,
+          heartRate: quiz.heartRate,
+          medicalContext: quiz.medicalContext
+        });
+      });
+      console.log('✅ Loaded Batch 1:', (quizBatch1 as any).quizzes.length, 'quizzes');
+    }
+    
+    // Load quiz batch 2 (quizzes 26-50)
+    if ((quizBatch2 as any)?.quizzes) {
+      (quizBatch2 as any).quizzes.forEach((quiz: any) => {
+        allQuizzes.push({
+          id: quiz.id,
+          question: quiz.question,
+          imageUrl: quiz.imageUrl,
+          correctAnswer: quiz.correctAnswer,
+          options: quiz.options,
+          explanation: quiz.explanation,
+          difficulty: quiz.difficulty as 'easy' | 'medium' | 'hard',
+          category: quiz.category,
+          tags: quiz.tags,
+          heartRate: quiz.heartRate,
+          medicalContext: quiz.medicalContext
+        });
+      });
+      console.log('✅ Loaded Batch 2:', (quizBatch2 as any).quizzes.length, 'quizzes');
+    }
+    
+    // Load quiz batch 3 (MI-focused quizzes)
+    if ((quizBatch3 as any)?.quizzes) {
+      (quizBatch3 as any).quizzes.forEach((quiz: any) => {
+        allQuizzes.push({
+          id: quiz.id,
+          question: quiz.question,
+          imageUrl: quiz.imageUrl,
+          correctAnswer: quiz.correctAnswer,
+          options: quiz.options,
+          explanation: quiz.explanation,
+          difficulty: quiz.difficulty as 'easy' | 'medium' | 'hard',
+          category: quiz.category,
+          tags: quiz.tags,
+          heartRate: quiz.heartRate,
+          medicalContext: quiz.medicalContext
+        });
+      });
+      console.log('✅ Loaded Batch 3:', (quizBatch3 as any).quizzes.length, 'MI-focused quizzes');
+    }
+    
+    console.log('🎯 Total Quizzes Loaded:', allQuizzes.length);
+  } catch (error) {
+    console.error('❌ Error loading quiz database:', error);
+  }
+  
+  return allQuizzes;
+};
+
+// Initialize comprehensive quiz database
+const COMPREHENSIVE_QUIZ_DATABASE = loadQuizDatabase();
+
+// Debug: Log quiz database loading (only show summary)
+if (COMPREHENSIVE_QUIZ_DATABASE.length > 0) {
+  console.log('✅ ECG Quiz Database Loaded:', COMPREHENSIVE_QUIZ_DATABASE.length, 'quizzes');
+} else {
+  console.error('❌ ECG Quiz Database is empty!');
+}
+
 // ECG Categories
 // Category interface for better typing
 interface ECGCategory {
@@ -78,10 +185,65 @@ interface ECGCategory {
     management: string[];
     images: string[];
   };
+  // Optional video content for Learn Mode
+  video?: {
+    videoId: string;
+    title: string;
+    description: string;
+    duration: number;
+  };
 }
+
+// Type guard to check if category has video
+const hasVideo = (category: any): category is ECGCategory & { video: NonNullable<ECGCategory['video']> } => {
+  return category && typeof category === 'object' && 'video' in category && category.video !== undefined;
+};
 
 // Available ECG images for random selection
 const ECG_IMAGE_LIBRARY = {
+  // PTB-XL Medical Database - Authentic 12-lead ECGs
+  ptbxl_afib: [
+    '/ecg/ptbxl_12lead/afib/afib_351_1.png',
+    '/ecg/ptbxl_12lead/afib/afib_4117_2.png',
+    '/ecg/ptbxl_12lead/afib/afib_4401_3.png',
+    '/ecg/ptbxl_12lead/afib/afib_4423_4.png',
+    '/ecg/ptbxl_12lead/afib/afib_4531_5.png'
+  ],
+  ptbxl_clbbb: [
+    '/ecg/ptbxl_12lead/clbbb/clbbb_180_1.png',
+    '/ecg/ptbxl_12lead/clbbb/clbbb_256_2.png',
+    '/ecg/ptbxl_12lead/clbbb/clbbb_279_3.png',
+    '/ecg/ptbxl_12lead/clbbb/clbbb_286_4.png',
+    '/ecg/ptbxl_12lead/clbbb/clbbb_287_5.png'
+  ],
+  ptbxl_crbbb: [
+    '/ecg/ptbxl_12lead/crbbb/crbbb_172_1.png',
+    '/ecg/ptbxl_12lead/crbbb/crbbb_195_2.png',
+    '/ecg/ptbxl_12lead/crbbb/crbbb_269_3.png',
+    '/ecg/ptbxl_12lead/crbbb/crbbb_310_4.png',
+    '/ecg/ptbxl_12lead/crbbb/crbbb_424_5.png'
+  ],
+  ptbxl_lvh: [
+    '/ecg/ptbxl_12lead/lvh/lvh_138_3.png',
+    '/ecg/ptbxl_12lead/lvh/lvh_173_4.png',
+    '/ecg/ptbxl_12lead/lvh/lvh_191_5.png',
+    '/ecg/ptbxl_12lead/lvh/lvh_30_1.png',
+    '/ecg/ptbxl_12lead/lvh/lvh_96_2.png'
+  ],
+  ptbxl_rvh: [
+    '/ecg/ptbxl_12lead/rvh/rvh_1733_2.png',
+    '/ecg/ptbxl_12lead/rvh/rvh_222_1.png',
+    '/ecg/ptbxl_12lead/rvh/rvh_2417_3.png',
+    '/ecg/ptbxl_12lead/rvh/rvh_2493_4.png',
+    '/ecg/ptbxl_12lead/rvh/rvh_3242_5.png'
+  ],
+  ptbxl_wpw: [
+    '/ecg/ptbxl_12lead/wpw/wpw_2145_1.png',
+    '/ecg/ptbxl_12lead/wpw/wpw_4658_2.png',
+    '/ecg/ptbxl_12lead/wpw/wpw_4825_3.png',
+    '/ecg/ptbxl_12lead/wpw/wpw_5028_4.png',
+    '/ecg/ptbxl_12lead/wpw/wpw_5303_5.png'
+  ],
   normal_sinus: [
     '/ecg/medical_accurate/normal_75bpm.png',
     '/ecg/medical_accurate/normal_sinus_60bpm_1.png',
@@ -182,303 +344,149 @@ const ECG_IMAGE_LIBRARY = {
   ]
 };
 
-// NEET PG Style ECG Database - Comprehensive diagnostic categories with 3-option MCQs
-const BOOST_MODE_ECG_DATABASE = {
-  'NORM_normal_ECG': {
-    correct: 'Normal ECG',
-    options: ['Normal ECG', 'Sinus Bradycardia', 'First Degree AV Block'],
-    explanation: 'Normal ECG showing regular sinus rhythm, normal axis, normal intervals, and no pathological findings.',
-    category: 'Normal Variants',
-    difficulty: 'easy',
-    images: [
-      '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00001_normal ECG.png',
-      '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00002_normal ECG.png',
-      '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00003_normal ECG.png',
-      '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00004_normal ECG.png',
-      '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00005_normal ECG.png'
-    ]
-  },
-  'AMI_anterior_myocardial_infarction': {
-    correct: 'Anterior STEMI',
-    options: ['Anterior STEMI', 'NSTEMI', 'Pericarditis'],
-    explanation: 'Anterior ST-elevation myocardial infarction with characteristic ST elevation in V1-V4, indicating LAD territory involvement.',
-    category: 'Myocardial Infarction',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00311_anterior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00418_anterior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00486_anterior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00600_anterior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00716_anterior myocardial infarction.png'
-    ]
-  },
-  'IMI_inferior_myocardial_infarction': {
-    correct: 'Inferior STEMI',
-    options: ['Inferior STEMI', 'Lateral STEMI', 'Posterior STEMI'],
-    explanation: 'Inferior ST-elevation myocardial infarction with ST elevation in leads II, III, aVF indicating RCA or LCX involvement.',
-    category: 'Myocardial Infarction',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00008_inferior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00153_inferior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00161_inferior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00175_inferior myocardial infarction.png',
-      '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00210_inferior myocardial infarction.png'
-    ]
-  },
-  'CLBBB_complete_left_bundle_branch_block': {
-    correct: 'Complete LBBB',
-    options: ['Complete LBBB', 'Complete RBBB', 'Bifascicular Block'],
-    explanation: 'Complete left bundle branch block with QRS >120ms, broad monophasic R in I, aVL, V5-V6.',
-    category: 'Conduction Disorders',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00180_complete left bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00256_complete left bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00279_complete left bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00286_complete left bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00287_complete left bundle branch block.png'
-    ]
-  },
-  'CRBBB_complete_right_bundle_branch_block': {
-    correct: 'Complete RBBB',
-    options: ['Complete RBBB', 'Complete LBBB', 'IVCD'],
-    explanation: 'Complete right bundle branch block with RSR pattern in V1-V2, wide S in I, aVL, V5-V6.',
-    category: 'Conduction Disorders',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00172_complete right bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00195_complete right bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00424_complete right bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00428_complete right bundle branch block.png',
-      '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00455_complete right bundle branch block.png'
-    ]
-  },
-  '1AVB_first_degree_AV_block': {
-    correct: 'First Degree AV Block',
-    options: ['First Degree AV Block', 'Second Degree AV Block', 'Third Degree AV Block'],
-    explanation: 'First degree AV block with prolonged PR interval >200ms but every P wave is followed by QRS.',
-    category: 'AV Blocks',
-    difficulty: 'easy',
-    images: [
-      '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00102_first degree AV block.png',
-      '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00218_first degree AV block.png',
-      '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00522_first degree AV block.png',
-      '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00556_first degree AV block.png',
-      '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_01135_first degree AV block.png'
-    ]
-  },
-  '2AVB_second_degree_AV_block': {
-    correct: 'Second Degree AV Block',
-    options: ['Second Degree AV Block', 'First Degree AV Block', 'Third Degree AV Block'],
-    explanation: 'Second degree AV block with intermittent failure of AV conduction - some P waves not followed by QRS.',
-    category: 'AV Blocks',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_11209_second degree AV block.png',
-      '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_13938_second degree AV block.png',
-      '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_14009_second degree AV block.png',
-      '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_16401_second degree AV block.png'
-    ]
-  },
-  '3AVB_third_degree_AV_block': {
-    correct: 'Complete Heart Block',
-    options: ['Complete Heart Block', 'Second Degree AV Block', 'Junctional Rhythm'],
-    explanation: 'Third degree (complete) AV block with complete dissociation between atrial and ventricular activity.',
-    category: 'AV Blocks',
-    difficulty: 'hard',
-    images: [
-      '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_07688_third degree AV block.png',
-      '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_08210_third degree AV block.png',
-      '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_10505_third degree AV block.png',
-      '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_16271_third degree AV block.png'
-    ]
-  },
-  'LVH_left_ventricular_hypertrophy': {
-    correct: 'Left Ventricular Hypertrophy',
-    options: ['Left Ventricular Hypertrophy', 'Right Ventricular Hypertrophy', 'Biventricular Hypertrophy'],
-    explanation: 'Left ventricular hypertrophy with increased QRS voltage, left axis deviation, and strain pattern.',
-    category: 'Hypertrophy',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00030_left ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00096_left ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00138_left ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00173_left ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00191_left ventricular hypertrophy.png'
-    ]
-  },
-  'RVH_right_ventricular_hypertrophy': {
-    correct: 'Right Ventricular Hypertrophy',
-    options: ['Right Ventricular Hypertrophy', 'Left Ventricular Hypertrophy', 'Pulmonary Embolism'],
-    explanation: 'Right ventricular hypertrophy with right axis deviation, tall R in V1, deep S in V6.',
-    category: 'Hypertrophy',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_00222_right ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_02417_right ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_04713_right ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_04794_right ventricular hypertrophy.png',
-      '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_04868_right ventricular hypertrophy.png'
-    ]
-  },
-  'WPW_Wolf_Parkinson_White_syndrome': {
-    correct: 'Wolf-Parkinson-White Syndrome',
-    options: ['WPW Syndrome', 'Bundle Branch Block', 'Ventricular Pre-excitation'],
-    explanation: 'WPW syndrome with short PR interval, delta waves, and wide QRS due to accessory pathway.',
-    category: 'Pre-excitation',
-    difficulty: 'hard',
-    images: [
-      '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_02145_Wolf-Parkinson-White syndrome.png',
-      '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_04279_Wolf-Parkinson-White syndrome.png',
-      '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_04658_Wolf-Parkinson-White syndrome.png',
-      '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_04825_Wolf-Parkinson-White syndrome.png',
-      '/ecg/ecg_dataset_clean/WPW_Wolf-Parkinson-White_syndrome/clean_05028_Wolf-Parkinson-White syndrome.png'
-    ]
-  },
-  'LAFB_left_anterior_fascicular_block': {
-    correct: 'Left Anterior Fascicular Block',
-    options: ['LAFB', 'LPFB', 'Complete LBBB'],
-    explanation: 'Left anterior fascicular block with left axis deviation -30° to -90°, small Q in I, aVL.',
-    category: 'Fascicular Blocks',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00041_left anterior fascicular block.png',
-      '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00103_left anterior fascicular block.png',
-      '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00157_left anterior fascicular block.png',
-      '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00162_left anterior fascicular block.png',
-      '/ecg/ecg_dataset_clean/LAFB_left_anterior_fascicular_block/clean_00182_left anterior fascicular block.png'
-    ]
-  },
-  'LNGQT_long_QT_interval': {
-    correct: 'Long QT Syndrome',
-    options: ['Long QT Syndrome', 'Short QT Syndrome', 'Hypokalemia'],
-    explanation: 'Prolonged QT interval >440ms in men, >460ms in women, predisposing to Torsades de Pointes.',
-    category: 'QT Abnormalities',
-    difficulty: 'medium',
-    images: [
-      '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_00039_long QT-interval.png',
-      '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_00260_long QT-interval.png',
-      '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_00320_long QT-interval.png',
-      '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_00907_long QT-interval.png',
-      '/ecg/ecg_dataset_clean/LNGQT_long_QT-interval/clean_02221_long QT-interval.png'
-    ]
+// NEET PG Style ECG Database - Will be replaced with Firebase quizzes
+// Temporary placeholder - removed non-existent image references
+
+// Generate NEET PG style ECG question for Boost Mode using comprehensive database
+const generateBoostModeQuestion = (id: string): ECGQuestion => {
+  // Use comprehensive quiz database with NEET PG style filtering
+  const mediumHardQuizzes = COMPREHENSIVE_QUIZ_DATABASE.filter(quiz => 
+    quiz.difficulty === 'medium' || quiz.difficulty === 'hard'
+  );
+  
+  if (mediumHardQuizzes.length > 0) {
+    const randomQuiz = mediumHardQuizzes[Math.floor(Math.random() * mediumHardQuizzes.length)];
+    return {
+      ...randomQuiz,
+      id: id || randomQuiz.id,
+      // Enhance for NEET PG style - focus on clinical significance
+      question: randomQuiz.question || `What is the most likely diagnosis for this ECG finding?`
+    };
   }
+  
+  // Fallback to any available quiz
+  return generateRandomECGQuestion(id);
 };
 
-// Generate NEET PG style ECG question for Boost Mode
-const generateBoostModeQuestion = (id: string): ECGQuestion => {
-  const categories = Object.keys(BOOST_MODE_ECG_DATABASE);
-  const selectedCategory = categories[Math.floor(Math.random() * categories.length)];
-  const categoryData = BOOST_MODE_ECG_DATABASE[selectedCategory as keyof typeof BOOST_MODE_ECG_DATABASE];
+// Generate Practice mode questions - Image recognition without formal quizzes
+const generatePracticeECGQuestion = (id: string): ECGQuestion => {
+  // Get all PTB-XL categories for practice
+  const ptbxlCategories = Object.keys(ECG_IMAGE_LIBRARY).filter(key => key.startsWith('ptbxl_'));
+  const allCategories = [...ptbxlCategories, 'normal_sinus', 'bradycardia', 'tachycardia', 'atrial_fibrillation'];
   
-  // Select random image from the category's image array
-  let imagePath = '/ecg/medical_accurate/normal_75bpm.png'; // fallback
-  if (categoryData.images && categoryData.images.length > 0) {
-    const rawImagePath = categoryData.images[Math.floor(Math.random() * categoryData.images.length)];
-    // Handle spaces in filenames by encoding only the filename part
-    const pathParts = rawImagePath.split('/');
-    const filename = pathParts.pop();
-    const encodedFilename = filename ? encodeURIComponent(filename) : '';
-    imagePath = pathParts.join('/') + '/' + encodedFilename;
-    console.log('Generated image path for boost mode:', imagePath);
-  }
+  // Select random category
+  const selectedCategory = allCategories[Math.floor(Math.random() * allCategories.length)];
+  const categoryImages = ECG_IMAGE_LIBRARY[selectedCategory as keyof typeof ECG_IMAGE_LIBRARY];
+  const selectedImage = categoryImages[Math.floor(Math.random() * categoryImages.length)];
   
-  // Shuffle options for randomization
-  const shuffledOptions = [...categoryData.options].sort(() => Math.random() - 0.5);
+  // Create diagnostic options based on available categories
+  const diagnosticLabels = {
+    'ptbxl_afib': 'Atrial Fibrillation',
+    'ptbxl_clbbb': 'Complete Left Bundle Branch Block',
+    'ptbxl_crbbb': 'Complete Right Bundle Branch Block', 
+    'ptbxl_lvh': 'Left Ventricular Hypertrophy',
+    'ptbxl_rvh': 'Right Ventricular Hypertrophy',
+    'ptbxl_wpw': 'Wolff-Parkinson-White Syndrome',
+    'normal_sinus': 'Normal Sinus Rhythm',
+    'bradycardia': 'Sinus Bradycardia',
+    'tachycardia': 'Sinus Tachycardia',
+    'atrial_fibrillation': 'Atrial Fibrillation'
+  };
+  
+  const correctAnswer = diagnosticLabels[selectedCategory as keyof typeof diagnosticLabels];
+  
+  // Create answer options (3 incorrect + 1 correct)
+  const allLabels = Object.values(diagnosticLabels);
+  const incorrectAnswers = allLabels.filter(label => label !== correctAnswer);
+  const shuffledIncorrect = incorrectAnswers.sort(() => 0.5 - Math.random()).slice(0, 3);
+  const options = [correctAnswer, ...shuffledIncorrect].sort(() => 0.5 - Math.random());
   
   return {
-    id: `boost_${id}`,
-    imageUrl: imagePath,
-    correctAnswer: categoryData.correct,
-    options: shuffledOptions,
-    explanation: categoryData.explanation,
-    difficulty: categoryData.difficulty as 'easy' | 'medium' | 'hard',
-    category: categoryData.category
+    id,
+    imageUrl: selectedImage,
+    question: 'What diagnosis does this 12-lead ECG show?',
+    correctAnswer,
+    options,
+    explanation: `This ECG demonstrates ${correctAnswer}. Study the characteristic patterns and morphology.`,
+    difficulty: 'medium',
+    category: selectedCategory,
+    tags: ['practice', 'ptbxl', 'medical-grade']
   };
 };
 
-// Generate unlimited random ECG questions
+// Generate comprehensive ECG questions using our quiz database
 const generateRandomECGQuestion = (id: string): ECGQuestion => {
+  // Use comprehensive quiz database for Challenge mode and other modes
+  if (COMPREHENSIVE_QUIZ_DATABASE.length > 0) {
+    const randomIndex = Math.floor(Math.random() * COMPREHENSIVE_QUIZ_DATABASE.length);
+    const randomQuiz = COMPREHENSIVE_QUIZ_DATABASE[randomIndex];
+    
+    console.log('🎲 Generated Quiz:', {
+      id: id,
+      quizId: randomQuiz.id,
+      question: randomQuiz.question,
+      category: randomQuiz.category,
+      difficulty: randomQuiz.difficulty,
+      selectedFromTotal: `${randomIndex + 1}/${COMPREHENSIVE_QUIZ_DATABASE.length}`
+    });
+    
+    return {
+      ...randomQuiz,
+      id: id || randomQuiz.id // Use provided id or keep original
+    };
+  }
+  
+  // Fallback to basic generation if quiz database is empty (shouldn't happen)
+  console.warn('⚠️ Fallback: Quiz database is empty, using basic generation');
   const categories = Object.keys(ECG_IMAGE_LIBRARY);
   const selectedCategory = categories[Math.floor(Math.random() * categories.length)];
   const categoryImages = ECG_IMAGE_LIBRARY[selectedCategory as keyof typeof ECG_IMAGE_LIBRARY];
   const selectedImage = categoryImages[Math.floor(Math.random() * categoryImages.length)];
   
-  // Define answer options based on category
-  const answerMap: Record<string, { correct: string; options: string[]; explanation: string; difficulty: string }> = {
-    normal_sinus: {
-      correct: 'Normal Sinus Rhythm',
-      options: ['Normal Sinus Rhythm', 'Sinus Bradycardia', 'Sinus Tachycardia', 'First Degree AV Block'],
-      explanation: 'Normal sinus rhythm with regular P waves, normal PR interval (120-200ms), and regular QRS complexes.',
-      difficulty: 'easy'
-    },
-    bradycardia: {
-      correct: 'Sinus Bradycardia',
-      options: ['Normal Sinus Rhythm', 'Sinus Bradycardia', 'Junctional Rhythm', 'Second Degree AV Block'],
-      explanation: 'Sinus bradycardia with heart rate below 60 BPM but normal P waves and PR intervals.',
-      difficulty: 'easy'
-    },
-    tachycardia: {
-      correct: 'Sinus Tachycardia',
-      options: ['Normal Sinus Rhythm', 'Sinus Tachycardia', 'Atrial Fibrillation', 'Supraventricular Tachycardia'],
-      explanation: 'Sinus tachycardia with heart rate above 100 BPM and normal P wave morphology.',
-      difficulty: 'easy'
-    },
-    atrial_fibrillation: {
-      correct: 'Atrial Fibrillation',
-      options: ['Atrial Fibrillation', 'Atrial Flutter', 'Multifocal Atrial Tachycardia', 'Sinus Arrhythmia'],
-      explanation: 'Atrial fibrillation showing irregularly irregular rhythm with no distinct P waves, only fibrillatory waves.',
-      difficulty: 'medium'
-    },
-    ventricular_tachycardia: {
-      correct: 'Ventricular Tachycardia',
-      options: ['Sinus Tachycardia', 'Supraventricular Tachycardia', 'Ventricular Tachycardia', 'Atrial Flutter'],
-      explanation: 'Ventricular tachycardia shows wide QRS complexes (>120ms) with rapid rate, typically >150 BPM.',
-      difficulty: 'hard'
-    },
-    bundle_branch_blocks: {
-      correct: selectedImage.includes('rbbb') ? 'Right Bundle Branch Block' : 'Left Bundle Branch Block',
-      options: ['Normal Sinus Rhythm', 'Right Bundle Branch Block', 'Left Bundle Branch Block', 'First Degree AV Block'],
-      explanation: selectedImage.includes('rbbb') 
-        ? 'Right bundle branch block shows widened QRS complexes with characteristic RSR\' pattern in V1.'
-        : 'Left bundle branch block shows wide QRS complexes with broad R waves in lateral leads and no septal Q waves.',
-      difficulty: 'hard'
-    },
-    other_rhythms: {
-      correct: selectedImage.includes('pvc') ? 'Premature Ventricular Contractions' :
-               selectedImage.includes('atrial_flutter') ? 'Atrial Flutter' :
-               selectedImage.includes('supraventricular') ? 'Supraventricular Tachycardia' :
-               'First Degree AV Block',
-      options: selectedImage.includes('pvc') ? 
-               ['Normal Sinus Rhythm', 'Atrial Fibrillation', 'Premature Ventricular Contractions', 'Bundle Branch Block'] :
-               selectedImage.includes('atrial_flutter') ?
-               ['Atrial Fibrillation', 'Atrial Flutter', 'Supraventricular Tachycardia', 'Ventricular Tachycardia'] :
-               selectedImage.includes('supraventricular') ?
-               ['Sinus Tachycardia', 'Supraventricular Tachycardia', 'Ventricular Tachycardia', 'Atrial Flutter'] :
-               ['Normal Sinus Rhythm', 'First Degree AV Block', 'Second Degree AV Block', 'Third Degree AV Block'],
-      explanation: selectedImage.includes('pvc') ? 
-                  'PVCs appear as wide, bizarre QRS complexes that occur earlier than expected.' :
-                  selectedImage.includes('atrial_flutter') ?
-                  'Atrial flutter with characteristic sawtooth pattern of flutter waves.' :
-                  selectedImage.includes('supraventricular') ?
-                  'SVT shows rapid, regular rhythm with narrow QRS complexes and P waves may be hidden.' :
-                  'First degree AV block shows prolonged PR interval (>200ms) but all P waves are conducted.',
-      difficulty: selectedImage.includes('pvc') || selectedImage.includes('first_degree') ? 'medium' : 'hard'
-    }
-  };
-
-  const answerData = answerMap[selectedCategory];
-  
   return {
     id,
     imageUrl: selectedImage,
-    correctAnswer: answerData.correct,
-    options: answerData.options,
-    explanation: answerData.explanation,
-    difficulty: answerData.difficulty as 'easy' | 'medium' | 'hard',
-    category: 'random'
+    question: 'What rhythm is shown in this ECG?',
+    correctAnswer: 'Normal Sinus Rhythm',
+    options: ['Normal Sinus Rhythm', 'Sinus Bradycardia', 'Sinus Tachycardia', 'Atrial Fibrillation'],
+    explanation: 'Fallback ECG question - comprehensive quiz database not loaded. Please check console for loading errors.',
+    difficulty: 'easy',
+    category: 'fallback'
   };
+};
+
+// Generate quiz questions by difficulty level for progressive challenges
+const generateQuestionByDifficulty = (difficulty: 'easy' | 'medium' | 'hard'): ECGQuestion => {
+  const filteredQuizzes = COMPREHENSIVE_QUIZ_DATABASE.filter(quiz => quiz.difficulty === difficulty);
+  
+  if (filteredQuizzes.length > 0) {
+    const randomQuiz = filteredQuizzes[Math.floor(Math.random() * filteredQuizzes.length)];
+    return {
+      ...randomQuiz,
+      id: `${difficulty}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    };
+  }
+  
+  // Fallback to any available quiz if no quizzes of requested difficulty
+  return generateRandomECGQuestion(`fallback_${difficulty}_${Date.now()}`);
+};
+
+// Generate quiz questions by category
+const generateQuestionByCategory = (category: string): ECGQuestion => {
+  const filteredQuizzes = COMPREHENSIVE_QUIZ_DATABASE.filter(quiz => 
+    quiz.category === category || quiz.tags?.includes(category)
+  );
+  
+  if (filteredQuizzes.length > 0) {
+    const randomQuiz = filteredQuizzes[Math.floor(Math.random() * filteredQuizzes.length)];
+    return {
+      ...randomQuiz,
+      id: `${category}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    };
+  }
+  
+  // Fallback to any available quiz if no quizzes of requested category
+  return generateRandomECGQuestion(`fallback_${category}_${Date.now()}`);
 };
 
 // Comprehensive ECG categories for Learn Mode - Expanded with all medical rhythms
@@ -487,6 +495,12 @@ const ECG_CATEGORIES = {
     name: 'Normal Sinus Rhythm',
     description: 'Normal cardiac electrical conduction and rhythm patterns',
     icon: Heart,
+    video: {
+      videoId: 'e37rJqP6-aM',
+      title: '3D Heart Anatomy Visualization',
+      description: 'Understanding heart structure and normal electrical conduction through 3D animation',
+      duration: 600
+    },
     educational: {
       mechanism: 'Normal sinus rhythm originates from the sinoatrial (SA) node, the heart\'s natural pacemaker. The electrical impulse travels through the atria, causing atrial depolarization, then through the atrioventricular (AV) node, bundle of His, bundle branches, and Purkinje fibers to depolarize the ventricles.',
       pathophysiology: 'In normal sinus rhythm, the SA node fires at 60-100 beats per minute. The electrical conduction system functions properly, allowing coordinated atrial and ventricular contractions. The autonomic nervous system regulates heart rate through sympathetic and parasympathetic inputs.',
@@ -505,9 +519,9 @@ const ECG_CATEGORIES = {
         'Regular cardiac health maintenance'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00001_normal%20ECG.png',
-        '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00002_normal%20ECG.png',
-        '/ecg/ecg_dataset_clean/NORM_normal_ECG/clean_00003_normal%20ECG.png'
+        '/ecg/medical_accurate/normal_75bpm.png',
+        '/ecg/medical_accurate/normal_sinus_60bpm_1.png',
+        '/ecg/medical_accurate/normal_sinus_75bpm_2.png'
       ]
     },
     questions: [
@@ -523,18 +537,19 @@ const ECG_CATEGORIES = {
     ]
   },
   anterior_mi: {
-    name: 'Anterior STEMI',
-    description: 'Anterior ST-elevation myocardial infarction patterns',
+    name: 'Anterior Wall MI (AWMI)',
+    description: 'Anterior ST-elevation myocardial infarction with authentic ECG patterns',
     icon: AlertTriangle,
     educational: {
-      mechanism: 'Anterior STEMI occurs due to occlusion of the left anterior descending (LAD) coronary artery. This leads to ischemia and necrosis of the anterior wall of the left ventricle, causing characteristic ECG changes in the anterior leads (V1-V4).',
+      mechanism: 'Anterior STEMI occurs due to occlusion of the left anterior descending (LAD) coronary artery. This leads to ischemia and necrosis of the anterior wall of the left ventricle, causing characteristic ECG changes in the anterior leads (V1-V6).',
       pathophysiology: 'LAD occlusion causes transmural ischemia of the anterior myocardium. The lack of oxygen leads to cellular injury, membrane depolarization, and eventually cell death. This manifests as ST elevation due to injury current and later Q wave development due to necrosis.',
       ecgChanges: [
-        'ST elevation in leads V1-V4 (anterior leads)',
-        'Reciprocal ST depression in inferior leads (II, III, aVF)',
-        'Development of pathological Q waves in V1-V4',
-        'T wave inversion in anterior leads (late finding)',
-        'Loss of R wave progression in precordial leads'
+        'ST elevation in leads V1-V6 (anterior/septal leads)',
+        'Reciprocal ST depression in inferior leads (II, III, aVF)', 
+        'Development of pathological Q waves in anterior leads',
+        'Loss of R wave progression in precordial leads',
+        'T wave inversion in anterior leads (evolutionary change)',
+        'Poor R wave progression indicates extensive anterior damage'
       ],
       clinicalSignificance: 'Anterior STEMI is a medical emergency requiring immediate reperfusion therapy. It carries significant morbidity and mortality, often affecting a large portion of the left ventricle and potentially causing cardiogenic shock.',
       management: [
@@ -545,16 +560,46 @@ const ECG_CATEGORIES = {
         'Emergency cardiac catheterization and revascularization'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00311_anterior%20myocardial%20infarction.png',
-        '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00418_anterior%20myocardial%20infarction.png',
-        '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00486_anterior%20myocardial%20infarction.png'
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI.jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI3.jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI5.jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI6.jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI8.jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI9.jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/ami (2).jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/ami (3).jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI(7).jpg',
+        '/ecg/MI_ecg_database/Anterior_wall_MI/AMI9 (2).jpg',
+        '/ecg/teaching/massive-anterior-mi.jpg',
+        '/ecg/teaching/anteroseptal-mi-with-reciprocal-changes.jpg'
       ]
     },
-    questions: []
+    questions: [
+      {
+        id: 'ami_q1',
+        question: 'Which leads typically show ST elevation in anterior wall MI?',
+        imageUrl: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI.jpg',
+        correctAnswer: 'V1-V6 (anterior/precordial leads)',
+        options: ['II, III, aVF', 'V1-V6 (anterior/precordial leads)', 'I, aVL, V5-V6', 'V7-V9'],
+        explanation: 'Anterior wall MI typically shows ST elevation in the precordial leads V1-V6, representing the anterior and septal walls of the left ventricle supplied by the LAD.',
+        difficulty: 'medium',
+        category: 'anterior_mi'
+      },
+      {
+        id: 'ami_q2',
+        question: 'What artery is typically occluded in anterior wall MI?',
+        imageUrl: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI3.jpg',
+        correctAnswer: 'Left Anterior Descending (LAD)',
+        options: ['Right Coronary Artery (RCA)', 'Left Anterior Descending (LAD)', 'Left Circumflex (LCX)', 'Posterior Descending Artery (PDA)'],
+        explanation: 'The LAD supplies the anterior wall and septum of the left ventricle. Its occlusion causes anterior wall MI with characteristic changes in V1-V6.',
+        difficulty: 'medium', 
+        category: 'anterior_mi'
+      }
+    ]
   },
   inferior_mi: {
-    name: 'Inferior STEMI',
-    description: 'Inferior ST-elevation myocardial infarction patterns',
+    name: 'Inferior Wall MI (IWMI)', 
+    description: 'Inferior ST-elevation myocardial infarction with authentic ECG patterns',
     icon: AlertTriangle,
     educational: {
       mechanism: 'Inferior STEMI results from occlusion of the right coronary artery (RCA) or left circumflex artery (LCX). This causes ischemia and necrosis of the inferior wall of the left ventricle, showing characteristic changes in the inferior leads (II, III, aVF).',
@@ -563,8 +608,9 @@ const ECG_CATEGORIES = {
         'ST elevation in leads II, III, aVF (inferior leads)',
         'Reciprocal ST depression in leads I, aVL',
         'Development of pathological Q waves in II, III, aVF',
-        'T wave inversion in inferior leads (later finding)',
-        'May have right ventricular involvement (V4R changes)'
+        'T wave inversion in inferior leads (evolutionary change)',
+        'May have right ventricular involvement (V4R changes)',
+        'Lead III often shows more prominent changes than lead II'
       ],
       clinicalSignificance: 'Inferior STEMI may be associated with bradyarrhythmias due to RCA supplying the SA and AV nodes. Right ventricular involvement can cause hemodynamic compromise and requires specific management considerations.',
       management: [
@@ -575,12 +621,210 @@ const ECG_CATEGORIES = {
         'Avoid nitroglycerin if RV infarction present'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00008_inferior%20myocardial%20infarction.png',
-        '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00153_inferior%20myocardial%20infarction.png',
-        '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00161_inferior%20myocardial%20infarction.png'
+        '/ecg/MI_ecg_database/Inferior_wall_MI/IMI.jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/IMI4.jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi5.jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi6.jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi8.jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi (2).jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi (3).jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi (4).jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi (5).jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/imi (6).jpg',
+        '/ecg/MI_ecg_database/Inferior_wall_MI/IMI(2).jpg',
+        '/ecg/teaching/acute-inferior-mi.jpg',
+        '/ecg/teaching/inferior-mi-reciprocal-changes.jpg',
+        '/ecg/teaching/inferior-wall-mi.jpg'
       ]
     },
-    questions: []
+    questions: [
+      {
+        id: 'imi_q1',
+        question: 'Which leads show ST elevation in inferior wall MI?',
+        imageUrl: '/ecg/MI_ecg_database/Inferior_wall_MI/IMI.jpg',
+        correctAnswer: 'II, III, aVF',
+        options: ['V1-V4', 'II, III, aVF', 'I, aVL, V5-V6', 'V7-V9'],
+        explanation: 'Inferior wall MI shows ST elevation in the inferior leads II, III, and aVF, which look at the inferior (diaphragmatic) surface of the left ventricle.',
+        difficulty: 'medium',
+        category: 'inferior_mi'
+      },
+      {
+        id: 'imi_q2',
+        question: 'What reciprocal changes are seen in inferior MI?',
+        imageUrl: '/ecg/MI_ecg_database/Inferior_wall_MI/IMI4.jpg',
+        correctAnswer: 'ST depression in leads I and aVL',
+        options: ['ST elevation in V1-V4', 'ST depression in leads I and aVL', 'Q waves in lateral leads', 'T wave inversion in V5-V6'],
+        explanation: 'Reciprocal changes in inferior MI include ST depression in the high lateral leads I and aVL, which are electrically opposite to the inferior leads.',
+        difficulty: 'hard',
+        category: 'inferior_mi'
+      }
+    ]
+  },
+  lateral_mi: {
+    name: 'Lateral Wall MI (LWMI)',
+    description: 'Lateral ST-elevation myocardial infarction with authentic ECG patterns',
+    icon: AlertTriangle,
+    educational: {
+      mechanism: 'Lateral STEMI results from occlusion of the left circumflex artery (LCX) or diagonal branches of the LAD. This causes ischemia and necrosis of the lateral wall of the left ventricle, showing characteristic changes in the lateral leads (I, aVL, V5, V6).',
+      pathophysiology: 'LCX occlusion affects the lateral wall of the left ventricle. The circumflex artery supplies the lateral and posterior walls, and in some patients, the inferior wall. Transmural ischemia leads to ST elevation and eventual Q wave formation in lateral leads.',
+      ecgChanges: [
+        'ST elevation in leads I, aVL, V5, V6 (lateral leads)',
+        'Reciprocal ST depression in inferior leads (II, III, aVF)',
+        'Development of pathological Q waves in lateral leads',
+        'T wave inversion in lateral leads (evolutionary change)',
+        'May extend to posterior wall (V7-V9 changes)'
+      ],
+      clinicalSignificance: 'Lateral MI often presents with less dramatic symptoms than anterior MI but still requires urgent reperfusion. It may be associated with posterior wall involvement, requiring posterior lead assessment.',
+      management: [
+        'Immediate primary PCI within 90 minutes',
+        'Dual antiplatelet therapy and anticoagulation',
+        'Obtain posterior leads (V7-V9) to assess extent',
+        'Standard post-MI medications (beta-blockers, ACE inhibitors, statins)',
+        'Monitor for extension to posterior territory'
+      ],
+      images: [
+        '/ecg/MI_ecg_database/Lateral_wall_MI/LMI.jpg',
+        '/ecg/MI_ecg_database/Lateral_wall_MI/lmi.png',
+        '/ecg/MI_ecg_database/Lateral_wall_MI/lmi (2).jpg',
+        '/ecg/MI_ecg_database/Lateral_wall_MI/lmi (3).jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'lmi_q1',
+        question: 'Which leads show ST elevation in lateral wall MI?',
+        imageUrl: '/ecg/MI_ecg_database/Lateral_wall_MI/LMI.jpg',
+        correctAnswer: 'I, aVL, V5, V6',
+        options: ['II, III, aVF', 'V1-V4', 'I, aVL, V5, V6', 'V7-V9'],
+        explanation: 'Lateral wall MI shows ST elevation in the high lateral leads (I, aVL) and lateral precordial leads (V5, V6).',
+        difficulty: 'medium',
+        category: 'lateral_mi'
+      }
+    ]
+  },
+  posterior_mi: {
+    name: 'Posterior Wall MI (PWMI)',
+    description: 'Posterior myocardial infarction with authentic ECG patterns',
+    icon: AlertTriangle,
+    educational: {
+      mechanism: 'Posterior MI results from occlusion of the posterior descending artery (PDA) or posterolateral branches, usually arising from a dominant RCA or LCX. This causes ischemia of the posterior wall of the left ventricle.',
+      pathophysiology: 'Posterior wall MI is often missed on standard 12-lead ECG because there are no posterior leads in the standard configuration. The diagnosis relies on reciprocal changes in anterior leads and requires posterior leads (V7-V9) for confirmation.',
+      ecgChanges: [
+        'Reciprocal changes in V1-V3: tall R waves, ST depression',
+        'Prominent R waves in V1-V2 (mirror image of Q waves)',
+        'ST depression in V1-V3 (reciprocal to posterior ST elevation)',
+        'Upright T waves in V1-V2 (reciprocal to posterior T inversion)',
+        'ST elevation in posterior leads V7-V9 (when obtained)'
+      ],
+      clinicalSignificance: 'Posterior MI is frequently missed because it does not show typical ST elevation on standard 12-lead ECG. High index of suspicion and posterior lead placement are essential for diagnosis.',
+      management: [
+        'Obtain posterior leads (V7-V9) for confirmation',
+        'Primary PCI if confirmed posterior STEMI',
+        'Standard STEMI treatment protocols apply',
+        'Monitor for extension to inferior/lateral walls',
+        'Echocardiogram to assess posterior wall motion'
+      ],
+      images: [
+        '/ecg/MI_ecg_database/Posterior_wall_MI/PMI.jpg',
+        '/ecg/MI_ecg_database/Posterior_wall_MI/PMI2.jpg',
+        '/ecg/MI_ecg_database/Posterior_wall_MI/pmi3.jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'pmi_q1',
+        question: 'What are the typical reciprocal changes seen in posterior MI?',
+        imageUrl: '/ecg/MI_ecg_database/Posterior_wall_MI/PMI.jpg',
+        correctAnswer: 'Tall R waves and ST depression in V1-V3',
+        options: ['ST elevation in II, III, aVF', 'Tall R waves and ST depression in V1-V3', 'Q waves in V4-V6', 'ST elevation in I, aVL'],
+        explanation: 'Posterior MI shows reciprocal changes in the anterior leads V1-V3, including tall R waves (mirror image of Q waves) and ST depression (reciprocal to posterior ST elevation).',
+        difficulty: 'hard',
+        category: 'posterior_mi'
+      }
+    ]
+  },
+  anterolateral_mi: {
+    name: 'Anterolateral MI',
+    description: 'Combined anterior and lateral wall myocardial infarction',
+    icon: AlertTriangle,
+    educational: {
+      mechanism: 'Anterolateral MI involves both anterior and lateral walls, typically due to proximal LAD occlusion affecting both the anterior territory and diagonal branches, or combined LAD and LCX involvement.',
+      pathophysiology: 'Large territory MI affecting significant portions of the left ventricle. The extensive area of ischemia can lead to significant hemodynamic compromise and increased risk of complications including cardiogenic shock.',
+      ecgChanges: [
+        'ST elevation in V1-V6 (extensive anterior leads)',
+        'ST elevation in leads I, aVL (lateral leads)',
+        'Reciprocal ST depression in inferior leads',
+        'Development of Q waves in anterior and lateral leads',
+        'Loss of R wave progression across precordial leads'
+      ],
+      clinicalSignificance: 'Anterolateral MI represents a large territory infarction with high risk of complications. Urgent reperfusion is critical due to the extensive myocardium at risk.',
+      management: [
+        'Emergent primary PCI - high priority case',
+        'Hemodynamic monitoring for cardiogenic shock',
+        'Dual antiplatelet therapy and anticoagulation',
+        'Consider mechanical circulatory support if needed',
+        'Aggressive post-MI medical therapy'
+      ],
+      images: [
+        '/ecg/MI_ecg_database/Anterolateral_MI/ANTEROLATERAL.jpg',
+        '/ecg/MI_ecg_database/Anterolateral_MI/anerolateral.jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'almi_q1',
+        question: 'Which leads show ST elevation in anterolateral MI?',
+        imageUrl: '/ecg/MI_ecg_database/Anterolateral_MI/ANTEROLATERAL.jpg',
+        correctAnswer: 'V1-V6, I, aVL',
+        options: ['II, III, aVF only', 'V1-V6, I, aVL', 'V7-V9 only', 'I, aVL, V5-V6 only'],
+        explanation: 'Anterolateral MI shows extensive ST elevation involving both anterior leads (V1-V6) and lateral leads (I, aVL), representing a large territory infarction.',
+        difficulty: 'hard',
+        category: 'anterolateral_mi'
+      }
+    ]
+  },
+  post_mi_evolved: {
+    name: 'Post-MI Evolved Changes',
+    description: 'Chronic ECG changes following myocardial infarction',
+    icon: Clock,
+    educational: {
+      mechanism: 'After acute MI, the ECG evolves over days to weeks. ST elevation resolves, T waves invert and may normalize, but pathological Q waves typically persist, representing areas of myocardial scar tissue.',
+      pathophysiology: 'Necrotic myocardium is replaced by fibrous scar tissue over time. This scar tissue cannot conduct electrical impulses normally, leading to persistent Q waves. The evolutionary changes reflect healing and remodeling processes.',
+      ecgChanges: [
+        'Pathological Q waves persist (>0.04s width, >25% of R wave)',
+        'ST segments return to baseline',
+        'T waves may normalize or remain inverted',
+        'Loss of R wave progression in affected leads',
+        'Regional wall motion abnormalities on echo'
+      ],
+      clinicalSignificance: 'Evolved Q waves indicate previous MI and myocardial scar. These changes help identify patients with ischemic cardiomyopathy and guide long-term management and risk stratification.',
+      management: [
+        'Long-term post-MI medications (beta-blockers, ACE inhibitors, statins)',
+        'Assess for residual ischemia with stress testing',
+        'Echocardiogram to evaluate left ventricular function',
+        'ICD evaluation if significant LV dysfunction',
+        'Cardiac rehabilitation and lifestyle modifications'
+      ],
+      images: [
+        '/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_AWMI.jpg',
+        '/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_IWMI.jpg', 
+        '/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_LWMI.jpg',
+        '/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_AWMI (2).jpg',
+        '/ecg/MI_ecg_database/Post_MI_evolved_MI/post_awmi (3).jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'post_mi_q1',
+        question: 'What is the most persistent ECG finding after MI?',
+        imageUrl: '/ecg/MI_ecg_database/Post_MI_evolved_MI/Post_AWMI.jpg',
+        correctAnswer: 'Pathological Q waves',
+        options: ['ST elevation', 'T wave inversion', 'Pathological Q waves', 'ST depression'],
+        explanation: 'Pathological Q waves are the most persistent finding after MI, representing areas of myocardial scar tissue that cannot conduct electrical impulses normally.',
+        difficulty: 'medium',
+        category: 'post_mi_evolved'
+      }
+    ]
   },
   lbbb: {
     name: 'Left Bundle Branch Block',
@@ -605,9 +849,9 @@ const ECG_CATEGORIES = {
         'Treat underlying conditions (hypertension, CAD)'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00180_complete%20left%20bundle%20branch%20block.png',
-        '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00256_complete%20left%20bundle%20branch%20block.png',
-        '/ecg/ecg_dataset_clean/CLBBB_complete_left_bundle_branch_block/clean_00279_complete%20left%20bundle%20branch%20block.png'
+        '/ecg/medical_accurate/lbbb_65bpm_1.png',
+        '/ecg/medical_accurate/lbbb_70bpm.png',
+        '/ecg/medical_accurate/lbbb_75bpm_2.png'
       ]
     },
     questions: []
@@ -635,9 +879,9 @@ const ECG_CATEGORIES = {
         'Generally no specific treatment required for isolated RBBB'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00172_complete%20right%20bundle%20branch%20block.png',
-        '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00195_complete%20right%20bundle%20branch%20block.png',
-        '/ecg/ecg_dataset_clean/CRBBB_complete_right_bundle_branch_block/clean_00424_complete%20right%20bundle%20branch%20block.png'
+        '/ecg/medical_accurate/rbbb_70bpm_1.png',
+        '/ecg/medical_accurate/rbbb_75bpm.png',
+        '/ecg/medical_accurate/rbbb_80bpm_2.png'
       ]
     },
     questions: []
@@ -665,9 +909,9 @@ const ECG_CATEGORIES = {
         'Consider pacemaker only if symptomatic bradycardia develops'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00102_first%20degree%20AV%20block.png',
-        '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00218_first%20degree%20AV%20block.png',
-        '/ecg/ecg_dataset_clean/1AVB_first_degree_AV_block/clean_00522_first%20degree%20AV%20block.png'
+        '/ecg/medical_accurate/first_degree_av_block_60bpm_1.png',
+        '/ecg/medical_accurate/first_degree_av_block_70bpm_2.png',
+        '/ecg/medical_accurate/first_degree_av_block_80bpm_3.png'
       ]
     },
     questions: []
@@ -695,9 +939,9 @@ const ECG_CATEGORIES = {
         'Evaluate for reversible causes (medications, ischemia)'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_11209_second%20degree%20AV%20block.png',
-        '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_13938_second%20degree%20AV%20block.png',
-        '/ecg/ecg_dataset_clean/2AVB_second_degree_AV_block/clean_14009_second%20degree%20AV%20block.png'
+        '/ecg/medical_accurate/bradycardia_35bpm.png',
+        '/ecg/medical_accurate/bradycardia_40bpm.png',
+        '/ecg/medical_accurate/bradycardia_45bpm.png'
       ]
     },
     questions: []
@@ -725,9 +969,9 @@ const ECG_CATEGORIES = {
         'Treat underlying causes when possible'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_07688_third%20degree%20AV%20block.png',
-        '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_08210_third%20degree%20AV%20block.png',
-        '/ecg/ecg_dataset_clean/3AVB_third_degree_AV_block/clean_10505_third%20degree%20AV%20block.png'
+        '/ecg/medical_accurate/bradycardia_35bpm.png',
+        '/ecg/medical_accurate/bradycardia_42bpm_2.png',
+        '/ecg/medical_accurate/bradycardia_50bpm.png'
       ]
     },
     questions: []
@@ -755,9 +999,9 @@ const ECG_CATEGORIES = {
         'Lifestyle modifications (weight loss, exercise, sodium restriction)'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00030_left%20ventricular%20hypertrophy.png',
-        '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00096_left%20ventricular%20hypertrophy.png',
-        '/ecg/ecg_dataset_clean/LVH_left_ventricular_hypertrophy/clean_00138_left%20ventricular%20hypertrophy.png'
+        '/ecg/medical_accurate/tachycardia_125bpm.png',
+        '/ecg/medical_accurate/tachycardia_135bpm_4.png',
+        '/ecg/medical_accurate/tachycardia_145bpm_5.png'
       ]
     },
     questions: []
@@ -785,9 +1029,9 @@ const ECG_CATEGORIES = {
         'Surgical correction of congenital lesions when appropriate'
       ],
       images: [
-        '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_00222_right%20ventricular%20hypertrophy.png',
-        '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_02417_right%20ventricular%20hypertrophy.png',
-        '/ecg/ecg_dataset_clean/RVH_right_ventricular_hypertrophy/clean_04713_right%20ventricular%20hypertrophy.png'
+        '/ecg/medical_accurate/tachycardia_155bpm.png',
+        '/ecg/medical_accurate/tachycardia_165bpm_7.png',
+        '/ecg/medical_accurate/vtach_150bpm.png'
       ]
     },
     questions: []
@@ -881,13 +1125,426 @@ const ECG_CATEGORIES = {
       ]
     },
     questions: []
+  },
+  // New video-enhanced categories
+  atrial_fibrillation: {
+    name: 'Atrial Fibrillation',
+    description: 'Chaotic atrial electrical activity with irregular ventricular response',
+    icon: Waves,
+    video: {
+      videoId: 'Xa-YkT3gJWU',
+      title: 'What is Atrial Fibrillation?',
+      description: 'Understanding atrial fibrillation mechanisms, causes, and ECG recognition',
+      duration: 480
+    },
+    educational: {
+      mechanism: 'Atrial fibrillation results from multiple reentrant circuits in the atria, often originating from pulmonary veins. Chaotic atrial activity leads to irregular AV conduction and loss of organized atrial contraction.',
+      pathophysiology: 'AF involves electrical and structural remodeling of atrial tissue. Risk factors include age, hypertension, heart failure, and structural heart disease. Loss of atrial kick reduces cardiac output by 15-20%.',
+      ecgChanges: [
+        'Irregularly irregular ventricular rhythm',
+        'No discernible P waves',
+        'Fibrillatory (f) waves in baseline',
+        'Variable ventricular rate (usually 100-180 bpm if uncontrolled)',
+        'QRS complexes typically narrow unless aberrancy'
+      ],
+      clinicalSignificance: 'AF is the most common sustained arrhythmia. Major complications include stroke due to thromboembolism, heart failure, and reduced quality of life. Stroke risk requires anticoagulation assessment.',
+      management: [
+        'Rate control (beta-blockers, calcium channel blockers, digoxin)',
+        'Rhythm control (cardioversion, antiarrhythmics, ablation)',
+        'Anticoagulation based on CHA2DS2-VASc score',
+        'Address underlying causes and risk factors',
+        'Lifestyle modifications and comorbidity management'
+      ],
+      images: [
+        '/ecg/medical_accurate/atrial_fibrillation_110bpm_4.png',
+        '/ecg/medical_accurate/atrial_fibrillation_130bpm_6.png',
+        '/ecg/medical_accurate/atrial_fibrillation_150bpm_8.png',
+        '/ecg/teaching/atrial-fibrillation.jpg'
+      ]
+    },
+    questions: VIDEO_QUIZ_MODULES.find(m => m.category === 'atrial_fibrillation')?.questions || []
+  },
+  ventricular_tachycardia: {
+    name: 'Ventricular Tachycardia',
+    description: 'Life-threatening wide complex tachycardia from ventricular origin',
+    icon: AlertTriangle,
+    video: {
+      videoId: 'prcxfvoE4C4',
+      title: 'Ventricular Fibrillation - Terminal Rhythm',
+      description: 'Understanding life-threatening ventricular arrhythmias and emergency management',
+      duration: 480
+    },
+    educational: {
+      mechanism: 'Ventricular tachycardia originates in ventricular tissue, bypassing the normal conduction system. It can result from reentry circuits, abnormal automaticity, or triggered activity in diseased myocardium.',
+      pathophysiology: 'VT often occurs in the setting of structural heart disease, ischemia, or cardiomyopathy. The abnormal ventricular activation leads to wide QRS complexes and hemodynamic compromise due to reduced filling time.',
+      ecgChanges: [
+        'Wide QRS complexes (>120 ms, usually >140 ms)',
+        'Ventricular rate typically 150-250 bpm',
+        'Regular or slightly irregular rhythm',
+        'AV dissociation (when visible)',
+        'Capture beats or fusion beats (pathognomonic)'
+      ],
+      clinicalSignificance: 'VT is a life-threatening arrhythmia that can cause hemodynamic collapse and degenerate to ventricular fibrillation. It requires immediate recognition and treatment.',
+      management: [
+        'Unstable VT: Immediate synchronized cardioversion',
+        'Stable VT: IV antiarrhythmics (amiodarone, lidocaine)',
+        'Hemodynamically stable: Consider procainamide',
+        'ICD implantation for secondary prevention',
+        'Treat underlying coronary disease and heart failure'
+      ],
+      images: [
+        '/ecg/medical_accurate/ventricular_tachycardia_180bpm_3.png',
+        '/ecg/medical_accurate/vtach_180bpm.png',
+        '/ecg/medical_accurate/ventricular_tachycardia_210bpm_5.png',
+        '/ecg/teaching/premature-ventricular-contractions.jpg',
+        '/ecg/teaching/single-pvcs.jpg'
+      ]
+    },
+    questions: VIDEO_QUIZ_MODULES.find(m => m.category === 'ventricular_tachycardia')?.questions || []
+  },
+  // Enhanced teaching categories with real clinical images
+  clinical_mi_patterns: {
+    name: 'Clinical MI Patterns',
+    description: 'Real-world myocardial infarction cases with teaching analysis',
+    icon: AlertTriangle,
+    educational: {
+      mechanism: 'Clinical MI patterns demonstrate the evolution and variation of myocardial infarction presentations. These real cases show how MI patterns can vary based on vessel involvement, timing, and patient factors.',
+      pathophysiology: 'MI results from coronary artery occlusion leading to myocardial necrosis. Different territories show characteristic ECG changes based on the culprit vessel and collateral circulation.',
+      ecgChanges: [
+        'ST elevation in territory-specific leads',
+        'Reciprocal ST depression in opposite leads',
+        'Development of pathological Q waves over time',
+        'T wave inversion as evolutionary change',
+        'Loss of R wave progression in affected areas'
+      ],
+      clinicalSignificance: 'Rapid recognition of MI patterns is crucial for timely reperfusion therapy. Different MI territories have varying prognosis and complications.',
+      management: [
+        'Immediate reperfusion therapy (PCI or thrombolytics)',
+        'Dual antiplatelet therapy and anticoagulation',
+        'Beta-blockers, ACE inhibitors, statins',
+        'Monitoring for complications (arrhythmias, heart failure)',
+        'Risk stratification and secondary prevention'
+      ],
+      images: [
+        '/ecg/teaching/acute-inferior-mi.jpg',
+        '/ecg/teaching/massive-anterior-mi.jpg',
+        '/ecg/teaching/anteroseptal-mi-with-reciprocal-changes.jpg',
+        '/ecg/teaching/inferior-mi-reciprocal-changes.jpg',
+        '/ecg/teaching/inferior-wall-mi.jpg',
+        '/ecg/teaching/old-inferior-mi-q-waves.jpg',
+        '/ecg/teaching/old-mi-pathological-q-waves.jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'clinical_mi_1',
+        question: 'Identify the type of myocardial infarction shown:',
+        imageUrl: '/ecg/teaching/acute-inferior-mi.jpg',
+        correctAnswer: 'Acute Inferior MI',
+        options: ['Acute Inferior MI', 'Anterior MI', 'Lateral MI', 'Posterior MI'],
+        explanation: 'This ECG shows acute inferior MI with ST elevation in leads II, III, and aVF, indicating RCA or PDA occlusion.',
+        difficulty: 'medium',
+        category: 'clinical_mi_patterns'
+      },
+      {
+        id: 'clinical_mi_2',
+        question: 'What does this ECG pattern indicate?',
+        imageUrl: '/ecg/teaching/massive-anterior-mi.jpg',
+        correctAnswer: 'Massive Anterior MI',
+        options: ['Massive Anterior MI', 'Inferior MI', 'LBBB', 'Normal Sinus Rhythm'],
+        explanation: 'This shows extensive anterior MI with ST elevation across precordial leads V1-V6, indicating LAD occlusion with large territory involvement.',
+        difficulty: 'medium',
+        category: 'clinical_mi_patterns'
+      }
+    ]
+  },
+  arrhythmia_teaching: {
+    name: 'Arrhythmia Recognition',
+    description: 'Clinical arrhythmia patterns with detailed teaching examples',
+    icon: Activity,
+    educational: {
+      mechanism: 'Arrhythmias result from disorders of impulse formation, conduction, or both. Understanding the underlying mechanisms helps in recognition and treatment selection.',
+      pathophysiology: 'Different arrhythmias arise from various mechanisms including automaticity, reentry, and triggered activity. Clinical context and patient factors influence arrhythmia significance.',
+      ecgChanges: [
+        'Rate variations from normal sinus rhythm',
+        'Irregular rhythm patterns',
+        'Abnormal P wave morphology or absence',
+        'Wide or narrow QRS complexes',
+        'AV dissociation patterns'
+      ],
+      clinicalSignificance: 'Rapid arrhythmia recognition is essential for appropriate treatment. Some arrhythmias are life-threatening while others are benign.',
+      management: [
+        'Assess hemodynamic stability first',
+        'Rate vs rhythm control strategies',
+        'Acute vs chronic management approaches',
+        'Anticoagulation considerations',
+        'Device therapy when indicated'
+      ],
+      images: [
+        '/ecg/teaching/atrial-fibrillation.jpg',
+        '/ecg/teaching/supraventricular-tachycardia.jpg',
+        '/ecg/teaching/svt-differential-diagnosis.jpg',
+        '/ecg/teaching/sinus-tachycardia.jpg',
+        '/ecg/teaching/premature-ventricular-contractions.jpg',
+        '/ecg/teaching/single-pvcs.jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'arrhythmia_1',
+        question: 'Identify this arrhythmia pattern:',
+        imageUrl: '/ecg/teaching/atrial-fibrillation.jpg',
+        correctAnswer: 'Atrial Fibrillation',
+        options: ['Atrial Fibrillation', 'Atrial Flutter', 'SVT', 'Multifocal Atrial Tachycardia'],
+        explanation: 'This ECG shows atrial fibrillation with irregularly irregular rhythm, absence of P waves, and fibrillatory baseline activity.',
+        difficulty: 'easy',
+        category: 'arrhythmia_teaching'
+      },
+      {
+        id: 'arrhythmia_2',
+        question: 'What type of tachycardia is demonstrated?',
+        imageUrl: '/ecg/teaching/supraventricular-tachycardia.jpg',
+        correctAnswer: 'Supraventricular Tachycardia',
+        options: ['Supraventricular Tachycardia', 'Ventricular Tachycardia', 'Sinus Tachycardia', 'Atrial Flutter'],
+        explanation: 'This shows supraventricular tachycardia with narrow QRS complexes and regular rapid rhythm, likely AVNRT or AVRT.',
+        difficulty: 'medium',
+        category: 'arrhythmia_teaching'
+      }
+    ]
+  },
+  conduction_abnormalities: {
+    name: 'Conduction Disorders',
+    description: 'Bundle branch blocks and conduction system abnormalities',
+    icon: GitBranch,
+    educational: {
+      mechanism: 'Conduction disorders result from damage or dysfunction in the specialized conduction system. Bundle branch blocks affect ventricular depolarization patterns.',
+      pathophysiology: 'Conduction blocks can be caused by ischemia, fibrosis, drugs, or degenerative disease. They alter the sequence of ventricular activation.',
+      ecgChanges: [
+        'QRS widening >120 ms in bundle branch blocks',
+        'Characteristic morphology patterns',
+        'Axis deviations in fascicular blocks',
+        'Secondary ST-T wave changes',
+        'Loss of septal Q waves in some leads'
+      ],
+      clinicalSignificance: 'New bundle branch blocks may indicate acute coronary syndromes. Some blocks are associated with increased mortality and may require pacing.',
+      management: [
+        'Identify and treat underlying causes',
+        'Monitor for progression to higher-degree blocks',
+        'Pacemaker therapy when indicated',
+        'Consider cardiac resynchronization therapy',
+        'Avoid bradycardia-inducing medications'
+      ],
+      images: [
+        '/ecg/teaching/left-bundle-branch-block.jpg',
+        '/ecg/teaching/lbbb-classic-pattern.jpg',
+        '/ecg/teaching/lbbb-dilated-cardiomyopathy.jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'conduction_1',
+        question: 'Identify this conduction abnormality:',
+        imageUrl: '/ecg/teaching/left-bundle-branch-block.jpg',
+        correctAnswer: 'Left Bundle Branch Block',
+        options: ['Left Bundle Branch Block', 'Right Bundle Branch Block', 'Bifascicular Block', 'Normal Conduction'],
+        explanation: 'This ECG shows LBBB with wide QRS >120ms, loss of septal Q waves, and broad R waves in lateral leads.',
+        difficulty: 'medium',
+        category: 'conduction_abnormalities'
+      }
+    ]
+  },
+  emergency_patterns: {
+    name: 'Emergency ECG Patterns',
+    description: 'Life-threatening conditions requiring immediate recognition',
+    icon: AlertTriangle,
+    educational: {
+      mechanism: 'Emergency ECG patterns represent conditions that can cause immediate hemodynamic collapse or death. Rapid recognition and treatment are critical.',
+      pathophysiology: 'These patterns may result from complete electrical failure, severe metabolic disturbances, or terminal cardiac events.',
+      ecgChanges: [
+        'Absence of organized electrical activity',
+        'Severe electrolyte-induced changes',
+        'Terminal rhythm patterns',
+        'Agonal rhythms with poor perfusion',
+        'Cardiac arrest rhythms'
+      ],
+      clinicalSignificance: 'These patterns require immediate intervention including CPR, defibrillation, or advanced cardiac life support measures.',
+      management: [
+        'Immediate CPR and ACLS protocols',
+        'Defibrillation for shockable rhythms',
+        'Treat underlying causes (electrolytes, drugs)',
+        'Advanced airway and circulatory support',
+        'Post-resuscitation care'
+      ],
+      images: [
+        '/ecg/teaching/pulseless-electrical-activity.jpg',
+        '/ecg/teaching/pea-cardiac-arrest.jpg',
+        '/ecg/teaching/hyperkalemia.jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'emergency_1',
+        question: 'This ECG pattern represents:',
+        imageUrl: '/ecg/teaching/pulseless-electrical-activity.jpg',
+        correctAnswer: 'Pulseless Electrical Activity (PEA)',
+        options: ['Pulseless Electrical Activity (PEA)', 'Normal Sinus Rhythm', 'Atrial Fibrillation', 'Ventricular Tachycardia'],
+        explanation: 'This shows PEA - organized electrical activity on ECG but no detectable pulse or blood pressure, requiring immediate CPR.',
+        difficulty: 'hard',
+        category: 'emergency_patterns'
+      }
+    ]
+  },
+  diagnostic_challenges: {
+    name: 'Diagnostic Challenges',
+    description: 'Complex ECG patterns requiring careful analysis',
+    icon: Brain,
+    educational: {
+      mechanism: 'Some ECG patterns can mimic other conditions or present with subtle findings that require careful analysis and clinical correlation.',
+      pathophysiology: 'Diagnostic challenges arise from overlapping patterns, early disease states, or conditions that can be easily confused with more serious pathology.',
+      ecgChanges: [
+        'Subtle ST-T wave abnormalities',
+        'Benign vs pathological patterns',
+        'Early repolarization variants',
+        'Low voltage complexes',
+        'Borderline interval measurements'
+      ],
+      clinicalSignificance: 'Proper interpretation prevents unnecessary interventions for benign findings while ensuring serious conditions are not missed.',
+      management: [
+        'Careful clinical correlation required',
+        'Serial ECGs for comparison',
+        'Consider patient demographics and risk factors',
+        'Additional testing when indicated',
+        'Specialty consultation for complex cases'
+      ],
+      images: [
+        '/ecg/teaching/benign-early-repolarization.jpg',
+        '/ecg/teaching/global-t-inversion-long-qt.jpg',
+        '/ecg/teaching/global-t-inversion-lvh-cardiomyopathy.jpg',
+        '/ecg/teaching/t-wave-inversion-lateral-leads.jpg',
+        '/ecg/teaching/t-wave-inversion-low-voltage.jpg',
+        '/ecg/teaching/deep-q-waves-inferior-leads.jpg',
+        '/ecg/teaching/complex-ecg-analysis.jpg'
+      ]
+    },
+    questions: [
+      {
+        id: 'diagnostic_1',
+        question: 'This ST elevation pattern likely represents:',
+        imageUrl: '/ecg/teaching/benign-early-repolarization.jpg',
+        correctAnswer: 'Benign Early Repolarization',
+        options: ['Benign Early Repolarization', 'Acute STEMI', 'Pericarditis', 'Hyperkalemia'],
+        explanation: 'This shows benign early repolarization with concave ST elevation, notching, and no reciprocal changes - not acute MI.',
+        difficulty: 'hard',
+        category: 'diagnostic_challenges'
+      }
+    ]
+  },
+  bradycardia: {
+    name: 'Bradycardia',
+    description: 'Slow heart rate with potential hemodynamic compromise',
+    icon: Clock,
+    video: {
+      videoId: 'U3926ZrAosM',
+      title: 'Adult Bradycardia Algorithm (ACLS)',
+      description: 'ACLS approach to bradycardia management and treatment protocols',
+      duration: 600
+    },
+    educational: {
+      mechanism: 'Bradycardia can result from decreased SA node automaticity, increased parasympathetic tone, or conduction blocks. It may be physiologic (athletes) or pathologic (medications, ischemia, aging).',
+      pathophysiology: 'Slow heart rates can compromise cardiac output, especially in patients with fixed stroke volumes. Symptoms occur when cardiac output cannot meet metabolic demands.',
+      ecgChanges: [
+        'Heart rate <60 bpm',
+        'Regular or irregular rhythm depending on cause',
+        'Normal P-QRS relationship in sinus bradycardia',
+        'May have prolonged PR intervals',
+        'QRS usually narrow unless conduction disease'
+      ],
+      clinicalSignificance: 'Symptomatic bradycardia can cause dizziness, syncope, fatigue, and heart failure. Asymptomatic bradycardia in athletes is usually benign.',
+      management: [
+        'Asymptomatic: Observation and monitoring',
+        'Symptomatic: Atropine 0.5-1 mg IV',
+        'Transcutaneous pacing if atropine ineffective',
+        'Permanent pacemaker for persistent symptomatic bradycardia',
+        'Address reversible causes (medications, electrolytes)'
+      ],
+      images: [
+        '/ecg/medical_accurate/bradycardia_45bpm.png',
+        '/ecg/medical_accurate/bradycardia_35bpm.png',
+        '/ecg/medical_accurate/bradycardia_52bpm_4.png'
+      ]
+    },
+    questions: VIDEO_QUIZ_MODULES.find(m => m.category === 'bradycardia')?.questions || []
+  },
+  tachycardia: {
+    name: 'Supraventricular Tachycardia',
+    description: 'Fast heart rate originating above the ventricles',
+    icon: TrendingUp,
+    video: {
+      videoId: 'bDyZ76QzA9s',
+      title: 'Types and ECG Features of Supraventricular Tachycardia (SVT)',
+      description: 'Understanding different types of SVT and their ECG characteristics',
+      duration: 600
+    },
+    educational: {
+      mechanism: 'SVT includes various tachyarrhythmias originating above the ventricles: AVNRT, AVRT, atrial tachycardia, and atrial flutter. Reentrant circuits are the most common mechanism.',
+      pathophysiology: 'SVT typically involves reentry circuits using the AV node and/or accessory pathways. Fast rates can compromise ventricular filling and cardiac output, especially in patients with structural heart disease.',
+      ecgChanges: [
+        'Narrow QRS complexes (<120 ms) unless aberrancy',
+        'Heart rate typically 150-220 bpm',
+        'Regular rhythm (usually)',
+        'P waves may be hidden, inverted, or abnormal',
+        'Abrupt onset and termination'
+      ],
+      clinicalSignificance: 'SVT can cause palpitations, chest pain, dyspnea, and syncope. While rarely life-threatening, it can trigger ischemia or heart failure in vulnerable patients.',
+      management: [
+        'Stable SVT: Vagal maneuvers (Valsalva, carotid massage)',
+        'Adenosine 6 mg IV rapid push, then 12 mg if needed',
+        'Calcium channel blockers or beta-blockers',
+        'Synchronized cardioversion if hemodynamically unstable',
+        'Catheter ablation for recurrent SVT'
+      ],
+      images: [
+        '/ecg/medical_accurate/supraventricular_tachycardia_180bpm_2.png',
+        '/ecg/medical_accurate/tachycardia_145bpm_5.png',
+        '/ecg/medical_accurate/tachycardia_125bpm_3.png'
+      ]
+    },
+    questions: VIDEO_QUIZ_MODULES.find(m => m.category === 'tachycardia')?.questions || []
   }
 };
 
 const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
   // Sound effects and XP system hooks
-  const { playCorrectSound, playErrorSound, playRewardSound, playPageTurnSound } = useUISounds();
-  const { awardXP } = usePulseStore();
+  const { playCorrectSound, playErrorSound, playRewardSound, playPageTurnSound } = useUISounds() || {};
+  const { awardXP } = usePulseStore() || {};
+
+  // Safe function wrappers to prevent errors
+  const safePlayPageTurnSound = () => {
+    try {
+      if (typeof playPageTurnSound === 'function') {
+        playPageTurnSound();
+      } else {
+        console.warn('playPageTurnSound not available');
+      }
+    } catch (error) {
+      console.warn('Error playing page turn sound:', error);
+    }
+  };
+
+  const safeAwardXP = async (points: number) => {
+    try {
+      if (typeof awardXP === 'function') {
+        await awardXP(points);
+        return points;
+      } else {
+        console.warn('awardXP not available');
+        return 0;
+      }
+    } catch (error) {
+      console.warn('Error awarding XP:', error);
+      return 0;
+    }
+  };
 
   // Core game state
   const [currentView, setCurrentView] = useState<'menu' | 'categories' | 'game' | 'results' | 'educational'>('menu');
@@ -907,6 +1564,12 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
   // Educational mode state
   const [selectedEducationalCategory, setSelectedEducationalCategory] = useState<string>('');
   const [currentEducationalSlide, setCurrentEducationalSlide] = useState(0);
+  
+  // Video quiz state
+  const [isVideoQuizActive, setIsVideoQuizActive] = useState(false);
+  const [currentVideoQuizIndex, setCurrentVideoQuizIndex] = useState(0);
+  const [videoQuizScore, setVideoQuizScore] = useState(0);
+  const [videoQuizAnswered, setVideoQuizAnswered] = useState<(string | null)[]>([]);
   
   // Touch/Swipe handling for mobile
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -935,13 +1598,13 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
       // Swipe left - next slide
       // Each educational category has 5 slides: overview, pathophysiology, ECG features, clinical impact, treatment
       const totalSlides = 5;
-      playPageTurnSound();
+      safePlayPageTurnSound();
       setCurrentEducationalSlide(Math.min(totalSlides - 1, currentEducationalSlide + 1));
     }
     
     if (isRightSwipe && currentView === 'educational') {
       // Swipe right - previous slide  
-      playPageTurnSound();
+      safePlayPageTurnSound();
       setCurrentEducationalSlide(Math.max(0, currentEducationalSlide - 1));
     }
   };
@@ -949,6 +1612,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
   // Game progress
   const [score, setScore] = useState(0);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [questionCounter, setQuestionCounter] = useState(0); // Debug counter
   const [streak, setStreak] = useState(0);
   const [gameActive, setGameActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -972,6 +1636,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
       // Return a default question if no questions available
       return {
         id: 'default',
+        question: 'What rhythm is shown in this ECG?',
         imageUrl: '/ecg/medical_accurate/normal_75bpm.png',
         correctAnswer: 'Normal Sinus Rhythm',
         options: ['Normal Sinus Rhythm', 'Sinus Bradycardia', 'Sinus Tachycardia', 'Atrial Fibrillation'],
@@ -1002,6 +1667,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     setCurrentView('game');
     setScore(0);
     setQuestionsAnswered(0);
+    setQuestionCounter(1); // Reset debug counter
     setStreak(0);
     setGameActive(true);
     
@@ -1046,7 +1712,9 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
       try {
         const question = (mode as string) === 'boost' 
           ? generateBoostModeQuestion(`${mode}_${Date.now()}`)
-          : await generateRandomECGQuestion(difficultyLevel);
+          : (mode as string) === 'practice'
+            ? generatePracticeECGQuestion(`${mode}_${Date.now()}`)
+            : await generateRandomECGQuestion(difficultyLevel);
         setCurrentQuestion(question);
       } catch (error) {
         const question = generateQuestion(category);
@@ -1069,10 +1737,22 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
   };
 
   const nextQuestion = async () => {
-    if (!selectedCategory) return;
+    console.log('🔍 nextQuestion called - checking selectedCategory:', selectedCategory);
+    
+    if (!selectedCategory) {
+      console.error('❌ nextQuestion BLOCKED: selectedCategory is', selectedCategory);
+      return;
+    }
+    
+    console.log('➡️ Next Question Called:', {
+      selectedMode,
+      selectedCategory,
+      questionsAnswered,
+      currentScore: score
+    });
     
     // Play page turn sound for navigation
-    playPageTurnSound();
+    safePlayPageTurnSound();
     
     let question: ECGQuestion;
     
@@ -1080,12 +1760,23 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     if (selectedCategory === 'mixed' || selectedMode === 'practice' || selectedMode === 'challenge' || selectedMode === 'boost') {
       question = selectedMode === 'boost' 
         ? generateBoostModeQuestion(`${selectedMode}_${Date.now()}`)
-        : generateRandomECGQuestion(`${selectedMode}_${Date.now()}`);
+        : selectedMode === 'practice'
+          ? generatePracticeECGQuestion(`${selectedMode}_${Date.now()}`)
+          : generateRandomECGQuestion(`${selectedMode}_${Date.now()}`);
     } else {
       question = generateQuestion(selectedCategory);
     }
     
+    console.log('✅ Question Generated:', {
+      questionId: question.id,
+      hasQuestion: !!question.question,
+      hasImageUrl: !!question.imageUrl,
+      optionsCount: question.options.length
+    });
+    
+    console.log('🎯 Setting new question:', question);
     setCurrentQuestion(question);
+    setQuestionCounter(prev => prev + 1); // Increment debug counter
     setShowAnswer(false);
     setUserAnswer(null);
     setShowHint(false);
@@ -1099,10 +1790,26 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     if (mode.timeLimit) {
       setTimeLeft(mode.timeLimit);
     }
+    
+    console.log('✅ nextQuestion completed successfully');
+  };
+
+  const startVideoQuiz = (videoQuizIndex: number) => {
+    setCurrentVideoQuizIndex(videoQuizIndex);
+    setIsVideoQuizActive(true);
+    setVideoQuizAnswered([]);
+    setVideoQuizScore(0);
   };
 
   const handleAnswer = async (answer: string) => {
     if (!currentQuestion || userAnswer) return;
+    
+    console.log('🎯 Answer Submitted:', {
+      userAnswer: answer,
+      correctAnswer: currentQuestion.correctAnswer,
+      isCorrect: answer === currentQuestion.correctAnswer,
+      questionId: currentQuestion.id
+    });
     
     setUserAnswer(answer);
     const isCorrect = answer === currentQuestion.correctAnswer;
@@ -1110,15 +1817,19 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     
     if (isCorrect) {
       // Play success sound
-      playCorrectSound();
+      if (typeof playCorrectSound === 'function') {
+        playCorrectSound();
+      }
       
       // Award 15 XP for correct answers in boost/challenge modes
       if (selectedMode === 'boost' || selectedMode === 'challenge') {
         try {
-          await awardXP(15);
-          setXpAwarded(15);
+          const pointsAwarded = await safeAwardXP(15);
+          setXpAwarded(pointsAwarded);
           // Play reward sound for XP
-          playRewardSound();
+          if (typeof playRewardSound === 'function') {
+            playRewardSound();
+          }
         } catch (error) {
           console.error('Failed to award XP:', error);
           setXpAwarded(0);
@@ -1131,7 +1842,9 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
       setStreak(streak + 1);
     } else {
       // Play error sound
-      playErrorSound();
+      if (typeof playErrorSound === 'function') {
+        playErrorSound();
+      }
       setXpAwarded(0);
       setStreak(0);
     }
@@ -1144,6 +1857,14 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
 
   // Continue to next question from feedback popup
   const continueToNextQuestion = async () => {
+    console.log('🔄 Continue to Next Question clicked');
+    console.log('🔍 Current state before continue:', {
+      showAnswerFeedback,
+      selectedCategory,
+      selectedMode,
+      currentQuestionId: currentQuestion?.id
+    });
+    
     setShowAnswerFeedback(false);
     setUserAnswer(null);
     setXpAwarded(0);
@@ -1154,10 +1875,15 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     setImageError(false);
     
     // Play page turn sound for flashcard-style navigation
-    playPageTurnSound();
+    safePlayPageTurnSound();
     
+    console.log('🚀 About to call nextQuestion()...');
     await nextQuestion();
+    console.log('✅ nextQuestion() completed');
   };
+
+  // Auto-progress removed - let users read the explanations at their own pace
+  // Users must click "Continue to Next Question" manually
 
   const resetGame = () => {
     setCurrentView('menu');
@@ -1431,6 +2157,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                 </div>
                 <span className="text-white">{questionsAnswered}</span>
                 <span className="text-blue-200 text-sm hidden sm:inline">answered</span>
+                <span className="text-yellow-300 text-xs ml-1">(Q#{questionCounter})</span>
               </div>
               
               {timeLeft !== null && timeLeft < 30 && (
@@ -1529,7 +2256,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                   ? 'text-white text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-flash' 
                   : 'text-white'
               }`}>
-                {isBoostMode ? 'What is the most likely ECG diagnosis?' : 'What rhythm is shown in this ECG?'}
+                {currentQuestion.question || (isBoostMode ? 'What is the most likely ECG diagnosis?' : 'What rhythm is shown in this ECG?')}
               </h2>
               
               <div className="grid grid-cols-1 gap-3 sm:gap-4">
@@ -1702,19 +2429,76 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                         <Brain className="w-4 h-4 text-blue-600" />
                         <h4 className="font-semibold text-blue-800">Explanation</h4>
                       </div>
-                      <p className="text-blue-700 text-sm leading-relaxed">
+                      <p className="text-blue-700 text-sm leading-relaxed mb-3">
                         {currentQuestion.explanation}
                       </p>
+                      
+                      {/* Enhanced Medical Information */}
+                      {(currentQuestion.heartRate || currentQuestion.medicalContext || currentQuestion.tags) && (
+                        <div className="mt-4 pt-3 border-t border-blue-200">
+                          {/* Heart Rate */}
+                          {currentQuestion.heartRate && (
+                            <div className="mb-2 flex items-center gap-2">
+                              <Heart className="w-4 h-4 text-red-500" />
+                              <span className="text-sm font-medium text-blue-800">
+                                Heart Rate: {currentQuestion.heartRate} BPM
+                              </span>
+                            </div>
+                          )}
+                          
+                          {/* Medical Context */}
+                          {currentQuestion.medicalContext && (
+                            <div className="space-y-2">
+                              {currentQuestion.medicalContext.mechanism && (
+                                <div>
+                                  <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Mechanism:</span>
+                                  <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.mechanism}</p>
+                                </div>
+                              )}
+                              {currentQuestion.medicalContext.clinical_significance && (
+                                <div>
+                                  <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Clinical Significance:</span>
+                                  <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.clinical_significance}</p>
+                                </div>
+                              )}
+                              {currentQuestion.medicalContext.management && (
+                                <div>
+                                  <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Management:</span>
+                                  <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.management}</p>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          
+                          {/* Tags */}
+                          {currentQuestion.tags && currentQuestion.tags.length > 0 && (
+                            <div className="mt-3 flex flex-wrap gap-1">
+                              {currentQuestion.tags.map((tag, index) => (
+                                <Badge key={index} variant="secondary" className="text-xs px-2 py-1 bg-blue-100 text-blue-700">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </motion.div>
 
-                    {/* Continue Button */}
+                    {/* Continue Button with Auto-progress indicator */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6 }}
                     >
                       <Button
-                        onClick={continueToNextQuestion}
+                        onClick={async () => {
+                          console.log('🖱️ Continue button clicked');
+                          try {
+                            await continueToNextQuestion();
+                          } catch (error) {
+                            console.error('❌ Error in button click:', error);
+                          }
+                        }}
                         className={`w-full py-4 text-lg font-bold rounded-xl ${
                           isAnswerCorrect
                             ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
@@ -1724,6 +2508,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                         Continue to Next Question
                         <ArrowLeft className="ml-2 w-5 h-5 rotate-180" />
                       </Button>
+
                     </motion.div>
                   </CardContent>
                 </Card>
@@ -1792,12 +2577,28 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
     );
   }
 
-  // Educational view - Mobile-optimized swipeable
+  // Educational view - Mobile-optimized swipeable with video integration
   if (currentView === 'educational' && selectedEducationalCategory) {
     const categoryData = ECG_CATEGORIES[selectedEducationalCategory as keyof typeof ECG_CATEGORIES];
     
-    // Prepare content slides for mobile swiping
-    const slides = [
+    // Prepare content slides for mobile swiping - Include video slide first if available
+    const slides = [];
+    
+    // Add YouTube video slide if category has video
+    if (hasVideo(categoryData)) {
+      slides.push({
+        title: categoryData.video.title,
+        subtitle: "Watch & Learn",
+        videoId: categoryData.video.videoId,
+        content: categoryData.video.description,
+        icon: Video,
+        color: "from-red-500 to-pink-500",
+        isVideo: true
+      });
+    }
+    
+    // Add educational content slides
+    slides.push(
       {
         title: categoryData.name,
         subtitle: "Overview",
@@ -1838,7 +2639,23 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
         icon: Stethoscope,
         color: "from-green-500 to-emerald-500"
       }
-    ];
+    );
+    
+    // Add video quiz slide if category has video
+    if (hasVideo(categoryData)) {
+      const videoQuizModule = VIDEO_QUIZ_MODULES.find(m => m.category === selectedEducationalCategory);
+      if (videoQuizModule && videoQuizModule.questions.length > 0) {
+        slides.push({
+          title: "Test Your Knowledge",
+          subtitle: "Video Quiz",
+          content: `Ready to test what you learned from the video? Take this ${videoQuizModule.questions.length}-question quiz based on the video content.`,
+          icon: Brain,
+          color: "from-green-500 to-emerald-500",
+          isQuiz: true,
+          quizzes: videoQuizModule.questions
+        });
+      }
+    }
 
     const currentSlideData = slides[currentEducationalSlide];
     const IconComponent = currentSlideData.icon;
@@ -1884,7 +2701,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
               <button
                 key={index}
                 onClick={() => {
-                  playPageTurnSound();
+                  safePlayPageTurnSound();
                   setCurrentEducationalSlide(index);
                 }}
                 className={`h-2 rounded-full transition-all duration-300 ${
@@ -1925,31 +2742,91 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                 </div>
               </div>
 
-              {/* ECG Image Section */}
+              {/* Dynamic Content Section */}
               <div className="p-4 sm:p-6">
-                <div className="bg-gray-900/50 rounded-2xl p-4 mb-4">
-                  <SimpleImageViewer
-                    src={currentSlideData.image}
-                    alt={`${currentSlideData.title} ECG Example`}
-                    containerClassName="w-full h-48 sm:h-64"
-                  />
-                </div>
-                
-                {/* Content Section */}
-                <div className="text-blue-100 text-sm sm:text-base leading-relaxed">
-                  {Array.isArray(currentSlideData.content) ? (
-                    <div className="space-y-2">
-                      {currentSlideData.content.map((item, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          <div className={`w-2 h-2 bg-gradient-to-r ${currentSlideData.color} rounded-full mt-2 flex-shrink-0`}></div>
-                          <p>{item}</p>
-                        </div>
-                      ))}
+                {/* Video Slide */}
+                {currentSlideData.isVideo ? (
+                  <div className="space-y-4">
+                    <div className="bg-black rounded-2xl aspect-video relative overflow-hidden">
+                      <iframe
+                        className="absolute inset-0 w-full h-full"
+                        src={`https://www.youtube.com/embed/${currentSlideData.videoId}?rel=0&modestbranding=1`}
+                        title={currentSlideData.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
                     </div>
-                  ) : (
-                    <p>{currentSlideData.content}</p>
-                  )}
-                </div>
+                    <div className="text-blue-100 text-sm sm:text-base leading-relaxed">
+                      <p>{currentSlideData.content}</p>
+                    </div>
+                  </div>
+                ) : currentSlideData.isQuiz ? (
+                  /* Quiz Slide */
+                  <div className="space-y-4">
+                    <div className="bg-gradient-to-br from-green-900/50 to-emerald-900/50 rounded-2xl p-6 border border-green-500/30">
+                      <div className="text-center mb-6">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full text-green-300 text-sm font-medium mb-4">
+                          <Brain className="h-4 w-4" />
+                          Video Quiz Ready
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-2">Test Your Knowledge</h3>
+                        <p className="text-green-200 text-sm">
+                          {currentSlideData.quizzes.length} questions based on the video you just watched
+                        </p>
+                      </div>
+                      
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => {
+                            // Find the video quiz index for this category
+                            const videoQuizIndex = VIDEO_QUIZ_MODULES.findIndex(
+                              module => module.category === selectedEducationalCategory
+                            );
+                            if (videoQuizIndex >= 0) {
+                              startVideoQuiz(videoQuizIndex);
+                            }
+                          }}
+                          className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 rounded-xl text-white font-medium transition-all duration-300 transform hover:scale-105"
+                        >
+                          <Play className="h-5 w-5" />
+                          Start Video Quiz
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="text-blue-100 text-sm leading-relaxed">
+                      <p>{currentSlideData.content}</p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Regular Educational Slide */
+                  <>
+                    <div className="bg-gray-900/50 rounded-2xl p-4 mb-4">
+                      <SimpleImageViewer
+                        src={currentSlideData.image}
+                        alt={`${currentSlideData.title} ECG Example`}
+                        containerClassName="w-full h-48 sm:h-64"
+                      />
+                    </div>
+                    
+                    {/* Content Section */}
+                    <div className="text-blue-100 text-sm sm:text-base leading-relaxed">
+                      {Array.isArray(currentSlideData.content) ? (
+                        <div className="space-y-2">
+                          {currentSlideData.content.map((item, index) => (
+                            <div key={index} className="flex items-start gap-3">
+                              <div className={`w-2 h-2 bg-gradient-to-r ${currentSlideData.color} rounded-full mt-2 flex-shrink-0`}></div>
+                              <p>{item}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p>{currentSlideData.content}</p>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Navigation Controls - Hidden on mobile, use swipe instead */}
@@ -1957,7 +2834,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                 <div className="flex justify-between items-center">
                   <button
                     onClick={() => {
-                      playPageTurnSound();
+                      safePlayPageTurnSound();
                       setCurrentEducationalSlide(Math.max(0, currentEducationalSlide - 1));
                     }}
                     disabled={currentEducationalSlide === 0}
@@ -1986,7 +2863,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                   ) : (
                     <button
                       onClick={() => {
-                        playPageTurnSound();
+                        safePlayPageTurnSound();
                         setCurrentEducationalSlide(Math.min(slides.length - 1, currentEducationalSlide + 1));
                       }}
                       className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all"
@@ -2012,6 +2889,198 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
               )}
             </div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Video Quiz Interface
+  if (isVideoQuizActive) {
+    const currentVideoQuiz = VIDEO_QUIZ_MODULES[currentVideoQuizIndex];
+    if (!currentVideoQuiz) {
+      return null;
+    }
+
+    return (
+      <div className="fixed inset-0 bg-black flex flex-col">
+        {/* Header */}
+        <div className="p-4 bg-gradient-to-r from-purple-600 to-blue-600">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-white">{currentVideoQuiz.title}</h1>
+              <p className="text-white/80 text-sm">{currentVideoQuiz.description}</p>
+            </div>
+            <button
+              onClick={() => setIsVideoQuizActive(false)}
+              className="p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          
+          {/* Progress Bar */}
+          <div className="mt-3 bg-white/20 rounded-full h-2">
+            <div 
+              className="bg-white rounded-full h-full transition-all duration-500"
+              style={{ width: `${((videoQuizAnswered.length / currentVideoQuiz.questions.length) * 100)}%` }}
+            />
+          </div>
+          <p className="text-white/70 text-xs mt-1">
+            Progress: {videoQuizAnswered.length} / {currentVideoQuiz.questions.length} questions
+          </p>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-auto p-4">
+          {videoQuizAnswered.length === 0 && (
+            <div className="bg-white/10 backdrop-blur rounded-xl p-6 mb-4">
+              <h3 className="text-white text-lg font-semibold mb-3">Watch the Video First</h3>
+              <div className="aspect-video bg-black rounded-xl overflow-hidden">
+                <iframe
+                  src={`https://www.youtube.com/embed/${currentVideoQuiz.videoId}?rel=0&modestbranding=1`}
+                  className="w-full h-full"
+                  allowFullScreen
+                  title={currentVideoQuiz.title}
+                />
+              </div>
+              <button
+                onClick={() => setVideoQuizAnswered([null])}
+                className="mt-4 w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6 rounded-xl hover:scale-105 transition-all font-medium"
+              >
+                Start Quiz
+              </button>
+            </div>
+          )}
+
+          {videoQuizAnswered.length > 0 && (
+            <div className="space-y-4">
+              {currentVideoQuiz.questions.map((question, index) => {
+                const isAnswered = videoQuizAnswered[index] !== undefined;
+                const userAnswer = videoQuizAnswered[index];
+                
+                if (index >= videoQuizAnswered.length) return null;
+                
+                return (
+                  <div key={index} className="bg-white/10 backdrop-blur rounded-xl p-6">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-full p-3 flex-shrink-0">
+                        <span className="text-white font-bold text-lg">{index + 1}</span>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-white text-lg font-semibold mb-2">{question.question}</h3>
+                        {question.imageUrl && (
+                          <div className="bg-white rounded-lg p-4 mb-4">
+                            <img 
+                              src={question.imageUrl} 
+                              alt="ECG strip" 
+                              className="w-full h-auto rounded"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid gap-3">
+                      {question.options.map((option, optionIndex) => {
+                        const isCorrect = option === question.correctAnswer;
+                        const isSelected = userAnswer === option;
+                        
+                        let buttonClass = "p-4 rounded-xl text-left transition-all border-2 ";
+                        
+                        if (!isAnswered) {
+                          buttonClass += "bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/30";
+                        } else {
+                          if (isCorrect) {
+                            buttonClass += "bg-green-500/20 border-green-500 text-green-300";
+                          } else if (isSelected && !isCorrect) {
+                            buttonClass += "bg-red-500/20 border-red-500 text-red-300";
+                          } else {
+                            buttonClass += "bg-white/5 border-white/20 text-white/70";
+                          }
+                        }
+
+                        return (
+                          <button
+                            key={optionIndex}
+                            onClick={() => {
+                              if (!isAnswered) {
+                                const newAnswers = [...videoQuizAnswered];
+                                newAnswers[index] = option;
+                                setVideoQuizAnswered(newAnswers);
+                                
+                                if (isCorrect) {
+                                  setVideoQuizScore(prev => prev + 1);
+                                }
+                                
+                                // Auto-progress to next question after 2 seconds
+                                setTimeout(() => {
+                                  if (index < currentVideoQuiz.questions.length - 1) {
+                                    const nextAnswers = [...newAnswers];
+                                    nextAnswers[index + 1] = null;
+                                    setVideoQuizAnswered(nextAnswers);
+                                  }
+                                }, 2000);
+                              }
+                            }}
+                            disabled={isAnswered}
+                            className={buttonClass}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-bold ${
+                                isAnswered && isCorrect ? 'border-green-500 bg-green-500 text-white' :
+                                isAnswered && isSelected ? 'border-red-500 bg-red-500 text-white' :
+                                'border-current'
+                              }`}>
+                                {String.fromCharCode(65 + optionIndex)}
+                              </div>
+                              <span>{option}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {isAnswered && (
+                      <div className="mt-4 p-4 bg-white/5 rounded-xl">
+                        <h4 className="text-white font-semibold mb-2">Explanation:</h4>
+                        <p className="text-white/80 text-sm">{question.explanation}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {videoQuizAnswered.length === currentVideoQuiz.questions.length && (
+                <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6 text-center">
+                  <h3 className="text-white text-xl font-bold mb-2">Quiz Complete!</h3>
+                  <p className="text-white/80 mb-4">
+                    Your Score: {videoQuizScore} / {currentVideoQuiz.questions.length}
+                  </p>
+                  <div className="flex gap-3 justify-center flex-wrap">
+                    <button
+                      onClick={() => {
+                        setVideoQuizAnswered([]);
+                        setVideoQuizScore(0);
+                      }}
+                      className="bg-white/20 hover:bg-white/30 text-white py-2 px-4 rounded-xl transition-all"
+                    >
+                      Retake Quiz
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsVideoQuizActive(false);
+                        setVideoQuizAnswered([]);
+                        setVideoQuizScore(0);
+                      }}
+                      className="bg-gradient-to-r from-green-500 to-green-600 text-white py-2 px-4 rounded-xl hover:scale-105 transition-all"
+                    >
+                      Back to Learn Mode
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

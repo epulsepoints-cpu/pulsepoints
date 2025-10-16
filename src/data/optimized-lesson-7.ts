@@ -217,7 +217,7 @@ export const optimizedLesson7: Lesson = {
         type: 'highlight',
         layout: 'centered',
         animation: 'fade',
-        imageUrl: '/lessonimages/gender-ecg-differences.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
         imageAlt: 'Gender-specific ECG patterns overview',
         highlights: [
           '♀️ Female normal variants',
@@ -381,7 +381,7 @@ export const optimizedLesson7: Lesson = {
         layout: 'centered',
         animation: 'fade',
         audioUrl: '/lessonaudio/normal-variants/gender-differences-analysis.mp3',
-        imageUrl: '/lessonimages/gender-ecg-differences.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
         imageAlt: 'Gender differences audio lesson',
         hint: '🔊 Master gender-specific patterns!'
       },
@@ -394,7 +394,7 @@ export const optimizedLesson7: Lesson = {
         type: 'quiz',
         layout: 'centered',
         animation: 'slide',
-        imageUrl: '/lessonimages/gender-ecg-differences.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
         imageAlt: 'Gender differences quiz',
         hint: '🧠 Test your Unit 2 knowledge!',
         question: "Why should women be monitored more carefully for drug-induced QT prolongation?",
@@ -418,7 +418,7 @@ export const optimizedLesson7: Lesson = {
         type: 'highlight',
         layout: 'centered',
         animation: 'fade',
-        imageUrl: '/lessonimages/positional-ecg-changes.png',
+        imageUrl: '/lessonimages/positional-ecg-variations.png',
         imageAlt: 'Positional ECG changes overview',
         highlights: [
           '🔄 Position-dependent changes',
@@ -439,7 +439,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/elderly-ecg-variants.png',
+        imageUrl: '/lessonimages/age-related-ecg-changes.png',
       imageAlt: 'Elderly ECG normal variants',
       hint: '👴 Slower but often still normal!'
     },
@@ -455,7 +455,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-      imageUrl: '/lessonimages/age-interpretation.png',
+      imageUrl: '/lessonimages/age-related-ecg-changes.png',
       imageAlt: 'Age-based interpretation principles',
       hint: '🎯 Age-appropriate interpretation!'
     },
@@ -493,7 +493,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/gender-ecg-differences.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Gender differences overview',
       hint: '♀️♂️ Gender creates normal differences!'
     },
@@ -507,7 +507,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/female-ecg-patterns.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Female ECG characteristics',
       hint: '♀️ Female patterns are distinctive!'
     },
@@ -521,7 +521,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/male-ecg-patterns.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Male ECG characteristics',
       hint: '♂️ Male patterns show higher voltages!'
     },
@@ -535,7 +535,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/hormonal-influences.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Hormonal influences on ECG',
       hint: '🧬 Hormones shape ECG patterns!'
     },
@@ -549,7 +549,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/pregnancy-ecg-changes.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Pregnancy-related ECG changes',
       hint: '🤰 Pregnancy creates predictable changes!'
     },
@@ -565,7 +565,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-      imageUrl: '/lessonimages/gender-criteria.png',
+      imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Gender-specific diagnostic criteria',
       hint: '📏 Different criteria for different genders!'
     },
@@ -582,7 +582,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-      imageUrl: '/lessonimages/gender-pitfalls.png',
+      imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Gender interpretation pitfalls',
       hint: '⚠️ Avoid gender bias in interpretation!'
     },
@@ -595,7 +595,7 @@ export const optimizedLesson7: Lesson = {
       layout: 'centered',
       animation: 'fade',
       audioUrl: '/lessonaudio/normal-variations/gender-differences.mp3',
-      imageUrl: '/lessonimages/gender-ecg-differences.png',
+      imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Gender differences audio lesson',
       hint: '🔊 Learn gender-specific patterns!'
     },
@@ -608,7 +608,7 @@ export const optimizedLesson7: Lesson = {
       type: 'quiz',
       layout: 'centered',
       animation: 'slide',
-      imageUrl: '/lessonimages/gender-ecg-differences.png',
+      imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Gender differences quiz',
       hint: '🧠 Test your Unit 2 knowledge!',
       question: "Which ECG characteristic is typically more prominent in men than women?",
@@ -633,7 +633,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/positional-ecg-variants.png',
+        imageUrl: '/lessonimages/positional-ecg-variations.png',
       imageAlt: 'Positional changes overview',
       hint: '📐 Position affects ECG patterns!'
     },
@@ -647,7 +647,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/body-habitus-ecg.png',
+        imageUrl: '/lessonimages/positional-ecg-variations.png',
       imageAlt: 'Body habitus ECG effects',
       hint: '📏 Body shape determines heart position!'
     },
@@ -661,7 +661,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/patient-positioning.png',
+        imageUrl: '/lessonimages/positional-ecg-variations.png',
       imageAlt: 'Patient positioning effects',
       hint: '🛏️ Position matters for consistency!'
     },
@@ -675,7 +675,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/respiratory-ecg-effects.png',
+        imageUrl: '/lessonimages/respiratory-sinus-arrhythmia-cycle.png',
       imageAlt: 'Respiratory effects on ECG',
       hint: '🫁 Breathing changes heart position!'
     },
@@ -689,7 +689,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/chest-anatomy-variations.png',
+        imageUrl: '/lessonimages/positional-ecg-variations.png',
       imageAlt: 'Chest anatomy ECG variations',
       hint: '🫁 Chest shape affects ECG!'
     },
@@ -703,7 +703,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/obesity-ecg-effects.png',
+        imageUrl: '/lessonimages/positional-ecg-variations.png',
       imageAlt: 'Obesity effects on ECG',
       hint: '📊 More tissue = lower voltage!'
     },
@@ -717,7 +717,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/electrode-placement.png',
+        imageUrl: '/lessonimages/limb-lead-placement.png',
       imageAlt: 'Electrode placement variations',
       hint: '📍 Consistent placement crucial!'
     },
@@ -729,7 +729,7 @@ export const optimizedLesson7: Lesson = {
       layout: 'centered',
       animation: 'fade',
       audioUrl: '/lessonaudio/normal-variations/age-related-variations.mp3',
-      imageUrl: '/lessonimages/positional-ecg-variants.png',
+      imageUrl: '/lessonimages/positional-ecg-variations.png',
       imageAlt: 'Positional variations audio lesson',
       hint: '🔊 Master positional effects!'
     },
@@ -742,7 +742,7 @@ export const optimizedLesson7: Lesson = {
       type: 'quiz',
       layout: 'centered',
       animation: 'slide',
-      imageUrl: '/lessonimages/positional-ecg-variants.png',
+      imageUrl: '/lessonimages/positional-ecg-variations.png',
       imageAlt: 'Positional changes quiz',
       hint: '🧠 Test your Unit 3 knowledge!',
       question: "In obese patients, ECG voltage is typically:",
@@ -767,7 +767,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/athletic-heart-ecg.png',
+        imageUrl: '/lessonimages/athletic-heart-syndrome.png',
       imageAlt: 'Athletic heart overview',
       hint: '🏃‍♂️ Fitness changes the heart!'
     },
@@ -795,7 +795,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/athletic-voltage-changes.png',
+        imageUrl: '/lessonimages/athletic-heart-syndrome.png',
       imageAlt: 'Athletic voltage changes',
       hint: '💪 Stronger heart = bigger voltages!'
     },
@@ -809,7 +809,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/early-repolarization-athletic.png',
+        imageUrl: '/lessonimages/early-repolarization-vs-stemi.png',
       imageAlt: 'Early repolarization in athletes',
       hint: '📈 ST elevation that\'s normal!'
     },
@@ -823,7 +823,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/athletic-conduction.png',
+        imageUrl: '/lessonimages/athletic-heart-syndrome.png',
       imageAlt: 'Athletic conduction changes',
       hint: '🔄 Vagal tone affects conduction!'
     },
@@ -837,7 +837,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/sport-specific-patterns.png',
+        imageUrl: '/lessonimages/athletic-heart-syndrome.png',
       imageAlt: 'Sport-specific ECG patterns',
       hint: '🏃‍♂️ Different sports, different patterns!'
     },
@@ -851,7 +851,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/athletic-vs-pathological.png',
+        imageUrl: '/lessonimages/athletic-heart-syndrome.png',
       imageAlt: 'Athletic vs pathological comparison',
       hint: '⚖️ Key distinction for diagnosis!'
     },
@@ -863,7 +863,7 @@ export const optimizedLesson7: Lesson = {
       layout: 'centered',
       animation: 'fade',
       videoUrl: '/lessonvideos/normal-ecg-variations.mp4',
-      imageUrl: '/lessonimages/athletic-heart-ecg.png',
+      imageUrl: '/lessonimages/athletic-heart-syndrome.png',
       imageAlt: 'Normal variations video lesson',
       hint: '🎬 See all variations in action!'
     },
@@ -876,7 +876,7 @@ export const optimizedLesson7: Lesson = {
       type: 'quiz',
       layout: 'centered',
       animation: 'slide',
-      imageUrl: '/lessonimages/athletic-heart-ecg.png',
+      imageUrl: '/lessonimages/athletic-heart-syndrome.png',
       imageAlt: 'Athletic heart quiz',
       hint: '🧠 Test your Unit 4 knowledge!',
       question: "A heart rate of 45 bpm in a trained marathon runner is:",
@@ -901,7 +901,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/population-variations.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Population variations overview',
       hint: '🌍 Population diversity affects normals!'
     },
@@ -915,7 +915,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/ethnic-variations.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Ethnic ECG variations',
       hint: '👥 Genetics influence ECG patterns!'
     },
@@ -929,7 +929,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/altitude-effects.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Altitude ECG effects',
       hint: '🏔️ Environment affects the heart!'
     },
@@ -943,7 +943,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/genetic-factors.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Genetic factors in ECG',
       hint: '🧬 Genes determine normal ranges!'
     },
@@ -957,7 +957,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/socioeconomic-factors.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Socioeconomic factors affecting ECG',
       hint: '💰 Lifestyle affects cardiac health!'
     },
@@ -971,7 +971,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/reference-ranges.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Reference range considerations',
       hint: '📊 Reference ranges must represent populations!'
     },
@@ -985,7 +985,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/global-standards.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Global ECG standards',
       hint: '🌐 Global standards, local adaptations!'
     },
@@ -996,7 +996,7 @@ export const optimizedLesson7: Lesson = {
       type: 'audio',
       layout: 'centered',
       animation: 'fade',
-        imageUrl: '/lessonimages/population-variations.png',
+        imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Population variations audio lesson',
       hint: '🔊 Learn population-specific patterns!'
     },
@@ -1009,7 +1009,7 @@ export const optimizedLesson7: Lesson = {
       type: 'quiz',
       layout: 'centered',
       animation: 'slide',
-      imageUrl: '/lessonimages/population-variations.png',
+      imageUrl: '/lessonimages/normal-ecg-variations-overview.png',
       imageAlt: 'Population variations quiz',
       hint: '🧠 Test your Unit 5 knowledge!',
       question: "Early repolarization patterns are most commonly seen in:",
@@ -1034,7 +1034,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/clinical-recognition.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
       imageAlt: 'Clinical recognition overview',
       hint: '🔍 Recognize variants to prevent errors!'
     },
@@ -1048,7 +1048,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/systematic-approach.png',
+        imageUrl: '/lessonimages/rhythm-vs-rate-overview.png',
       imageAlt: 'Systematic approach to variant recognition',
       hint: '📋 Systematic approach prevents errors!'
     },
@@ -1062,7 +1062,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/red-flags-variants.png',
+        imageUrl: '/lessonimages/artifact-causes-overview.png',
       imageAlt: 'Red flags vs normal variants',
       hint: '🚩 Some patterns need investigation!'
     },
@@ -1076,7 +1076,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/variant-documentation.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
       imageAlt: 'Variant documentation standards',
       hint: '📝 Clear documentation prevents confusion!'
     },
@@ -1090,7 +1090,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/patient-education.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
       imageAlt: 'Patient education about variants',
       hint: '🗣️ Education reduces patient anxiety!'
     },
@@ -1104,7 +1104,7 @@ export const optimizedLesson7: Lesson = {
       ],
       type: 'highlight',
       animation: 'fade',
-        imageUrl: '/lessonimages/quality-assurance.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
       imageAlt: 'Quality assurance for variants',
       hint: '✅ Systems prevent misinterpretation!'
     },
@@ -1115,7 +1115,7 @@ export const optimizedLesson7: Lesson = {
       type: 'audio',
       layout: 'centered',
       animation: 'fade',
-        imageUrl: '/lessonimages/clinical-recognition.png',
+        imageUrl: '/lessonimages/clinical-applications-overview.png',
       imageAlt: 'Normal variations mastery celebration',
       hint: '🎉 You\'ve mastered normal variations!'
     },
@@ -1128,7 +1128,7 @@ export const optimizedLesson7: Lesson = {
       type: 'quiz',
       layout: 'centered',
       animation: 'slide',
-      imageUrl: '/lessonimages/clinical-recognition.png',
+      imageUrl: '/lessonimages/clinical-applications-overview.png',
       imageAlt: 'Clinical recognition quiz',
       hint: '🧠 Test your Unit 6 knowledge!',
       question: "When evaluating a potential ECG variant, the most important first step is:",

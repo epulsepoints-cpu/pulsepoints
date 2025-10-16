@@ -33,7 +33,7 @@ export const optimizedLesson69: Lesson = {
         backgroundColor: '#fef2f2',
         textColor: '#991b1b',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00311_anterior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI.jpg',
         imageAlt: 'Classic anterior STEMI pattern showing ST elevation in precordial leads',
         highlights: [
           '⚡ Life-threatening emergency',
@@ -54,7 +54,7 @@ export const optimizedLesson69: Lesson = {
         backgroundColor: '#fef2f2',
         textColor: '#991b1b',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00418_anterior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI3.jpg',
         imageAlt: 'Anterior STEMI showing classic ST elevation pattern'
       },
 
@@ -152,7 +152,7 @@ export const optimizedLesson69: Lesson = {
         textColor: '#c2410c',
         animation: 'fade',
         content: 'Every minute counts in STEMI! Myocardial cell death begins within 20-30 minutes of complete occlusion. Peak salvage occurs within the first 2-3 hours.',
-        imageUrl: '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00008_inferior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Inferior_wall_MI/IMI.jpg',
         imageAlt: 'Inferior STEMI showing time-critical ST elevation',
         highlights: [
           '⏰ 0-20 min: Reversible ischemia',
@@ -221,7 +221,7 @@ export const optimizedLesson69: Lesson = {
         backgroundColor: '#f0f9ff',
         textColor: '#1e40af',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00486_anterior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI5.jpg',
         imageAlt: 'ECG showing ST elevation meeting STEMI criteria',
         highlights: [
           '📏 Precise millimeter criteria',
@@ -307,7 +307,7 @@ export const optimizedLesson69: Lesson = {
         backgroundColor: '#f0f9ff',
         textColor: '#1e40af',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00600_anterior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI6.jpg',
         imageAlt: 'ECG showing contiguous ST elevation in multiple leads'
       },
 
@@ -343,7 +343,7 @@ export const optimizedLesson69: Lesson = {
         textColor: '#166534', 
         animation: 'fade',
         content: 'Practice measuring ST elevation on this anterior STEMI example. Identify the J-point, establish baseline, and measure elevation height.',
-        imageUrl: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00716_anterior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI8.jpg',
         imageAlt: 'Practice ECG for ST elevation measurement',
         highlights: [
           '📍 Locate J-point precisely',
@@ -384,7 +384,7 @@ export const optimizedLesson69: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c3aed',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00153_inferior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Inferior_wall_MI/imi (2).jpg',
         imageAlt: 'Inferior STEMI showing territory-specific ST elevation',
         highlights: [
           '🗺️ Anatomical correlation',
@@ -493,7 +493,7 @@ export const optimizedLesson69: Lesson = {
         backgroundColor: '#fef7ff',
         textColor: '#7c3aed',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00161_inferior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Inferior_wall_MI/imi (3).jpg',
         imageAlt: 'Inferior STEMI with characteristic complications'
       },
 
@@ -505,7 +505,7 @@ export const optimizedLesson69: Lesson = {
         textColor: '#c2410c',
         animation: 'fade',
         content: 'Reciprocal changes (ST depression) in leads opposite to ST elevation strongly support STEMI diagnosis and help localize the culprit vessel.',
-        imageUrl: '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00175_inferior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Lateral_wall_MI/LMI.jpg',
         imageAlt: 'ECG showing reciprocal changes with inferior STEMI',
         highlights: [
           '🔄 Electrical opposite of injury',
@@ -546,7 +546,7 @@ export const optimizedLesson69: Lesson = {
         backgroundColor: '#f0fdf4',
         textColor: '#166534',
         animation: 'fade',
-        imageUrl: '/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00210_inferior myocardial infarction.png',
+        imageUrl: '/ecg/MI_ecg_database/Inferior_wall_MI/imi (4).jpg',
         imageAlt: 'Time-critical STEMI requiring immediate recognition',
         highlights: [
           '⏱️ Systematic 10-second approach',
@@ -1077,7 +1077,7 @@ export const optimizedLesson69: Lesson = {
         }
       },
       images: {
-        mainImage: '/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00311_anterior myocardial infarction.png',
+        mainImage: '/ecg/MI_ecg_database/Anterior_wall_MI/AMI.jpg',
         slideImages: []
       },
       content: {
@@ -1095,7 +1095,7 @@ export const optimizedLesson69: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! For men >40 years, STEMI criteria require ≥2.0mm in V2-V3 (this patient has 2.8mm) and ≥1.0mm in V4-V6 (has 1.3mm). This is anterior STEMI requiring immediate catheterization.",
-            imageUrl: "/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00418_anterior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Anterior_wall_MI/AMI3.jpg"
           },
           {
             id: "territory-recognition-assessment",
@@ -1109,7 +1109,7 @@ export const optimizedLesson69: Lesson = {
             ],
             correctAnswer: 2,
             explanation: "Correct! ST elevation in II, III, aVF with reciprocal depression in I, aVL indicates inferior STEMI. The RCA supplies the inferior wall in 90% of patients, making it the most likely culprit vessel.",
-            imageUrl: "/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00008_inferior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Inferior_wall_MI/IMI.jpg"
           },
           {
             id: "time-critical-assessment",
@@ -1123,7 +1123,7 @@ export const optimizedLesson69: Lesson = {
             ],
             correctAnswer: 1,
             explanation: "Correct! The guideline-recommended door-to-balloon time is ≤90 minutes for STEMI patients at PCI-capable hospitals. Every 30-minute delay increases mortality by 7.5%.",
-            imageUrl: "/ecg/ecg_dataset_clean/AMI_anterior_myocardial_infarction/clean_00486_anterior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Anterior_wall_MI/AMI5.jpg"
           },
           {
             id: "stemi-mimic-assessment",
@@ -1179,7 +1179,7 @@ export const optimizedLesson69: Lesson = {
             ],
             correctAnswer: 2,
             explanation: "Correct! Inferior STEMI (RCA territory) commonly causes bradycardia and AV blocks because the RCA typically supplies the SA and AV nodes. Anterior STEMI more commonly causes pump failure and VF.",
-            imageUrl: "/ecg/ecg_dataset_clean/IMI_inferior_myocardial_infarction/clean_00153_inferior myocardial infarction.png"
+            imageUrl: "/ecg/MI_ecg_database/Inferior_wall_MI/imi (2).jpg"
           },
           {
             id: "post-stemi-therapy-assessment",

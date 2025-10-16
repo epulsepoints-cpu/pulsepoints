@@ -1,9 +1,0 @@
-MIT-BIH Record 118
-Condition: Right Bundle Branch Block
-Files: 118.dat, 118.hea, 118.atr
-
-This is a placeholder file. To generate actual ECG images, you need:
-1. Python with wfdb, matplotlib, numpy packages
-2. Run the full processing script
-
-The raw ECG data files have been downloaded to the temp directory.

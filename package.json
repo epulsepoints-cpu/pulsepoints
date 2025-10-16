@@ -1,10 +1,10 @@
 {
-  "name": "ecgkid-pulsepoints",
+  "name": "e-pulsepoints",
   "private": false,
   "version": "1.0.0",
   "description": "A gamified ECG learning app to master electrocardiogram interpretation with daily challenges, achievements, and progress tracking.",
-  "author": "ECGkid <support@ecgkid.com>",
-  "homepage": "https://ecgkid.com",
+  "author": "E-Pulsepoints Team <support@e-pulsepoints.com>",
+  "homepage": "https://e-pulsepoints.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/filmmaking90/ecg-learn-game-main.git"
@@ -72,7 +72,7 @@
     "android:test:device": "npm run build:prod && npx cap sync android && cd android && ./gradlew installDebug",
     "android:crashfix": "npm run clean:android && npm run build:prod && npx cap sync android --force",
     "android:logcat": "adb logcat *:E",
-    "android:clear:logs": "adb logcat -c && adb logcat | grep -E '(ECGkid|PulsePoints|Capacitor|WebView)'",
+    "android:clear:logs": "adb logcat -c && adb logcat | grep -E '(E-Pulsepoints|PulsePoints|Capacitor|WebView)'",
     "studio:prepare": "npm run build:prod && npx cap sync android && echo 'Opening Android Studio...' && npx cap open android",
     "studio:clean": "cd android && ./gradlew clean && echo 'Android project cleaned'",
     "studio:build:debug": "cd android && ./gradlew assembleDebug",
