@@ -8,6 +8,10 @@ ptbxl_ecg_processor.*
 android/
 android/**/*
 
+# Ignore API directory (not used for main web deployment)
+api/
+api/**/*
+
 # Ignore development files
 node_modules/
 .env.local
