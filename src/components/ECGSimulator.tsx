@@ -2317,7 +2317,7 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
           {/* Remove old answer sections and replace with popup */}
         </div>
 
-        {/* Answer Feedback Popup - Duolingo Style */}
+        {/* Answer Feedback Popup - Mobile Optimized (80% screen) */}
         <AnimatePresence>
           {showAnswerFeedback && currentQuestion && (
             <motion.div
@@ -2330,17 +2330,17 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                 initial={{ scale: 0.8, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.8, y: 50 }}
-                className="w-full max-w-lg mx-auto"
+                className="w-[80%] sm:w-full sm:max-w-md mx-auto max-h-[80vh] sm:max-h-[90vh] overflow-y-auto"
               >
                 <Card className={`${
                   isAnswerCorrect 
                     ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200' 
                     : 'bg-gradient-to-br from-red-50 to-pink-50 border-red-200'
                 } shadow-2xl`}>
-                  <CardContent className="p-8 text-center">
-                    {/* Result Icon with Lottie Animation */}
+                  <CardContent className="p-4 sm:p-6 text-center">
+                    {/* Result Icon with Lottie Animation - Mobile Optimized */}
                     <motion.div
-                      className="w-20 h-20 mx-auto mb-6 flex items-center justify-center"
+                      className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 flex items-center justify-center"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ 
@@ -2352,21 +2352,21 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                       {isAnswerCorrect ? (
                         <MedicalAnimation
                           type="success-check"
-                          size="large"
+                          size="medium"
                           loop={false}
                           autoplay={true}
                           className="drop-shadow-lg"
                         />
                       ) : (
-                        <div className="w-20 h-20 rounded-full flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500">
-                          <X className="w-10 h-10 text-white" />
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-r from-red-500 to-pink-500">
+                          <X className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                         </div>
                       )}
                     </motion.div>
 
-                    {/* Result Title */}
+                    {/* Result Title - Mobile Optimized */}
                     <motion.h2 
-                      className={`text-4xl font-extrabold mb-4 ${
+                      className={`text-2xl sm:text-3xl font-extrabold mb-2 sm:mb-3 ${
                         isAnswerCorrect ? 'text-green-700' : 'text-red-700'
                       }`}
                       initial={{ opacity: 0, y: 20 }}
@@ -2376,115 +2376,123 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                       {isAnswerCorrect ? '🎉 Correct!' : '😔 Incorrect!'}
                     </motion.h2>
 
-                    {/* XP Reward for Correct Answers with Celebration Animation */}
+                    {/* XP Reward for Correct Answers - Mobile Optimized */}
                     {isAnswerCorrect && xpAwarded > 0 && (
                       <motion.div 
-                        className="relative flex items-center justify-center gap-2 mb-4"
+                        className="relative flex items-center justify-center gap-1 sm:gap-2 mb-2 sm:mb-3"
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.4, type: "spring" }}
                       >
-                        {/* Background Celebration Animation */}
+                        {/* Background Celebration Animation - Smaller on mobile */}
                         <div className="absolute inset-0 flex items-center justify-center">
                           <MedicalAnimation
                             type="celebration"
-                            size="xl"
+                            size="large"
                             loop={false}
                             autoplay={true}
-                            className="opacity-60"
+                            className="opacity-50"
                           />
                         </div>
                         
-                        {/* XP Display */}
-                        <div className="relative z-10 flex items-center gap-2">
-                          <Zap className="w-6 h-6 text-yellow-500" />
-                          <span className="font-bold text-lg text-yellow-600 bg-yellow-100 px-3 py-1 rounded-full">
+                        {/* XP Display - Mobile Optimized */}
+                        <div className="relative z-10 flex items-center gap-1 sm:gap-2">
+                          <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500" />
+                          <span className="font-bold text-sm sm:text-base text-yellow-600 bg-yellow-100 px-2 sm:px-3 py-1 rounded-full">
                             +{xpAwarded} XP
                           </span>
                         </div>
                       </motion.div>
                     )}
 
-                    {/* Correct Answer Display for Wrong Answers */}
+                    {/* Correct Answer Display for Wrong Answers - Mobile Optimized */}
                     {!isAnswerCorrect && (
                       <motion.div
-                        className="mb-6 p-4 bg-green-100 border border-green-200 rounded-xl"
+                        className="mb-3 sm:mb-4 p-3 sm:p-4 bg-green-100 border border-green-200 rounded-lg"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
                       >
-                        <p className="text-green-800 text-sm font-medium mb-1">Correct answer:</p>
-                        <p className="text-green-900 text-lg font-bold">{currentQuestion.correctAnswer}</p>
+                        <p className="text-green-800 text-xs sm:text-sm font-medium mb-1">Correct answer:</p>
+                        <p className="text-green-900 text-sm sm:text-base font-bold">{currentQuestion.correctAnswer}</p>
                       </motion.div>
                     )}
 
-                    {/* Explanation */}
+                    {/* Explanation - Hidden on Mobile, Shown on Desktop */}
                     <motion.div
-                      className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-left"
+                      className="hidden sm:block mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg text-left"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
                     >
                       <div className="flex items-center gap-2 mb-2">
-                        <Brain className="w-4 h-4 text-blue-600" />
-                        <h4 className="font-semibold text-blue-800">Explanation</h4>
+                        <Brain className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
+                        <h4 className="font-semibold text-sm sm:text-base text-blue-800">Explanation</h4>
                       </div>
-                      <p className="text-blue-700 text-sm leading-relaxed mb-3">
+                      <p className="text-blue-700 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3">
                         {currentQuestion.explanation}
                       </p>
                       
-                      {/* Enhanced Medical Information */}
+                      {/* Enhanced Medical Information - Mobile Optimized & Collapsible */}
                       {(currentQuestion.heartRate || currentQuestion.medicalContext || currentQuestion.tags) && (
-                        <div className="mt-4 pt-3 border-t border-blue-200">
-                          {/* Heart Rate */}
+                        <div className="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-blue-200">
+                          {/* Heart Rate - Hidden on Mobile */}
                           {currentQuestion.heartRate && (
-                            <div className="mb-2 flex items-center gap-2">
-                              <Heart className="w-4 h-4 text-red-500" />
-                              <span className="text-sm font-medium text-blue-800">
+                            <div className="hidden sm:flex mb-2 items-center gap-1 sm:gap-2">
+                              <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500" />
+                              <span className="text-xs sm:text-sm font-medium text-blue-800">
                                 Heart Rate: {currentQuestion.heartRate} BPM
                               </span>
                             </div>
                           )}
                           
-                          {/* Medical Context */}
+                          {/* Medical Context - Condensed for Mobile */}
                           {currentQuestion.medicalContext && (
-                            <div className="space-y-2">
+                            <div className="space-y-1 sm:space-y-2">
                               {currentQuestion.medicalContext.mechanism && (
                                 <div>
                                   <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Mechanism:</span>
-                                  <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.mechanism}</p>
+                                  <p className="text-xs text-blue-600 leading-tight sm:leading-relaxed">{currentQuestion.medicalContext.mechanism}</p>
                                 </div>
                               )}
-                              {currentQuestion.medicalContext.clinical_significance && (
-                                <div>
-                                  <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Clinical Significance:</span>
-                                  <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.clinical_significance}</p>
-                                </div>
-                              )}
-                              {currentQuestion.medicalContext.management && (
-                                <div>
-                                  <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Management:</span>
-                                  <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.management}</p>
-                                </div>
-                              )}
+                              {/* Show only most important info on mobile, expandable on larger screens */}
+                              <div className="hidden sm:block space-y-2">
+                                {currentQuestion.medicalContext.clinical_significance && (
+                                  <div>
+                                    <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Clinical Significance:</span>
+                                    <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.clinical_significance}</p>
+                                  </div>
+                                )}
+                                {currentQuestion.medicalContext.management && (
+                                  <div>
+                                    <span className="text-xs font-semibold text-blue-800 uppercase tracking-wide">Management:</span>
+                                    <p className="text-xs text-blue-600 leading-relaxed">{currentQuestion.medicalContext.management}</p>
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
                           
-                          {/* Tags */}
+                          {/* Tags - Limited on mobile */}
                           {currentQuestion.tags && currentQuestion.tags.length > 0 && (
-                            <div className="mt-3 flex flex-wrap gap-1">
-                              {currentQuestion.tags.map((tag, index) => (
-                                <Badge key={index} variant="secondary" className="text-xs px-2 py-1 bg-blue-100 text-blue-700">
+                            <div className="mt-2 sm:mt-3 flex flex-wrap gap-1">
+                              {currentQuestion.tags.slice(0, 3).map((tag, index) => (
+                                <Badge key={index} variant="secondary" className="text-xs px-1 sm:px-2 py-0.5 sm:py-1 bg-blue-100 text-blue-700">
                                   {tag}
                                 </Badge>
                               ))}
+                              {currentQuestion.tags.length > 3 && (
+                                <Badge variant="secondary" className="text-xs px-1 sm:px-2 py-0.5 sm:py-1 bg-blue-100 text-blue-700">
+                                  +{currentQuestion.tags.length - 3}
+                                </Badge>
+                              )}
                             </div>
                           )}
                         </div>
                       )}
                     </motion.div>
 
-                    {/* Continue Button with Auto-progress indicator */}
+                    {/* Continue Button - Mobile Optimized */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -2499,14 +2507,15 @@ const ECGSimulator: React.FC<ECGSimulatorProps> = ({ onBack }) => {
                             console.error('❌ Error in button click:', error);
                           }
                         }}
-                        className={`w-full py-4 text-lg font-bold rounded-xl ${
+                        className={`w-full py-3 sm:py-4 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl ${
                           isAnswerCorrect
                             ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
                             : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600'
                         } text-white shadow-lg transition-all duration-300 transform hover:scale-105`}
                       >
-                        Continue to Next Question
-                        <ArrowLeft className="ml-2 w-5 h-5 rotate-180" />
+                        <span className="hidden sm:inline">Continue to Next Question</span>
+                        <span className="sm:hidden">Continue</span>
+                        <ArrowLeft className="ml-1 sm:ml-2 w-4 h-4 sm:w-5 sm:h-5 rotate-180" />
                       </Button>
 
                     </motion.div>

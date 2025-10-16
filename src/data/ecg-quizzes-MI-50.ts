@@ -1,10 +1,10 @@
 ﻿// ECG Quiz Database - MI Focused (50 Questions) - Auto-converted from JSON
 const ecgQuizzesMI50 = {
     "metadata":  {
-                     "version":  "2.0",
-                     "created_date":  "2025-10-16",
-                     "description":  "ECG MI Quiz Database - 60 Comprehensive Myocardial Infarction Questions",
-                     "total_quizzes":  60,
+                     "version":  "2.1",
+                     "created_date":  "2025-10-17",
+                     "description":  "ECG MI Quiz Database - 59 Focused MI Pattern Recognition Questions",
+                     "total_quizzes":  59,
                      "categories":  [
                                         "anterior_mi",
                                         "inferior_mi",
@@ -1001,31 +1001,6 @@ const ecgQuizzesMI50 = {
                                                "mechanism":  "Necrotic anterior wall cannot generate normal R wave forces",
                                                "clinical_significance":  "Early sign of significant anterior wall damage",
                                                "management":  "Indicates need for urgent reperfusion therapy"
-                                           }
-                    },
-                    {
-                        "id":  "quiz_mi_040",
-                        "question":  "What is the typical heart rate response in inferior MI with RV involvement?",
-                        "imageUrl":  "/ecg/MI_ecg_database/Inferior_wall_MI/imi6.jpg",
-                        "options":  [
-                                        "Tachycardia",
-                                        "Bradycardia",
-                                        "Normal rate",
-                                        "Irregular rhythm"
-                                    ],
-                        "correctAnswer":  "Bradycardia",
-                        "explanation":  "Inferior MI with RV involvement often presents with bradycardia due to RCA supplying the SA and AV nodes in most patients, leading to sinus bradycardia and AV blocks.",
-                        "category":  "inferior_mi",
-                        "difficulty":  "hard",
-                        "tags":  [
-                                     "bradycardia",
-                                     "rca",
-                                     "conduction_system"
-                                 ],
-                        "medicalContext":  {
-                                               "mechanism":  "RCA supplies SA node (60%) and AV node (85%)",
-                                               "clinical_significance":  "Conduction abnormalities common in inferior MI",
-                                               "management":  "May require temporary pacing, avoid negative chronotropes"
                                            }
                     },
                     {

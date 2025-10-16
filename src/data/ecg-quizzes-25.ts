@@ -1,9 +1,9 @@
 const ecgQuizzes25 = {
   "metadata": {
-    "version": "2.0",
-    "created_date": "2025-10-16",
-    "description": "ECG Master Quiz Database - 35 Comprehensive Medical ECG Questions",
-    "total_quizzes": 35,
+    "version": "2.1",
+    "created_date": "2025-10-17",
+    "description": "ECG Master Quiz Database - 32 Focused Rhythm Recognition Questions",
+    "total_quizzes": 32,
     "categories": ["normal_sinus", "bradycardia", "tachycardia", "atrial_fibrillation", "ventricular_tachycardia", "bundle_branch_blocks", "av_blocks", "other_arrhythmias"],
     "difficulty_levels": ["easy", "medium", "hard"]
   },
@@ -261,27 +261,6 @@ const ecgQuizzes25 = {
       }
     },
     {
-      "id": "quiz_013",
-      "question": "What is the most appropriate classification for this rapid heart rate?",
-      "imageUrl": "/ecg/medical_accurate/tachycardia_155bpm.png",
-      "options": [
-        "Moderate Sinus Tachycardia",
-        "Severe Sinus Tachycardia", 
-        "Supraventricular Tachycardia",
-        "Inappropriate Sinus Tachycardia"
-      ],
-      "correctAnswer": "Severe Sinus Tachycardia",
-      "explanation": "This ECG shows sinus tachycardia with visible P waves and normal QRS morphology. At this rate (>150 BPM), it represents severe sinus tachycardia which requires investigation for underlying causes such as fever, dehydration, or hyperthyroidism.",
-      "category": "tachycardia",
-      "difficulty": "medium", 
-      "tags": ["severe_tachycardia", "high_rate", "sinus", "investigation_needed"],
-      "medicalContext": {
-        "mechanism": "Marked increase in sinus node firing rate due to physiologic or pathologic stimulus",
-        "clinical_significance": "Requires investigation for fever, sepsis, hyperthyroidism, or medications",
-        "management": "Identify and treat underlying cause, supportive care"
-      }
-    },
-    {
       "id": "quiz_014",
       "question": "What irregularity pattern is shown in this atrial fibrillation ECG?",
       "imageUrl": "/ecg/medical_accurate/atrial_fibrillation_85bpm_2.png",
@@ -366,27 +345,6 @@ const ecgQuizzes25 = {
       }
     },
     {
-      "id": "quiz_018",
-      "question": "What degree of AV block is shown in this ECG if PR interval is 280ms?",
-      "imageUrl": "/ecg/medical_accurate/first_degree_av_block_80bpm_3.png",
-      "options": [
-        "Normal AV Conduction",
-        "First Degree AV Block", 
-        "Second Degree AV Block Type I",
-        "Second Degree AV Block Type II"
-      ],
-      "correctAnswer": "First Degree AV Block",
-      "explanation": "This ECG shows first degree AV block with PR interval of 280ms (>200ms is abnormal). Every P wave is conducted to the ventricles but with prolonged delay. Heart rate is. This represents slowed but preserved AV conduction.",
-      "category": "av_blocks",
-      "difficulty": "easy",
-      "tags": ["first_degree", "prolonged_pr", "280ms", "conducted"],
-      "medicalContext": {
-        "mechanism": "Delayed conduction through AV node, often due to medications or increased vagal tone",
-        "clinical_significance": "Generally benign but monitor for progression to higher degrees",
-        "management": "Review AV node blocking medications, monitor for symptoms"
-      }
-    },
-    {
       "id": "quiz_019",
       "question": "How would you classify these premature complexes based on their morphology?",
       "imageUrl": "/ecg/medical_accurate/pvc_85bpm_3.png",
@@ -447,48 +405,6 @@ const ecgQuizzes25 = {
         "mechanism": "Rapid reentrant circuit above ventricles causing extremely fast narrow-complex rhythm",
         "clinical_significance": "High risk of hemodynamic instability, syncope, heart failure",
         "management": "Urgent treatment with adenosine, verapamil, or synchronized cardioversion"
-      }
-    },
-    {
-      "id": "quiz_022", 
-      "question": "What is the heart rate range that defines this bradycardia?",
-      "imageUrl": "/ecg/medical_accurate/bradycardia_52bpm_4.png",
-      "options": [
-        "40-50 BPM",
-        "50-60 BPM", 
-        "60-70 BPM",
-        "70-80 BPM"
-      ],
-      "correctAnswer": "50-60 BPM",
-      "explanation": "This ECG shows sinus bradycardia, falling in the 50-60 BPM range. Bradycardia is defined as heart rate <60 BPM. This moderate bradycardia may be physiologic in trained athletes or pathologic due to medications or conduction disease.",
-      "category": "bradycardia",
-      "difficulty": "easy",
-      "tags": ["52bpm", "moderate_brady", "sinus", "range"],
-      "medicalContext": {
-        "mechanism": "Slow sinus node firing or increased parasympathetic influence",
-        "clinical_significance": "May be normal variant or indicate medication effect, hypothyroidism",
-        "management": "Assess symptoms, review medications, consider pacing if symptomatic"
-      }
-    },
-    {
-      "id": "quiz_023",
-      "question": "What is the significance of the heart rate in this tachycardia?", 
-      "imageUrl": "/ecg/medical_accurate/tachycardia_140bpm.png",
-      "options": [
-        "Mild Tachycardia (100-120 BPM)",
-        "Moderate Tachycardia (120-150 BPM)",
-        "Severe Tachycardia (>150 BPM)", 
-        "Normal Heart Rate"
-      ],
-      "correctAnswer": "Moderate Tachycardia (120-150 BPM)",
-      "explanation": "This ECG shows sinus tachycardia, classified as moderate tachycardia (120-150 BPM range). This rate suggests a significant physiologic stress or pathologic condition requiring evaluation and treatment of the underlying cause.",
-      "category": "tachycardia",
-      "difficulty": "medium",
-      "tags": ["140bpm", "moderate", "physiologic_stress", "evaluation_needed"],
-      "medicalContext": {
-        "mechanism": "Increased sinus node firing in response to physiologic or pathologic stimuli",
-        "clinical_significance": "Suggests significant underlying condition requiring investigation",
-        "management": "Identify cause (fever, pain, dehydration), treat underlying condition"
       }
     },
     {
