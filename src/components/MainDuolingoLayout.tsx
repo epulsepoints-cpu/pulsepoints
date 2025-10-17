@@ -662,7 +662,7 @@ const MainDuolingoLayout: React.FC = () => {
                   <div className="p-1 rounded-lg bg-gradient-to-br from-green-400 to-emerald-500">
                     <Stethoscope className="w-4 h-4 md:w-5 md:h-5 text-white" />
                   </div>
-                  <h1 className="text-lg md:text-xl font-bold text-gray-900">ECG Master</h1>
+                  <h1 className="text-lg md:text-xl font-bold text-gray-900">E-Pulsepoints</h1>
                 </div>
                 {stats.currentStreak > 0 && (
                   <div className="flex items-center gap-1 bg-gradient-to-r from-orange-100 to-amber-100 px-2 py-1 md:px-3 md:py-1.5 rounded-full border border-orange-200">
