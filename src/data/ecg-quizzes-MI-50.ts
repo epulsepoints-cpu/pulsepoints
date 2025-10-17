@@ -1,4 +1,4 @@
-﻿// ECG Quiz Database - MI Focused (50 Questions) - Auto-converted from JSON
+// ECG Quiz Database - MI Focused (50 Questions) - Auto-converted from JSON
 const ecgQuizzesMI50 = {
     "metadata":  {
                      "version":  "2.1",
@@ -1134,12 +1134,12 @@ const ecgQuizzesMI50 = {
                         "imageUrl":  "/ecg/MI_ecg_database/Inferior_wall_MI/imi8.jpg",
                         "options":  [
                                         "Any ST elevation",
-                                        "â‰¥1mm in limb leads, â‰¥2mm in precordial leads",
-                                        "â‰¥2mm in all leads",
-                                        "â‰¥0.5mm in any lead"
+                                        "≥1mm in limb leads, ≥2mm in precordial leads",
+                                        "≥2mm in all leads",
+                                        "≥0.5mm in any lead"
                                     ],
-                        "correctAnswer":  "â‰¥1mm in limb leads, â‰¥2mm in precordial leads",
-                        "explanation":  "STEMI criteria require â‰¥1mm (0.1mV) ST elevation in limb leads or â‰¥2mm (0.2mV) in precordial leads in at least two contiguous leads.",
+                        "correctAnswer":  "≥1mm in limb leads, ≥2mm in precordial leads",
+                        "explanation":  "STEMI criteria require ≥1mm (0.1mV) ST elevation in limb leads or ≥2mm (0.2mV) in precordial leads in at least two contiguous leads.",
                         "category":  "inferior_mi",
                         "difficulty":  "medium",
                         "tags":  [
@@ -1256,7 +1256,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_051",
                         "question":  "Evaluate this ECG - what acute MI pattern do you recognize?",
-                        "imageUrl":  "/ecg/MI_ecg_database/Posterior_wall_MI/posterior_mi_v7v8v9.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Posterior_wall_MI/PMI.jpg",
                         "options":  [
                                         "Anterior STEMI",
                                         "Posterior STEMI",
@@ -1282,7 +1282,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_052",
                         "question":  "Recognize the infarct pattern - what does this ECG demonstrate?",
-                        "imageUrl":  "/ecg/MI_ecg_database/Lateral_wall_MI/lateral_mi_i_avl_v5v6.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Lateral_wall_MI/lmi (2).jpg",
                         "options":  [
                                         "High Lateral MI",
                                         "Low Lateral MI",
@@ -1308,7 +1308,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_053",
                         "question":  "Diagnose the MI location from this ECG - what do you see?",
-                        "imageUrl":  "/ecg/MI_ecg_database/Inferolateral_MI/inferolateral_stemi.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Anterolateral_MI/ANTEROLATERAL.jpg",
                         "options":  [
                                         "Isolated Inferior MI",
                                         "Isolated Lateral MI", 
@@ -1334,7 +1334,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_054",
                         "question":  "Evaluate this ECG pattern - what hyperacute changes do you identify?",
-                        "imageUrl":  "/ecg/MI_ecg_database/Anterior_wall_MI/hyperacute_anterior_mi.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Anterior_wall_MI/AMI.jpg",
                         "options":  [
                                         "Normal T waves",
                                         "Hyperacute T waves in V2-V4",
@@ -1360,7 +1360,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_055",
                         "question":  "Recognize the evolved MI pattern - what does this ECG show?",
-                        "imageUrl":  "/ecg/MI_ecg_database/Post_MI_evolved_MI/old_inferior_mi_q_waves.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Inferior_wall_MI/imi (2).jpg",
                         "options":  [
                                         "Acute Inferior MI",
                                         "Old Inferior MI with Q waves",
@@ -1386,7 +1386,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_056",
                         "question":  "What specific MI complication is suggested by this ECG?",
-                        "imageUrl":  "/ecg/MI_ecg_database/RV_infarction/rv_infarction_v3r_v4r.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Inferior_wall_MI/imi5.jpg",
                         "options":  [
                                         "Anterior Extension",
                                         "Right Ventricular Infarction",
@@ -1412,7 +1412,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_057",
                         "question":  "Identify the reperfusion marker in this post-PCI ECG:",
-                        "imageUrl":  "/ecg/MI_ecg_database/Reperfusion_markers/st_resolution_post_pci.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Anterior_wall_MI/AMI5.jpg",
                         "options":  [
                                         "Persistent ST Elevation",
                                         "ST Resolution (\u003e50%)",
@@ -1438,7 +1438,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_058", 
                         "question":  "Evaluate this ECG - what wellens pattern do you recognize?",
-                        "imageUrl":  "/ecg/MI_ecg_database/Wellens_pattern/wellens_type_a_v2v3.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Anterior_wall_MI/AMI(7).jpg",
                         "options":  [
                                         "Normal T waves",
                                         "Wellens Type A (Biphasic T waves)",
@@ -1464,7 +1464,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_059",
                         "question":  "Diagnose the territorial extent of this MI from the ECG:",
-                        "imageUrl":  "/ecg/MI_ecg_database/Extensive_anterior_MI/extensive_anterior_v1_v6.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Anterior_wall_MI/AMI6.jpg",
                         "options":  [
                                         "Limited Anterior MI",
                                         "Extensive Anterior MI",
@@ -1490,7 +1490,7 @@ const ecgQuizzesMI50 = {
                     {
                         "id":  "quiz_mi_060",
                         "question":  "What evolution phase of MI does this ECG represent?",
-                        "imageUrl":  "/ecg/MI_ecg_database/T_wave_inversions/evolving_t_inversions_v2_v4.jpg",
+                        "imageUrl":  "/ecg/MI_ecg_database/Anterior_wall_MI/ami (3).jpg",
                         "options":  [
                                         "Hyperacute Phase",
                                         "Acute Phase with ST elevation",

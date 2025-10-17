@@ -520,7 +520,7 @@ const ecgQuizzes2650 = {
                     {
                         "id":  "quiz_045",
                         "question":  "What is the frequency significance of these PVCs per minute?",
-                        "imageUrl":  "/ecg/medical_accurate/pvc_95bpm.png",
+                        "imageUrl":  "/ecg/medical_accurate/pvc_85bpm_3.png",
                         "options":  [
                                         "Rare PVCs (\u003c1% burden)",
                                         "Occasional PVCs (1-10% burden)",
