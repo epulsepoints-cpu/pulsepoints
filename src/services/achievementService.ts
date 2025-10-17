@@ -178,9 +178,9 @@ export const initializeUserAchievements = async (userId: string): Promise<UserAc
         reward: { xp: 500, gems: 100 },
         category: 'progress'
       },
-      'ecg-master': {
-        id: 'ecg-master',
-        title: 'Wave Virtuoso',
+      'e-pulsepoints-master': {
+        id: 'e-pulsepoints-master',
+        title: 'E-Pulsepoints Virtuoso',
         description: 'Complete all available modules',
         progress: 0,
         total: 8,
@@ -412,10 +412,10 @@ export const checkAchievements = async (
       newlyCompleted.push('knowledge-seeker');
     }
 
-    // ECG Master (all modules)
+    // E-Pulsepoints Master (all modules)
     if (stats.completedModules.length >= 8) {
-      await updateAchievementProgress(userId, 'ecg-master', stats.completedModules.length);
-      newlyCompleted.push('ecg-master');
+      await updateAchievementProgress(userId, 'e-pulsepoints-master', stats.completedModules.length);
+      newlyCompleted.push('e-pulsepoints-master');
     }
 
     console.log('✅ Achievement check completed:', newlyCompleted);

@@ -525,7 +525,7 @@ export const autoInitializeEventsSystem = async () => {
             // WEEK 4: CLINICAL INTEGRATION & MASTERY
             {
                 id: 'clinical-mastery-week-4',
-                title: 'Clinical Integration & ECG Mastery',
+                title: 'Clinical Integration & E-Pulsepoints Mastery',
                 description: 'Integrate ECG findings with clinical scenarios and patient management',
                 theme: 'mastery',
                 weekNumber: 4,
@@ -543,7 +543,7 @@ export const autoInitializeEventsSystem = async () => {
                 totalRewards: {
                     xp: 8000,
                     gems: 1500,
-                    badges: ['ecg-master', 'clinical-expert', 'cardiology-ready']
+                    badges: ['e-pulsepoints-master', 'clinical-expert', 'cardiology-ready']
                 },
                 status: 'coming-soon',
                 previewDescription: 'Real-world clinical scenarios integrating ECG interpretation with patient management'

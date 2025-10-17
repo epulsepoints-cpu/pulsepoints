@@ -139,7 +139,7 @@ const MainDuolingoLayout: React.FC = () => {
 
   // Navigation items for bottom tabs (moved stats to header, added store to bottom)
   const navItems = [
-    { id: 'learn', label: 'ECG Master', icon: BookOpen },
+    { id: 'learn', label: 'E-Pulsepoints', icon: BookOpen },
     { id: 'daily-tasks', label: 'Daily', icon: CheckSquare },
     { id: 'ecg-simulator', label: 'ECG Sim', icon: Activity },
     { id: 'events', label: 'Events', icon: Calendar },

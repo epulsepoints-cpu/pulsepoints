@@ -2,7 +2,7 @@ const ecgQuizzes25 = {
   "metadata": {
     "version": "2.1",
     "created_date": "2025-10-17",
-    "description": "ECG Master Quiz Database - 32 Focused Rhythm Recognition Questions",
+    "description": "E-Pulsepoints Quiz Database - 32 Focused Rhythm Recognition Questions",
     "total_quizzes": 32,
     "categories": ["normal_sinus", "bradycardia", "tachycardia", "atrial_fibrillation", "ventricular_tachycardia", "bundle_branch_blocks", "av_blocks", "other_arrhythmias"],
     "difficulty_levels": ["easy", "medium", "hard"]

@@ -3,7 +3,7 @@ const ecgQuizzes2650 = {
     "metadata":  {
                      "version":  "2.0",
                      "created_date":  "2025-10-16",
-                     "description":  "ECG Master Quiz Database - Batch 2 (Quizzes 26-58)",
+                     "description":  "E-Pulsepoints Quiz Database - Batch 2 (Quizzes 26-58)",
                      "total_quizzes":  33,
                      "batch_number":  2,
                      "categories":  [

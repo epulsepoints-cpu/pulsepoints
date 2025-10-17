@@ -750,7 +750,7 @@ function createMasteryAssessmentTasks(dayNumber: number, baseXP: number, baseGem
     {
       id: `code-pulse-day-${dayNumber}-task-1`,
       type: 'rhythm-recognition',
-      title: 'ECG Mastery Challenge',
+      title: 'E-Pulsepoints Mastery Challenge',
       description: 'Demonstrate mastery across all rhythm types',
       difficulty: 'expert',
       estimatedTime: 30,
@@ -772,7 +772,7 @@ function createMasteryAssessmentTasks(dayNumber: number, baseXP: number, baseGem
     {
       id: `code-pulse-day-${dayNumber}-task-2`,
       type: 'ecg-quiz',
-      title: 'Comprehensive ECG Mastery',
+      title: 'Comprehensive E-Pulsepoints Mastery',
       description: 'Final comprehensive assessment of all ECG knowledge',
       difficulty: 'expert',
       estimatedTime: 35,
@@ -1860,7 +1860,7 @@ export function generateSimpleEvents(): SimpleEvent[] {
     {
       id: 'code-pulse',
       title: 'Code Pulse Protocol',
-      subtitle: 'Comprehensive ECG Mastery',
+      subtitle: 'Comprehensive E-Pulsepoints Mastery',
       description: 'Master all ECG rhythms through progressive 30-day learning with real medical images',
       theme: eventThemes['code-pulse'],
       totalDays: 30,
